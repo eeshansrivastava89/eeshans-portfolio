@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing — Eeshan Srivastava</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#faf9f7;--bg-2:#f2f0ec;--bg-3:#eae7e2;--fg:#1a1a1a;--fg-2:#555;--fg-3:#888;--accent:#8b5e0b;--accent-2:#a67518;--link:#1a6b8a;--link-2:#145266;--border:#e2dfd9;--serif:'Instrument Serif',Georgia,serif;--sans:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono','Fira Code',monospace}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--fg);background:var(--bg);-webkit-font-smoothing:antialiased}
+    a{color:var(--link);text-decoration:none}a:hover{color:var(--link-2)}
+    ::selection{background:var(--accent);color:#fff}
+    .page{max-width:780px;margin:0 auto;padding:48px 24px 80px}
+    .nav{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:24px;border-bottom:1px solid var(--border);margin-bottom:40px}
+    .nav__name{font-family:var(--serif);font-size:1.15rem;color:var(--fg)}.nav__name em{font-style:italic}
+    .nav__name a{color:var(--fg)}.nav__name a:hover{color:var(--fg)}
+    .nav__links{display:flex;gap:24px;list-style:none}
+    .nav__links a{font-size:0.82rem;font-weight:500;color:var(--fg-3);letter-spacing:0.02em}.nav__links a:hover{color:var(--fg)}
+    .nav__links a.active{color:var(--fg)}
+    .page-title{font-family:var(--serif);font-size:2rem;line-height:1.15;margin-bottom:8px}
+    .page-subtitle{font-size:0.92rem;color:var(--fg-2);max-width:580px;line-height:1.6;margin-bottom:40px}
+    .back-link{font-size:0.82rem;color:var(--fg-3);display:inline-flex;align-items:center;gap:4px;margin-bottom:32px}.back-link:hover{color:var(--fg)}
+    .section-label{font-size:0.72rem;font-weight:600;color:var(--fg-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid var(--border);margin-top:40px}
+    .series{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:24px}
+    .series__header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+    .series__badge{font-family:var(--mono);font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;background:var(--accent);color:#fff;padding:2px 8px;border-radius:3px}
+    .series__title{font-family:var(--serif);font-size:1.1rem;color:var(--fg)}
+    .series__desc{font-size:0.88rem;color:var(--fg-2);line-height:1.55;margin-bottom:14px}
+    .series__posts{display:flex;flex-direction:column;gap:8px}
+    .series__post{display:flex;align-items:baseline;gap:10px;font-size:0.88rem}
+    .series__post-num{font-family:var(--mono);font-size:0.75rem;color:var(--accent);font-weight:600;min-width:20px}
+    .series__post-link{color:var(--fg)}.series__post-link:hover{color:var(--link-2)}
+    .series__post-date{font-size:0.72rem;color:var(--fg-3);font-family:var(--mono)}
+    .post{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}.post:last-child{margin-bottom:0;border-bottom:none;padding-bottom:0}
+    .post__title{font-family:var(--serif);font-size:1.1rem;line-height:1.3}
+    .post__title a{color:var(--fg)}.post__title a:hover{color:var(--link-2)}
+    .post__excerpt{font-size:0.88rem;color:var(--fg-3);line-height:1.5;margin-top:4px}
+    .post__meta{display:flex;gap:8px;margin-top:6px;font-family:var(--mono);font-size:0.65rem;color:var(--fg-3)}
+    .post__project{color:var(--accent);font-weight:500}
+    .subscribe-box{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:40px}
+    .subscribe-box__title{font-family:var(--serif);font-size:1.2rem;margin-bottom:2px}
+    .subscribe-box__desc{font-size:0.82rem;color:var(--fg-3)}
+    .subscribe-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--accent);color:#fff;border-radius:5px;font-size:0.82rem;font-weight:500;text-decoration:none}.subscribe-btn:hover{background:var(--accent-2);color:#fff}
+    .footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--fg-3);display:flex;justify-content:space-between}
+    @media(max-width:640px){.page{padding:32px 16px 60px}.page-title{font-size:1.6rem}.footer{flex-direction:column;gap:8px}}
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <div class="nav__name"><a href="index.html">Eeshan <em>Srivastava</em></a></div>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="writing.html" class="active">Writing</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <a href="index.html" class="back-link">← Home</a>
+
+  <h1 class="page-title">Writing</h1>
+  <p class="page-subtitle">Essays on AI, data science, and what holds up after the hype. Published on <a href="https://theasymptotic.substack.com" target="_blank">Asymptotic</a>.</p>
+
+  <div class="section-label" style="margin-top:0;">Series</div>
+
+  <div class="series">
+    <div class="series__header">
+      <span class="series__badge">3 parts</span>
+      <span class="series__title">Local AI Series</span>
+    </div>
+    <p class="series__desc">Running AI on your own hardware — why it matters, how to set it up, and how to tell which models are actually good.</p>
+    <div class="series__posts">
+      <div class="series__post">
+        <span class="series__post-num">01</span>
+        <a href="https://theasymptotic.substack.com/p/its-time-for-the-regular-person-to" target="_blank" class="series__post-link">It's Time for the Regular Person to Start Testing Local AI Models</a>
+        <span class="series__post-date">Apr 26</span>
+      </div>
+      <div class="series__post">
+        <span class="series__post-num">02</span>
+        <a href="https://theasymptotic.substack.com/p/local-ai-series-2-the-regular-persons" target="_blank" class="series__post-link">The Regular Person's Guide to Running AI on Your Laptop</a>
+        <span class="series__post-date">May 3</span>
+      </div>
+      <div class="series__post">
+        <span class="series__post-num">03</span>
+        <a href="https://theasymptotic.substack.com/p/local-ai-series-3-testing-local-ai" target="_blank" class="series__post-link">Testing Local AI by Asking It to Build Cherry Blossoms</a>
+        <span class="series__post-date">May 16</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Essays</div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/agentic-coding-for-non-vibe-coders" target="_blank">Agentic Coding for Non-Vibe Coders</a></h3>
+    <p class="post__excerpt">Not everyone is a vibe coder. How to use agentic tools without losing your standards or your understanding of what you're building.</p>
+    <div class="post__meta"><span>May 2026</span></div>
+  </div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/how-i-de-vibed-a-vibe-coded-nlp-app" target="_blank">How I De-Vibed a Vibe-Coded NLP App</a></h3>
+    <p class="post__excerpt">Used AI to build a prompt analyzer in 20 minutes. Took weeks to wade through the slop and make it work correctly.</p>
+    <div class="post__meta"><span>Apr 2026</span> · <a href="https://howiprompt.eeshans.com" class="post__project">→ How I Prompt</a></div>
+  </div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/the-dopamine-trap-of-ai-coding" target="_blank">The Dopamine Trap of AI Coding</a></h3>
+    <p class="post__excerpt">Solving a hard problem used to feel like an achievement. Watching an agent do it feels like a dopamine hit. What's lost?</p>
+    <div class="post__meta"><span>Feb 2026</span></div>
+  </div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/why-local-ai-is-more-important-than" target="_blank">Why Local AI Is More Important Than Ever</a></h3>
+    <p class="post__excerpt">Frontier models are good. On-device alternatives aren't there yet for the average person. But the privacy and cost math is shifting fast.</p>
+    <div class="post__meta"><span>Jan 2026</span> · <a href="https://eeshansrivastava89.github.io/local-llm-bench/" class="post__project">→ LLM Bench</a></div>
+  </div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/building-an-ab-testing-memory-game" target="_blank">Building an A/B Testing Memory Game</a></h3>
+    <p class="post__excerpt">Most A/B testing tutorials use fake data in a notebook. This one is different — a real experiment with real users and a real decision at the end.</p>
+    <div class="post__meta"><span>Dec 2025</span> · <a href="https://absim.eeshans.com" class="post__project">→ A/B Simulator</a></div>
+  </div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/i-built-a-spotify-wrapped-for-my" target="_blank">I Built a Spotify Wrapped for My Coding Habits</a></h3>
+    <p class="post__excerpt">From personal curiosity about how I talk to AI, to a full analytics dashboard anyone can run on their own machine.</p>
+    <div class="post__meta"><span>2025</span> · <a href="https://howiprompt.eeshans.com" class="post__project">→ How I Prompt</a></div>
+  </div>
+
+  <div class="section-label">Publication</div>
+
+  <div class="post">
+    <h3 class="post__title"><a href="https://towardsdatascience.com/causal-inference-in-the-wild-eeshan" target="_blank">Causal Inference in the Wild</a></h3>
+    <p class="post__excerpt">Published in Towards Data Science.</p>
+    <div class="post__meta"><span>Publication</span></div>
+  </div>
+
+  <div class="subscribe-box">
+    <div>
+      <div class="subscribe-box__title">Asymptotic</div>
+      <div class="subscribe-box__desc">Essays on AI, data science, and what holds up after the hype. No spam.</div>
+    </div>
+    <a href="https://theasymptotic.substack.com/subscribe" target="_blank" class="subscribe-btn">Subscribe ↗</a>
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Eeshan Srivastava</span>
+    <span>Open source · Non-commercial</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Eeshan Srivastava</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#faf9f7;--bg-2:#f2f0ec;--bg-3:#eae7e2;--fg:#1a1a1a;--fg-2:#555;--fg-3:#888;--accent:#8b5e0b;--accent-2:#a67518;--link:#1a6b8a;--link-2:#145266;--border:#e2dfd9;--serif:'Instrument Serif',Georgia,serif;--sans:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono','Fira Code',monospace}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--fg);background:var(--bg);-webkit-font-smoothing:antialiased}
+    a{color:var(--link);text-decoration:none}a:hover{color:var(--link-2)}
+    ::selection{background:var(--accent);color:#fff}
+    .page{max-width:780px;margin:0 auto;padding:48px 24px 80px}
+    .nav{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:24px;border-bottom:1px solid var(--border);margin-bottom:40px}
+    .nav__name{font-family:var(--serif);font-size:1.15rem;color:var(--fg)}.nav__name em{font-style:italic}
+    .nav__name a{color:var(--fg)}.nav__name a:hover{color:var(--fg)}
+    .nav__links{display:flex;gap:24px;list-style:none}
+    .nav__links a{font-size:0.82rem;font-weight:500;color:var(--fg-3);letter-spacing:0.02em}.nav__links a:hover{color:var(--fg)}
+    .nav__links a.active{color:var(--fg)}
+    .page-title{font-family:var(--serif);font-size:2rem;line-height:1.15;margin-bottom:8px}
+    .page-subtitle{font-size:0.92rem;color:var(--fg-2);max-width:580px;line-height:1.6;margin-bottom:40px}
+    .section-label{font-size:0.72rem;font-weight:600;color:var(--fg-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid var(--border);margin-top:40px}
+    .project{margin-bottom:32px}.project:last-child{margin-bottom:0}
+    .project__header{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+    .project__title{font-family:var(--serif);font-size:1.3rem;line-height:1.2}.project__title a{color:var(--fg)}.project__title a:hover{color:var(--link)}
+    .project__badge{font-family:var(--mono);font-size:0.6rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;padding:2px 7px;border-radius:3px;white-space:nowrap}
+    .project__badge--featured{background:#f0e6cc;color:#7a5800}.project__badge--live{background:#dff0e1;color:#2d6a32}
+    .project__hook{font-size:0.92rem;color:var(--fg-2);line-height:1.55;margin-bottom:8px;max-width:600px}
+    .project__meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:0.68rem;color:var(--fg-3)}
+    .project__meta a{color:var(--fg-3)}.project__meta a:hover{color:var(--link)}
+    .project__meta-sep{color:var(--border)}
+    .project__stats{margin-top:8px;display:flex;gap:16px}
+    .project__stat{font-family:var(--mono);font-size:0.72rem}
+    .project__stat-val{font-weight:600;color:var(--accent)}.project__stat-label{color:var(--fg-3)}
+    .project__video{margin-top:12px;aspect-ratio:16/9;max-width:480px;background:var(--bg-2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .project__video::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--bg-2) 0%,var(--bg-3) 25%,var(--bg-2) 50%,var(--bg-3) 75%,var(--bg-2) 100%);background-size:400% 400%;animation:shimmer 12s ease-in-out infinite}
+    @keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .project__video-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .project__video-play{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:rgba(250,249,247,0.8);display:flex;align-items:center;justify-content:center}
+    .project__video-play svg{width:14px;height:14px;fill:var(--fg-3);margin-left:2px}
+    .project__video-label{font-family:var(--mono);font-size:0.6rem;color:var(--fg-3);letter-spacing:0.05em}
+    .back-link{font-size:0.82rem;color:var(--fg-3);display:inline-flex;align-items:center;gap:4px;margin-bottom:32px}.back-link:hover{color:var(--fg)}
+    .footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--fg-3);display:flex;justify-content:space-between}
+    @media(max-width:640px){.page{padding:32px 16px 60px}.page-title{font-size:1.6rem}.project__video{max-width:100%}.footer{flex-direction:column;gap:8px}}
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <div class="nav__name"><a href="index.html">Eeshan <em>Srivastava</em></a></div>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <a href="index.html" class="back-link">← Home</a>
+
+  <h1 class="page-title">Projects</h1>
+  <p class="page-subtitle">Every project is a live web app you can play with, read the analysis, or explore the source code. No demos, no screenshots — the real thing.</p>
+
+  <div class="section-label">Featured</div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://github.com/eeshansrivastava89/sidequests" target="_blank">Sidequests</a></h3>
+      <span class="project__badge project__badge--featured">Featured</span>
+    </div>
+    <p class="project__hook">Track every side project you've ever started. Scans your dev folder, surfaces health, GitHub state, and AI-powered next actions. One command to install.</p>
+    <div class="project__meta">
+      <a href="https://github.com/eeshansrivastava89/sidequests" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <span>Next.js · React · Prisma/libSQL · Claude Code + Codex</span>
+    </div>
+    <div class="project__video">
+      <div class="project__video-inner">
+        <div class="project__video-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="project__video-label">Demo · 45s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://howiprompt.eeshans.com" target="_blank">How I Prompt</a></h3>
+      <span class="project__badge project__badge--live">Live</span>
+    </div>
+    <p class="project__hook">Wrapped-style analytics for your AI coding conversations. Discover your prompting persona, see your metrics, get a shareable report. Everything stays local.</p>
+    <div class="project__meta">
+      <a href="https://howiprompt.eeshans.com" target="_blank">Live</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://github.com/eeshansrivastava89/howiprompt" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://theasymptotic.substack.com/p/i-built-a-spotify-wrapped-for-my">Writeup →</a>
+      <span class="project__meta-sep">·</span>
+      <span>Python · Claude AI · Data Visualization</span>
+    </div>
+    <div class="project__video">
+      <div class="project__video-inner">
+        <div class="project__video-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="project__video-label">Demo · 45s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://absim.eeshans.com" target="_blank">A/B Testing Memory Game</a></h3>
+      <span class="project__badge project__badge--live">Live</span>
+    </div>
+    <p class="project__hook">A live experiment you can play. Real users, real data. The analysis found a significant effect — but completion rate dropped from 89% to 69%. Don't ship it.</p>
+    <div class="project__meta">
+      <a href="https://absim.eeshans.com" target="_blank">Live</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://absim.eeshans.com/analysis/" target="_blank">Analysis</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://github.com/eeshansrivastava89/ab-simulator" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://theasymptotic.substack.com/p/building-an-ab-testing-memory-game">Writeup →</a>
+      <span class="project__meta-sep">·</span>
+      <span>Astro · PostHog · Supabase · statsmodels</span>
+    </div>
+    <div class="project__stats">
+      <span class="project__stat"><span class="project__stat-val">1,200+</span> <span class="project__stat-label">games</span></span>
+      <span class="project__stat"><span class="project__stat-val">p = 0.002</span></span>
+      <span class="project__stat"><span class="project__stat-val">d = 0.39</span></span>
+      <span class="project__stat"><span class="project__stat-val">89% → 69%</span> <span class="project__stat-label">completion</span></span>
+    </div>
+    <div class="project__video">
+      <div class="project__video-inner">
+        <div class="project__video-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="project__video-label">Demo · 45s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Local AI</div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://localai.eeshans.com/" target="_blank">Local LLM Visual Bench</a></h3>
+    </div>
+    <p class="project__hook">Ask local models to draw cherry blossoms and solar systems. Compare the HTML artifacts side by side. No leaderboard scores — look at the output.</p>
+    <div class="project__meta">
+      <a href="https://localai.eeshans.com/" target="_blank">Live</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://github.com/eeshansrivastava89/local-llm-visual-benchmark" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://theasymptotic.substack.com/p/local-ai-series-3-testing-local-ai">Writeup →</a>
+      <span class="project__meta-sep">·</span>
+      <span>MLX · Ollama · Astro · Apple Silicon</span>
+    </div>
+    <div class="project__video">
+      <div class="project__video-inner">
+        <div class="project__video-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="project__video-label">Demo · 30s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://eeshansrivastava89.github.io/local-llm-bench/" target="_blank">Local LLM Bench</a></h3>
+    </div>
+    <p class="project__hook">Benchmark local models on what matters: structured data extraction accuracy. F1 scoring, fuzzy matching, ground-truth comparison. MLX and Ollama backends.</p>
+    <div class="project__meta">
+      <a href="https://eeshansrivastava89.github.io/local-llm-bench/" target="_blank">Live</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://github.com/eeshansrivastava89/local-llm-bench" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://theasymptotic.substack.com/p/why-local-ai-is-more-important-than">Writeup →</a>
+      <span class="project__meta-sep">·</span>
+      <span>Python · MLX · Ollama</span>
+    </div>
+  </div>
+
+  <div class="section-label">Also</div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://quizzard.fly.dev" target="_blank">Quizzard</a></h3>
+    </div>
+    <p class="project__hook">Free, self-hosted Kahoot for live events. QR join, real-time sync via Supabase, 180-player cap on the free tier.</p>
+    <div class="project__meta">
+      <a href="https://quizzard.fly.dev" target="_blank">Live</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://github.com/eeshansrivastava89/quizzard" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <span>Vanilla JS · Supabase Realtime · Fly.io</span>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="project__header">
+      <h3 class="project__title"><a href="https://github.com/eeshansrivastava89/brewfolio" target="_blank">Brewfolio</a></h3>
+    </div>
+    <p class="project__hook">Astro + Keystatic starter for portfolios and apps. Extracted from this site. <code style="font-family:var(--mono);font-size:0.8rem;background:var(--bg-2);padding:1px 4px;border-radius:3px;">npx create-brewfolio</code></p>
+    <div class="project__meta">
+      <a href="https://github.com/eeshansrivastava89/brewfolio" target="_blank">Source</a>
+      <span class="project__meta-sep">·</span>
+      <a href="https://www.npmjs.com/package/create-brewfolio" target="_blank">npm ↗</a>
+      <span class="project__meta-sep">·</span>
+      <span>Astro 5 · Keystatic · Tailwind</span>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>© 2026 Eeshan Srivastava</span>
+    <span>Open source · Non-commercial</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eeshan Srivastava</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf9f7;
+      --bg-2: #f2f0ec;
+      --bg-3: #eae7e2;
+      --fg: #1a1a1a;
+      --fg-2: #555;
+      --fg-3: #888;
+      --accent: #8b5e0b;
+      --accent-2: #a67518;
+      --link: #1a6b8a;
+      --link-2: #145266;
+      --border: #e2dfd9;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-2); }
+    ::selection { background: var(--accent); color: #fff; }
+
+    .page { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .nav__name { font-family: var(--serif); font-size: 1.15rem; color: var(--fg); }
+    .nav__name em { font-style: italic; }
+    .nav__name a { color: var(--fg); }
+    .nav__name a:hover { color: var(--fg); opacity: 1; }
+    .nav__links { display: flex; gap: 24px; list-style: none; }
+    .nav__links a { font-size: 0.82rem; font-weight: 500; color: var(--fg-3); letter-spacing: 0.02em; }
+    .nav__links a:hover { color: var(--fg); }
+    .nav__links a.active { color: var(--fg); }
+
+    /* INTRO */
+    .intro { margin-bottom: 56px; }
+    .intro__name { font-family: var(--serif); font-size: 2.2rem; line-height: 1.1; margin-bottom: 12px; }
+    .intro__role { font-size: 0.92rem; color: var(--fg-2); margin-bottom: 14px; }
+    .intro__bio { font-size: 0.92rem; color: var(--fg-2); max-width: 580px; line-height: 1.65; }
+    .intro__bio a { color: var(--accent); }
+    .intro__links { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+    .intro__link { font-size: 0.8rem; color: var(--fg-3); display: flex; align-items: center; gap: 4px; }
+    .intro__link:hover { color: var(--fg); }
+    .intro__link svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* SECTION */
+    .section { margin-bottom: 56px; }
+    .section__title {
+      font-size: 0.72rem; font-weight: 600; color: var(--fg-3);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 20px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .section__more { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 0.78rem; }
+
+    /* PROJECT */
+    .project { margin-bottom: 32px; }
+    .project:last-child { margin-bottom: 0; }
+    .project__header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+    .project__title { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; }
+    .project__title a { color: var(--fg); }
+    .project__title a:hover { color: var(--link); }
+    .project__badge {
+      font-family: var(--mono); font-size: 0.6rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 2px 7px; border-radius: 3px; white-space: nowrap;
+    }
+    .project__badge--featured { background: #f0e6cc; color: #7a5800; }
+    .project__badge--live { background: #dff0e1; color: #2d6a32; }
+    .project__hook { font-size: 0.92rem; color: var(--fg-2); line-height: 1.55; margin-bottom: 8px; max-width: 600px; }
+    .project__meta {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: 0.68rem; color: var(--fg-3);
+    }
+    .project__meta a { color: var(--fg-3); }
+    .project__meta a:hover { color: var(--link); }
+    .project__meta-sep { color: var(--border); }
+
+    .project__stats { margin-top: 8px; display: flex; gap: 16px; }
+    .project__stat { font-family: var(--mono); font-size: 0.72rem; }
+    .project__stat-val { font-weight: 600; color: var(--accent); }
+    .project__stat-label { color: var(--fg-3); }
+
+    .project__video {
+      margin-top: 12px; aspect-ratio: 16/9; max-width: 480px;
+      background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .project__video::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-3) 25%, var(--bg-2) 50%, var(--bg-3) 75%, var(--bg-2) 100%);
+      background-size: 400% 400%; animation: shimmer 12s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .project__video-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .project__video-play {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: rgba(250,249,247,0.8);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .project__video-play svg { width: 14px; height: 14px; fill: var(--fg-3); margin-left: 2px; }
+    .project__video-label { font-family: var(--mono); font-size: 0.6rem; color: var(--fg-3); letter-spacing: 0.05em; }
+
+    /* SERIES */
+    .series {
+      background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 20px; margin-bottom: 24px;
+    }
+    .series__header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .series__badge {
+      font-family: var(--mono); font-size: 0.62rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 3px;
+    }
+    .series__title { font-family: var(--serif); font-size: 1.1rem; color: var(--fg); }
+    .series__desc { font-size: 0.88rem; color: var(--fg-2); line-height: 1.55; margin-bottom: 12px; }
+    .series__posts { display: flex; flex-direction: column; gap: 6px; }
+    .series__post { display: flex; align-items: baseline; gap: 10px; font-size: 0.88rem; }
+    .series__post-num { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); font-weight: 600; min-width: 20px; }
+    .series__post-link { color: var(--fg); }
+    .series__post-link:hover { color: var(--link-2); }
+    .series__post-date { font-size: 0.72rem; color: var(--fg-3); font-family: var(--mono); }
+
+    /* POST */
+    .post { margin-bottom: 14px; }
+    .post:last-child { margin-bottom: 0; }
+    .post__title { font-family: var(--serif); font-size: 1.05rem; line-height: 1.3; }
+    .post__title a { color: var(--fg); }
+    .post__title a:hover { color: var(--link-2); }
+    .post__excerpt { font-size: 0.82rem; color: var(--fg-3); line-height: 1.45; margin-top: 2px; }
+    .post__meta { display: flex; gap: 8px; margin-top: 4px; font-family: var(--mono); font-size: 0.65rem; color: var(--fg-3); }
+    .post__project { color: var(--accent); font-weight: 500; }
+
+    /* RECOGNITION */
+    .recogs { display: flex; flex-direction: column; }
+    .recog {
+      display: flex; align-items: baseline; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem;
+    }
+    .recog:last-child { border-bottom: none; }
+    .recog__icon { font-size: 0.9rem; }
+    .recog__text { flex: 1; }
+    .recog__text a { color: var(--fg); }
+    .recog__text a:hover { color: var(--link-2); }
+    .recog__detail { font-size: 0.75rem; color: var(--fg-3); }
+    .recog__year { font-family: var(--mono); font-size: 0.72rem; color: var(--fg-3); white-space: nowrap; }
+
+    /* ABOUT */
+    .about { font-size: 0.92rem; color: var(--fg-2); max-width: 580px; line-height: 1.7; }
+    .about p + p { margin-top: 12px; }
+    .about strong { color: var(--fg); font-weight: 500; }
+    .about a { color: var(--accent); }
+
+    .subscribe-box {
+      background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .subscribe-box__title { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 2px; }
+    .subscribe-box__desc { font-size: 0.82rem; color: var(--fg-3); }
+    .subscribe-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; background: var(--accent); color: #fff;
+      border-radius: 5px; font-size: 0.82rem; font-weight: 500; text-decoration: none;
+    }
+    .subscribe-btn:hover { background: var(--accent-2); color: #fff; }
+
+    .footer {
+      margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--fg-3); display: flex; justify-content: space-between;
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 32px 16px 60px; }
+      .intro__name { font-size: 1.7rem; }
+      .project__video { max-width: 100%; }
+      .footer { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <div class="nav__name"><a href="index.html">Eeshan <em>Srivastava</em></a></div>
+    <ul class="nav__links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <section class="intro">
+    <h1 class="intro__name">Eeshan Srivastava</h1>
+    <p class="intro__role">Data science leader, local AI builder, open-source maintainer — Seattle</p>
+    <p class="intro__bio">
+      I lead a data science team at Starbucks. 12 years across engineering, data science, and technical leadership. CS undergrad, MBA. I build web apps to test ideas about AI and experimentation, and I write about what I find. Everything is <a href="https://github.com/eeshansrivastava89" target="_blank">open source</a> and non-commercial.
+    </p>
+    <div class="intro__links">
+      <a href="https://github.com/eeshansrivastava89" target="_blank" class="intro__link">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.37 1.23-3.21-.12-.3-.54-1.515.12-3.15 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.635.24 2.85.12 3.15.765.84 1.23 1.905 1.23 3.21 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/eeshans/" target="_blank" class="intro__link">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://theasymptotic.substack.com" target="_blank" class="intro__link">Asymptotic ↗</a>
+      <a href="https://x.com/notesundrground" target="_blank" class="intro__link">Twitter ↗</a>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <h2 class="section__title">Projects <a href="projects.html" class="section__more">See all →</a></h2>
+
+    <div class="project">
+      <div class="project__header">
+        <h3 class="project__title"><a href="https://github.com/eeshansrivastava89/sidequests" target="_blank">Sidequests</a></h3>
+        <span class="project__badge project__badge--featured">Featured</span>
+      </div>
+      <p class="project__hook">Track every side project you've ever started. Scans your dev folder, surfaces health, GitHub state, and AI-powered next actions. One command to install.</p>
+      <div class="project__meta">
+        <a href="https://github.com/eeshansrivastava89/sidequests" target="_blank">Source</a>
+        <span class="project__meta-sep">·</span>
+        <span>Next.js · React · Prisma · Claude Code</span>
+      </div>
+      <div class="project__video">
+        <div class="project__video-inner">
+          <div class="project__video-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span class="project__video-label">Demo · 45s</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project__header">
+        <h3 class="project__title"><a href="https://howiprompt.eeshans.com" target="_blank">How I Prompt</a></h3>
+        <span class="project__badge project__badge--live">Live</span>
+      </div>
+      <p class="project__hook">Wrapped-style analytics for your AI coding conversations. Discover your prompting persona, see metrics, get a shareable report. Everything stays local.</p>
+      <div class="project__meta">
+        <a href="https://howiprompt.eeshans.com" target="_blank">Live</a>
+        <span class="project__meta-sep">·</span>
+        <a href="https://github.com/eeshansrivastava89/howiprompt" target="_blank">Source</a>
+        <span class="project__meta-sep">·</span>
+        <a href="https://theasymptotic.substack.com/p/i-built-a-spotify-wrapped-for-my">Writeup →</a>
+        <span class="project__meta-sep">·</span>
+        <span>Python · Claude AI</span>
+      </div>
+      <div class="project__video">
+        <div class="project__video-inner">
+          <div class="project__video-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span class="project__video-label">Demo · 45s</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project__header">
+        <h3 class="project__title"><a href="https://absim.eeshans.com" target="_blank">A/B Testing Memory Game</a></h3>
+      </div>
+      <p class="project__hook">A live experiment you can play. Real users, real data. The analysis found a significant effect — but completion rate dropped from 89% to 69%. Don't ship it.</p>
+      <div class="project__meta">
+        <a href="https://absim.eeshans.com" target="_blank">Live</a>
+        <span class="project__meta-sep">·</span>
+        <a href="https://absim.eeshans.com/analysis/" target="_blank">Analysis</a>
+        <span class="project__meta-sep">·</span>
+        <a href="https://github.com/eeshansrivastava89/ab-simulator" target="_blank">Source</a>
+        <span class="project__meta-sep">·</span>
+        <span>Astro · PostHog · Supabase · statsmodels</span>
+      </div>
+      <div class="project__stats">
+        <span class="project__stat"><span class="project__stat-val">1,200+</span> <span class="project__stat-label">games</span></span>
+        <span class="project__stat"><span class="project__stat-val">p = 0.002</span></span>
+        <span class="project__stat"><span class="project__stat-val">d = 0.39</span></span>
+        <span class="project__stat"><span class="project__stat-val">89% → 69%</span> <span class="project__stat-label">completion</span></span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project__header">
+        <h3 class="project__title"><a href="https://localai.eeshans.com/" target="_blank">Local LLM Visual Bench</a></h3>
+      </div>
+      <p class="project__hook">Ask local models to draw cherry blossoms and solar systems. Compare the HTML artifacts side by side. No leaderboard scores — look at the output.</p>
+      <div class="project__meta">
+        <a href="https://localai.eeshans.com/" target="_blank">Live</a>
+        <span class="project__meta-sep">·</span>
+        <a href="https://github.com/eeshansrivastava89/local-llm-visual-benchmark" target="_blank">Source</a>
+        <span class="project__meta-sep">·</span>
+        <span>MLX · Ollama · Astro</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section class="section" id="writing">
+    <h2 class="section__title">Writing <a href="writing.html" class="section__more">See all →</a></h2>
+
+    <div class="series">
+      <div class="series__header">
+        <span class="series__badge">3-Part Series</span>
+        <span class="series__title">Local AI Series</span>
+      </div>
+      <p class="series__desc">Running AI on your own hardware — why, how, and how to tell which models are actually good.</p>
+      <div class="series__posts">
+        <div class="series__post">
+          <span class="series__post-num">01</span>
+          <a href="https://theasymptotic.substack.com/p/its-time-for-the-regular-person-to" target="_blank" class="series__post-link">It's Time for the Regular Person to Start Testing Local AI Models</a>
+          <span class="series__post-date">Apr 26</span>
+        </div>
+        <div class="series__post">
+          <span class="series__post-num">02</span>
+          <a href="https://theasymptotic.substack.com/p/local-ai-series-2-the-regular-persons" target="_blank" class="series__post-link">The Regular Person's Guide to Running AI on Your Laptop</a>
+          <span class="series__post-date">May 3</span>
+        </div>
+        <div class="series__post">
+          <span class="series__post-num">03</span>
+          <a href="https://theasymptotic.substack.com/p/local-ai-series-3-testing-local-ai" target="_blank" class="series__post-link">Testing Local AI by Asking It to Build Cherry Blossoms</a>
+          <span class="series__post-date">May 16</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post">
+      <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/agentic-coding-for-non-vibe-coders" target="_blank">Agentic Coding for Non-Vibe Coders</a></h3>
+      <p class="post__excerpt">Not everyone is a vibe coder. How to use agentic tools without losing your standards.</p>
+      <div class="post__meta"><span>May 2026</span></div>
+    </div>
+
+    <div class="post">
+      <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/how-i-de-vibed-a-vibe-coded-nlp-app" target="_blank">How I De-Vibed a Vibe-Coded NLP App</a></h3>
+      <p class="post__excerpt">Built in 20 minutes, fixed over weeks.</p>
+      <div class="post__meta"><span>Apr 2026</span> · <a href="https://howiprompt.eeshans.com" class="post__project">→ How I Prompt</a></div>
+    </div>
+
+    <div class="post">
+      <h3 class="post__title"><a href="https://theasymptotic.substack.com/p/building-an-ab-testing-memory-game" target="_blank">Building an A/B Testing Memory Game</a></h3>
+      <p class="post__excerpt">Not fake data in a notebook. A real experiment with real users and a real decision at the end.</p>
+      <div class="post__meta"><span>Dec 2025</span> · <a href="https://absim.eeshans.com" class="post__project">→ A/B Simulator</a></div>
+    </div>
+  </section>
+
+  <!-- RECOGNITION -->
+  <section class="section" id="recognition">
+    <h2 class="section__title">Recognition</h2>
+    <div class="recogs">
+      <div class="recog">
+        <span class="recog__icon">🏆</span>
+        <div class="recog__text">
+          <a href="https://case.edu/news/meet-2024-alumni-award-winners" target="_blank">5 Under 35 Award</a>
+          <span class="recog__detail"> — Weatherhead School of Management</span>
+        </div>
+        <span class="recog__year">2024</span>
+      </div>
+      <div class="recog">
+        <span class="recog__icon">🎤</span>
+        <div class="recog__text">
+          <a href="https://www.linkedin.com/posts/activity-7424640753852760064-ZBs6" target="_blank">UCLA + Starbucks Industry Seminar</a>
+          <span class="recog__detail"> — AI Applications</span>
+        </div>
+        <span class="recog__year">2024</span>
+      </div>
+      <div class="recog">
+        <span class="recog__icon">🎙️</span>
+        <div class="recog__text">
+          <a href="https://open.spotify.com/episode/0K3M2e38PPMO1HUdXpU0i9" target="_blank">What Really Matters Podcast</a>
+          <span class="recog__detail"> — Weatherhead</span>
+        </div>
+        <span class="recog__year">2022</span>
+      </div>
+      <div class="recog">
+        <span class="recog__icon">📰</span>
+        <div class="recog__text">
+          <a href="https://towardsdatascience.com/causal-inference-in-the-wild-eeshan" target="_blank">Towards Data Science</a>
+          <span class="recog__detail"> — "Causal Inference in the Wild"</span>
+        </div>
+        <span class="recog__year"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <h2 class="section__title">About</h2>
+    <div class="about">
+      <p>I'm <strong>Eeshan Srivastava</strong>. I lead a data science team at Starbucks — AI/ML, personalization, experimentation. 12 years across engineering, data science, and leadership. CS undergrad, MBA.</p>
+      <p>I test new tech to see what holds up after the hype fades. That's why I care about <a href="#writing">local AI</a> — models that run on your own hardware, with your own data. The cost and quality math is shifting faster than people realize.</p>
+      <p>5 Under 35 from the Weatherhead School of Management. I've talked about AI applications at UCLA and been a guest on two podcasts about data science careers. All my work is open source and non-commercial. Outside of work: kickboxing, painting, reading, basketball. Ravenclaw.</p>
+    </div>
+  </section>
+
+  <!-- SUBSCRIBE -->
+  <section class="section">
+    <div class="subscribe-box">
+      <div>
+        <div class="subscribe-box__title">Asymptotic</div>
+        <div class="subscribe-box__desc">Essays on AI, data science, and what holds up after the hype.</div>
+      </div>
+      <a href="https://theasymptotic.substack.com/subscribe" target="_blank" class="subscribe-btn">Subscribe ↗</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>© 2026 Eeshan Srivastava</span>
+    <span>Open source · Non-commercial</span>
+  </footer>
+
+</div>
+</body>
+</html>

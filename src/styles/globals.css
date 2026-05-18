@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+	--font-display: "Instrument Serif", Georgia, serif;
+	--font-sans: "Inter", system-ui, -apple-system, sans-serif;
+	--font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+	--color-paper: #faf9f7;
+	--color-paper-2: #f2f0ec;
+	--color-paper-3: #eae7e2;
+	--color-accent: #8b5e0b;
+	--color-accent-2: #a67518;
+	--color-link: #1a6b8a;
+	--color-link-2: #145266;
+}
+
+@layer base {
+	:root {
+		--background: 0 0% 98%;
+		--foreground: 0 0% 10%;
+		--card: 0 0% 98%;
+		--card-foreground: 0 0% 10%;
+		--popover: 0 0% 98%;
+		--popover-foreground: 0 0% 10%;
+		--primary: 36 81% 29%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 0 0% 94%;
+		--secondary-foreground: 0 0% 10%;
+		--muted: 0 0% 94%;
+		--muted-foreground: 0 0% 46%;
+		--accent: 36 81% 29%;
+		--accent-foreground: 0 0% 100%;
+		--destructive: 0 84% 60%;
+		--destructive-foreground: 0 0% 100%;
+		--border: 30 10% 88%;
+		--input: 30 10% 88%;
+		--ring: 36 81% 29%;
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 0 0% 7%;
+		--foreground: 0 0% 93%;
+		--card: 0 0% 10%;
+		--card-foreground: 0 0% 93%;
+		--popover: 0 0% 10%;
+		--popover-foreground: 0 0% 93%;
+		--primary: 36 81% 55%;
+		--primary-foreground: 0 0% 10%;
+		--secondary: 0 0% 14%;
+		--secondary-foreground: 0 0% 93%;
+		--muted: 0 0% 14%;
+		--muted-foreground: 0 0% 56%;
+		--accent: 36 81% 55%;
+		--accent-foreground: 0 0% 10%;
+		--destructive: 0 62% 50%;
+		--destructive-foreground: 0 0% 100%;
+		--border: 0 0% 18%;
+		--input: 0 0% 18%;
+		--ring: 36 81% 55%;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+	}
+}
