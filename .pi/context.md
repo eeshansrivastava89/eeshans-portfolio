@@ -5,89 +5,107 @@
 - Project: `eeshans-portfolio` — Portfolio rebuild for eeshans.com
 - Working directory: `/Users/eeshans/dev/eeshans-portfolio`
 - Branch: `main`
-- Latest commit at save: empty repo (only internal_docs/ and mockups/ exist)
-- Working tree at save: untracked files only (mockups/, internal_docs/, .pi/, .claude/, .codex/)
+- Latest commit: `e9e6943 feat: build visual layer and all 4 pages (Phase 2 & 3)`
+- Working tree at save: clean
 
 ## User Preferences / Constraints (still active)
 - Production portfolio (`eeshans.com`) still works; this repo is the rebuild
 - No hidden fallbacks or redundant implementations; one clear way to do things
 - User controls the dev server. Do not start one unless asked
-- Do not push commits
+- Do not push commits without asking
 - Projects detail pages are not wanted — `/projects/` is the single project experience
 - Prefer content-driven data; no manufactured frontmatter
-- Content must be separated from presentation (key architectural requirement)
-- Minimize custom code; maximize use of libraries/frameworks/tools
-- Minimize custom implementation over out-of-the-box solutions
+- Content must be separated from presentation
+- Minimize custom code; maximize use of libraries/frameworks/tools (see AGENTS.md)
 - More dependencies is fine as long as they reduce code
-- DRY principles, reusability
-- Dark mode is required (light-only was just for mockups)
-- No Brewfolio in project list
+- DRY principles, reusability (see AGENTS.md)
+- Think root causes, not patches (see AGENTS.md)
+- Minimize conditionals (see AGENTS.md)
+- No hidden fallbacks; one way to do things; fail loudly (see AGENTS.md)
+- Dark mode is required (light + dark)
+- No Brewfolio
 - No analysis route — link to external sites
 - No Pagefind/search in V1
 
-## What This Session Was
+## What Was Done This Session
 
-Continued from a previous session that produced PM analysis, design mockups, and architecture docs. This session focused on refining the architecture plan based on updated user preferences:
+### Phase 1 — Foundation ✅ (committed as ba8e434)
+- Initialized Astro 6 with React, MDX, Sitemap, Expressive Code
+- Installed Tailwind CSS v4 + shadcn/ui (New York, zinc, CSS variables)
+- 7 shadcn components: Button, Card, Badge, Separator, DropdownMenu, Sheet, Tooltip
+- ModeToggle React component for dark/light/system
+- Base layout with dark mode script + Google Fonts
+- Content collections: projects, posts, experience, impact, other
+- All content MDX files (6 projects, 9 posts, 7 experience, 5 impact, about)
+- Site config + series metadata
+- Build verified passing
 
-### Key changes from previous plan
-1. **Tailwind v4** — User explicitly wants Tailwind, not custom CSS. Zero custom CSS files, all utility classes.
-2. **shadcn/ui** — User wants shadcn for future extensibility. This means React islands for interactive components.
-3. **React** — Added as a dependency (required by shadcn/ui). Only ships JS for interactive islands (ModeToggle, Sheet, etc.).
-4. **Dark mode** — Required, not optional. shadcn's built-in dark mode system.
-5. **No Keystatic** — Content Collections are sufficient. Git + MDX workflow.
-6. **No Brewfolio** — Removed from project list.
-7. **No analysis route** — Links to external sites only.
-8. **No Pagefind** — Skipped for V1.
-9. **lucide-react** — Icon library (shadcn default).
-10. **No project detail pages** — Confirmed.
+### Phase 2 — Visual Layer ✅ (committed as e9e6943)
+- 8 Astro components: ProjectCard, PostItem, SeriesCard, RecogItem, TimelineItem, SubscribeBox, SectionTitle, VideoShimmer
+- Tailwind v4 @theme tokens (warm paper palette, accent, fonts)
+- shadcn light + dark CSS variable themes
+- @tailwindcss/typography plugin added
 
-### Mockups (from previous session, still valid)
-- `mockups/index.html` — Homepage (light editorial)
-- `mockups/projects.html` — Full projects page
-- `mockups/writing.html` — Full writing page
-- `mockups/about.html` — Full about page
+### Phase 3 — Pages ✅ (committed as e9e6943)
+- Homepage (`/`) — intro, projects, writing, recognition, about teaser, subscribe
+- Projects (`/projects`) — all projects grouped by category
+- Writing (`/writing`) — series card + essays + publication
+- About (`/about`) — bio, recognition, timeline, interests, social links
+- All 4 pages build and render from content collections
 
-### Architecture doc updated
-- `internal_docs/portfolio-architecture.md` — Updated with all tech stack decisions, Tailwind + shadcn + Content Collections, dark mode, no Brewfolio, no analysis route, no search.
+### Not Yet Done (Phase 4+)
+- Substack refresh pipeline (port from datascienceapps)
+- PostHog analytics integration
+- GitHub Activity system (port from datascienceapps)
+- RSS feed
+- robots.txt + sitemap
+- 404 page
+- Fly.io Dockerfile + fly.toml (reuse existing soma-portfolio app)
+- GitHub Actions workflow (port from datascienceapps)
+- Demo videos (Phase 5)
+- DNS cutover (Phase 6)
 
-## Important Files (still relevant)
-- `internal_docs/portfolio-rebuild-analysis.md` — Full PM analysis (unchanged)
-- `internal_docs/portfolio-architecture.md` — Architecture doc (UPDATED with new tech stack)
-- `mockups/index.html` — Homepage mockup (reference for design)
-- `mockups/projects.html` — Projects page mockup
-- `mockups/writing.html` — Writing page mockup
-- `mockups/about.html` — About page mockup
-
-## Key Decisions (currently active)
-- Fresh Astro 6 project with React integration (for shadcn islands)
-- Tailwind CSS v4 (no custom CSS)
+## Key Technical Decisions
+- Astro 6 + React islands (for shadcn/ui)
+- Tailwind CSS v4 via @tailwindcss/vite
 - shadcn/ui component library
-- Astro Content Collections with Zod schemas
-- Dark mode via shadcn's CSS variable system + inline script + ModeToggle
-- Instrument Serif + Inter + JetBrains Mono via Google Fonts CDN
-- lucide-react for icons
-- Video shimmer placeholders (videos deferred to Phase 5)
-- Fly.io + GitHub Actions for deployment
+- Dark mode via shadcn CSS variables + inline script + ModeToggle
+- Content Collections with Zod (not Keystatic)
+- lucide-react icons
+- Google Fonts CDN (Instrument Serif, Inter, JetBrains Mono)
+- Reuse existing Fly.io app `soma-portfolio` from datascienceapps
+- GitHub Actions workflow to be ported from datascienceapps
+- PostHog via PUBLIC_POSTHOG_KEY env var + api-v2.eeshans.com proxy
+- GitHub Activity via GITHUB_TOKEN at build time, cached in .cache/
+- Substack proxy via substack.eeshans.com
+- Substack posts will be sourced from pipeline, not hardcoded MDX (placeholder MDX files exist now, to be replaced in Phase 4)
 
-## Open Items
-- Phase 1 has not started yet (no code in repo)
-- Demo videos have not been recorded
-- DNS cutover to new site has not happened
-- Old repos (datascienceapps, es-portfolio) are still live in production
-- Need to port Substack refresh script from datascienceapps
+## Known Issues to Address
+- Recognition items don't show years (impact collection doesn't have year data yet)
+- Typography spacing and proportions need tuning against mockups
+- Shimmer placeholders are functional but not pixel-matched to mockups
+- The about page renders MDX content via `render()` — verify it looks correct in browser
+- 404 page not yet created
+
+## Important Files
+- `internal_docs/portfolio-architecture.md` — Full architecture doc (updated this session)
+- `internal_docs/portfolio-rebuild-analysis.md` — PM analysis (from prior session)
+- `AGENTS.md` — Working principles (work in chunks, DRY, minimize code, root causes, no fallbacks)
+- `mockups/` — HTML mockups for reference
+- `src/content.config.ts` — Zod schemas for all collections
+- `src/data/config.ts` — Site config
+- `src/data/series.ts` — Series metadata
+- `src/layouts/Base.astro` — Main layout with dark mode
+- `src/styles/globals.css` — Tailwind + shadcn theme tokens
 
 ## Resume Plan
-1. Initialize Astro 6 project with React + Tailwind v4 + MDX + shadcn/ui
-2. Configure Tailwind theme tokens matching mockup palette
-3. Set up content collections with Zod schemas
-4. Create all content MDX files
-5. Build visual layer (Phase 2)
-6. Build pages (Phase 3)
-7. Integration (Phase 4)
-8. Demo videos (Phase 5)
-9. Cutover (Phase 6)
+1. Run dev server and review visual output against mockups
+2. Tune typography, spacing, and proportions
+3. Begin Phase 4: Substack pipeline, PostHog, GitHub Activity, RSS, 404, Dockerfile, GitHub Actions
+4. Address known issues (years in recognition, etc.)
 
 ## Notes
-- `.env` exists locally in datascienceapps; do not print or commit secrets
-- Final cutover remains intended for Fly app `soma-portfolio`
-- User explicitly noted they're "ambitious and do a lot of stuff" — when a future session reaches a fork, default to the more ambitious option *and* the time-honest scope-down, present both
+- `.env` not yet created; `.env.example` exists with required vars
+- The `soma-portfolio` Fly.io app is already live serving eeshans.com
+- `.cache/` directory will hold substack-feed.json and github-data.json at build time
+- Final cutover = point existing Fly app to new repo, not a new app
