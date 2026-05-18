@@ -1,0 +1,50 @@
+---
+import { series as allSeries } from "@/data/series";
+import { getCollection } from "astro:content";
+
+interface Props {
+	seriesSlug: string;
+}
+
+const { seriesSlug } = Astro.props;
+const seriesMeta = allSeries[seriesSlug as keyof typeof allSeries];
+
+if (!seriesMeta) {
+	throw new Error(`Series "${seriesSlug}" not found in series data`);
+}
+
+const allPosts = await getCollection("posts");
+const seriesPosts = allPosts
+	.filter((post) => post.data.series === seriesSlug)
+	.sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
+---
+
+<div class="rounded-lg border border-border bg-paper-2 p-5 mb-6 dark:bg-muted">
+	<div class="flex items-center gap-2.5 mb-3">
+		<span class="font-[family-name:var(--font-mono)] text-[0.62rem] font-semibold uppercase tracking-wider bg-accent text-white px-2 py-0.5 rounded">
+			{seriesPosts.length} parts
+		</span>
+		<span class="font-[family-name:var(--font-display)] text-lg">{seriesMeta.title}</span>
+	</div>
+	<p class="text-sm text-muted-foreground leading-relaxed mb-3">{seriesMeta.description}</p>
+	<div class="flex flex-col gap-2">
+		{seriesPosts.map((post, i) => (
+			<div class="flex items-baseline gap-2.5 text-sm">
+				<span class="font-[family-name:var(--font-mono)] text-xs font-semibold text-accent min-w-[20px]">
+					{String(i + 1).padStart(2, "0")}
+				</span>
+				<a
+					href={post.data.externalUrl || `#`}
+					class="text-foreground hover:text-link-2 transition-colors"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{post.data.title}
+				</a>
+				<span class="font-[family-name:var(--font-mono)] text-[0.7rem] text-muted-foreground">
+					{post.data.createdAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+				</span>
+			</div>
+		))}
+	</div>
+</div>

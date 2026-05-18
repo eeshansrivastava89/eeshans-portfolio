@@ -1,0 +1,72 @@
+---
+import BaseLayout from "@/layouts/Base.astro";
+import SeriesCard from "@/components/SeriesCard.astro";
+import PostItem from "@/components/PostItem.astro";
+import SubscribeBox from "@/components/SubscribeBox.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+const sortedPosts = posts
+	.filter((p) => !p.data.draft)
+	.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime());
+
+const localAiSeriesPosts = sortedPosts.filter((p) => p.data.series === "local-ai");
+const standalonePosts = sortedPosts.filter((p) => !p.data.series);
+
+// Find publications (TDS etc.)
+const publications = sortedPosts.filter((p) => p.data.tags?.includes("publication"));
+const essays = standalonePosts.filter((p) => !p.data.tags?.includes("publication"));
+
+function formatDate(date: Date) {
+	return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+}
+---
+
+<BaseLayout title="Writing" activePage="/writing">
+	<a href="/" class="text-[0.82rem] text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
+
+	<h1 class="font-[family-name:var(--font-display)] text-4xl leading-tight mb-2">Writing</h1>
+	<p class="text-sm text-muted-foreground max-w-[580px] leading-relaxed mb-10">
+		Essays on AI, data science, and what holds up after the hype. Published on
+		<a href="https://theasymptotic.substack.com" class="text-accent hover:text-accent-2 transition-colors" target="_blank" rel="noopener noreferrer">Asymptotic</a>.
+	</p>
+
+	<!-- Series -->
+	{localAiSeriesPosts.length > 0 && (
+		<div class="mb-10">
+			<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">Series</h2>
+			<SeriesCard seriesSlug="local-ai" />
+		</div>
+	)}
+
+	<!-- Essays -->
+	<div class="mb-10">
+		<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">Essays</h2>
+		{essays.map((post) => (
+			<PostItem
+				title={post.data.title}
+				href={post.data.externalUrl}
+				excerpt={post.data.description}
+				date={formatDate(post.data.createdAt)}
+				projectLink={post.data.relatedProject ? { label: post.data.relatedProject, href: `/projects` } : undefined}
+			/>
+		))}
+	</div>
+
+	<!-- Publications -->
+	{publications.length > 0 && (
+		<div class="mb-10">
+			<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">Publication</h2>
+			{publications.map((post) => (
+				<PostItem
+					title={post.data.title}
+					href={post.data.externalUrl}
+					excerpt={post.data.description}
+					date="Publication"
+				/>
+			))}
+		</div>
+	)}
+
+	<SubscribeBox />
+</BaseLayout>

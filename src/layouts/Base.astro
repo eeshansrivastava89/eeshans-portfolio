@@ -1,15 +1,21 @@
 ---
+import { siteConfig } from "@/data/config";
+import { ModeToggle } from "@/components/ModeToggle";
 import "../styles/globals.css";
 
 interface Props {
 	title?: string;
 	description?: string;
+	activePage?: string;
 }
 
 const {
-	title = "Eeshan Srivastava",
-	description = "Data science leader, local AI builder, open-source maintainer.",
+	title = siteConfig.title,
+	description = siteConfig.description,
+	activePage = "",
 } = Astro.props;
+
+const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfig.title}`;
 ---
 
 <!doctype html>
@@ -18,15 +24,16 @@ const {
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content={description} />
-		<title>{title}</title>
+		<title>{fullTitle}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
 			rel="stylesheet"
 		/>
+		<meta name="generator" content={Astro.generator} />
 	</head>
-	<body>
+	<body class="min-h-screen bg-background text-foreground">
 		<script is:inline>
 			const getThemePreference = () => {
 				if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
@@ -49,6 +56,40 @@ const {
 				});
 			}
 		</script>
-		<slot />
+
+		<nav class="mx-auto flex max-w-3xl items-baseline justify-between border-b border-border px-6 pb-6 pt-12">
+			<div class="font-[family-name:var(--font-display)] text-lg">
+				<a href="/" class="text-foreground hover:text-foreground/80">
+					Eeshan <em>Srivastava</em>
+				</a>
+			</div>
+			<div class="flex items-center gap-6">
+				<ul class="flex gap-6">
+					{siteConfig.nav.map((item) => (
+						<li>
+							<a
+								href={item.href}
+								class:list={[
+									"text-xs font-medium uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground",
+									activePage === item.href && "text-foreground",
+								]}
+							>
+								{item.label}
+							</a>
+						</li>
+					))}
+				</ul>
+				<ModeToggle client:load />
+			</div>
+		</nav>
+
+		<main class="mx-auto max-w-3xl px-6 pb-20">
+			<slot />
+		</main>
+
+		<footer class="mx-auto flex max-w-3xl items-center justify-between border-t border-border px-6 py-6 text-xs text-muted-foreground">
+			<span>© {new Date().getFullYear()} Eeshan Srivastava</span>
+			<span>Open source · Non-commercial</span>
+		</footer>
 	</body>
 </html>

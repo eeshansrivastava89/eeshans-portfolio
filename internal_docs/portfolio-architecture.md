@@ -272,8 +272,8 @@ Single column on mobile (<640px), comfortable reading width on desktop (780px ma
 ### Deployment
 
 - **Static output** (`output: 'static'`)
-- **Fly.io** hosting with nginx, matching current production setup
-- **GitHub Actions** for CI/CD: push to `main` triggers build + deploy
+- **Fly.io** — reuse the existing `soma-portfolio` Fly app from datascienceapps. Same nginx-based Dockerfile pattern. Swap the repo pointer when ready for cutover.
+- **GitHub Actions** — port the existing workflow from datascienceapps: push to `main` triggers build + deploy, scheduled Substack refresh every 4 hours, typecheck step, automatic commit of snapshot changes. Uses `GITHUB_TOKEN` secret for GitHub Activity at build time and `FLY_API_TOKEN` secret for deployment.
 - **Substack refresh** on scheduled runs (4 hours), same pattern as datascienceapps. Uses a Substack API proxy at `substack.eeshans.com` to avoid CORS/rate-limit issues.
 - **PostHog** for analytics — public key inlined at build time via `PUBLIC_POSTHOG_KEY` env var, proxy host at `api-v2.eeshans.com`. Snippet injected in `<head>` of the base layout.
 - **GitHub Activity** — fetched at build time via GitHub GraphQL API using `GITHUB_TOKEN`. Contribution heatmap + recent activity (commits, repos, issues, PRs) displayed on homepage. Uses build-time caching (`.cache/github-data.json`) so the site remains fully static.
@@ -305,7 +305,7 @@ Single column on mobile (<640px), comfortable reading width on desktop (780px ma
 | Analytics | PostHog (public key, build-time inlined) | Same as current site, with proxy host |
 | GitHub Activity | GitHub GraphQL API (`GITHUB_TOKEN`) | Build-time fetch, cached in `.cache/` |
 | Substack Proxy | `substack.eeshans.com` API | Same as datascienceapps, avoids CORS |
-| Deploy | Fly.io + GitHub Actions | Same as current site |
+| Deploy | Fly.io (`soma-portfolio` app) + GitHub Actions | Reuse existing Fly app from datascienceapps |
 | Package manager | pnpm | Same as es-portfolio |
 
 ### Key npm dependencies
@@ -386,8 +386,9 @@ astro-expressive-code    # Code syntax highlighting
 - [ ] Add RSS feed (`/rss.xml`) from posts collection
 - [ ] Add `robots.txt` and sitemap
 - [ ] Add 404 page
-- [ ] Set up Fly.io deployment config (Dockerfile, fly.toml)
-- [ ] Set up GitHub Actions workflow for build + deploy + scheduled Substack refresh
+- [ ] Set up Fly.io deployment config — reuse existing `soma-portfolio` Fly app from datascienceapps (same Dockerfile + nginx pattern, same `fly.toml` with `soma-portfolio` app name)
+- [ ] Port GitHub Actions workflow from datascienceapps (build + deploy on push to `main`, scheduled Substack refresh every 4h, typecheck, type-safe commit of snapshot changes)
+- [ ] Set up Fly.io secrets: `GITHUB_TOKEN` (for GitHub Activity), `FLY_API_TOKEN` (for deploy)
 - [ ] Test Substack refresh script end-to-end
 - [ ] Test full build pipeline: `pnpm build` succeeds
 - [ ] Deploy to Fly.io staging and verify everything loads
@@ -405,14 +406,15 @@ astro-expressive-code    # Code syntax highlighting
 
 ### Phase 6 — Cutover
 
-- [ ] DNS cutover: point `eeshans.com` to new Fly.io app
+- [ ] DNS cutover: point `eeshans.com` to the existing `soma-portfolio` Fly.io app (already deployed, swap the repo)
 - [ ] Verify all external links still resolve (Substack posts, project live URLs, GitHub repos)
 - [ ] Verify PostHog events are firing
+- [ ] Verify GitHub Activity renders correctly (requires `GITHUB_TOKEN` secret in GitHub Actions)
 - [ ] Verify Substack scheduled refresh works on GitHub Actions
-- [ ] Archive or redirect old routes if URL structure changed
+- [ ] Archive or redirect old routes if any URL structure changed
 - [ ] Monitor for 48 hours, fix any issues
 - [ ] Archive the `datascienceapps` repo (or redirect it)
-- [ ] Update repo README with new architecture docs
+- [ ] Update `es-portfolio` (old repo) README with new architecture docs
 
 ---
 
@@ -493,8 +495,8 @@ eeshans-portfolio/
 ├── tsconfig.json
 ├── package.json
 ├── .env.example              # Required env vars (GITHUB_TOKEN, PUBLIC_POSTHOG_KEY, etc.)
-├── Dockerfile               # Fly.io deployment
-├── fly.toml                 # Fly.io config
+├── Dockerfile                # Fly.io deployment (nginx serving static build, same pattern as datascienceapps)
+├── fly.toml                  # Fly.io config (app = soma-portfolio, reuse existing app)
 ├── .cache/                  # Build-time cache (substack-feed.json, github-data.json)
 └── .github/
     └── workflows/
@@ -523,3 +525,13 @@ eeshans-portfolio/
 | No Pagefind | Skipped for V1 |
 | Video infra first, videos later | Build shimmer placeholders now, record with Screen Studio in Phase 5 |
 | No Tailwind CSS config file | Tailwind v4 uses CSS-based config via `@theme` in globals.css |
+
+---
+
+### Notes
+
+- `.env` exists locally and is ignored; do not print or commit secrets. See `.env.example` for required vars.
+- The `soma-portfolio` Fly.io app is already deployed and serving `eeshans.com`. Cutover means pointing this app to the new repo's build, not creating a new app.
+- The GitHub Actions workflow from datascienceapps (build + deploy on push, Substack refresh every 4h) will be ported and adapted.
+- User controls the dev server. Do not start one unless asked.
+- Do not push commits.
