@@ -1,0 +1,148 @@
+---
+import VideoShimmer from "./VideoShimmer.astro";
+
+interface Props {
+	title: string;
+	status?: "live" | "draft" | "archived";
+	hook: string;
+	liveUrl?: string;
+	repoUrl?: string;
+	analysisUrl?: string;
+	relatedWriting?: string[];
+	tech: string[];
+	stats?: { value: string; label?: string }[];
+	videoWebm?: string;
+	videoMp4?: string;
+	videoPoster?: string;
+}
+
+const {
+	title,
+	status = "live",
+	hook,
+	liveUrl,
+	repoUrl,
+	analysisUrl,
+	relatedWriting,
+	tech,
+	stats,
+	videoWebm,
+	videoMp4,
+	videoPoster,
+} = Astro.props;
+
+const badgeVariant = status === "live" ? "live" : status === "draft" ? "building" : null;
+const badgeLabel = status === "live" ? "Live" : status === "draft" ? "Building" : null;
+---
+
+<div class="group mb-8">
+	<!-- Title + badge + primary links -->
+	<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-1.5">
+		<h3 class="font-[family-name:var(--font-display)] text-2xl leading-tight">
+			<a href={liveUrl || repoUrl || "#"} class="text-foreground hover:text-link transition-colors">
+				{title}
+			</a>
+		</h3>
+		{badgeVariant && (
+			<span class="live-badge" data-variant={badgeVariant}>{badgeLabel}</span>
+		)}
+		{(liveUrl || repoUrl) && (
+			<div class="flex items-center gap-3 font-[family-name:var(--font-mono)] text-xs">
+				{liveUrl && (
+					<a href={liveUrl} class="inline-flex items-center gap-1 text-link hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
+						<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+						Live
+					</a>
+				)}
+				{repoUrl && (
+					<a href={repoUrl} class="inline-flex items-center gap-1 text-link hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
+						<svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.37 1.23-3.21-.12-.3-.54-1.515.12-3.15 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.635.24 2.85.12 3.15.765.84 1.23 1.905 1.23 3.21 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+						Source
+					</a>
+				)}
+			</div>
+		)}
+	</div>
+
+	<!-- Hook -->
+	<p class="text-base text-foreground/80 leading-relaxed mb-2">{hook}</p>
+
+	<!-- Secondary links + tech tags on one row -->
+	<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-2">
+		{analysisUrl && (
+			<a href={analysisUrl} class="inline-flex items-center gap-1 text-accent hover:text-accent-2 transition-colors text-xs font-medium" target="_blank" rel="noopener noreferrer">
+				<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+				Analysis
+			</a>
+		)}
+		{relatedWriting && relatedWriting.length > 0 && (
+			<a href="/writing" class="inline-flex items-center gap-1 text-accent hover:text-accent-2 transition-colors text-xs font-medium">
+				<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+				Writeup
+			</a>
+		)}
+		{tech.length > 0 && (
+			<span class="font-[family-name:var(--font-mono)] text-[0.65rem] text-muted-foreground">
+				{tech.join(" · ")}
+			</span>
+		)}
+	</div>
+
+	<!-- Stats -->
+	{stats && stats.length > 0 && (
+		<div class="flex gap-4 mb-2">
+			{stats.map((stat) => (
+				<span class="font-[family-name:var(--font-mono)] text-xs">
+					<span class="font-semibold text-accent">{stat.value}</span>
+					{stat.label && <span class="text-muted-foreground"> {stat.label}</span>}
+				</span>
+			))}
+		</div>
+	)}
+
+	<!-- Video / Shimmer -->
+	{(videoWebm || videoMp4) ? (
+		<div class="demo-video relative aspect-video rounded-lg border border-border overflow-hidden cursor-pointer">
+			<video autoplay muted loop playsinline preload="metadata" poster={videoPoster}>
+				{videoWebm && <source src={videoWebm} type="video/webm" />}
+				{videoMp4 && <source src={videoMp4} type="video/mp4" />}
+			</video>
+			<div class="demo-video-overlay absolute inset-0 flex items-center justify-center bg-foreground/5 opacity-0 transition-opacity duration-200 pointer-events-none">
+				<div class="w-12 h-12 rounded-full bg-foreground/80 dark:bg-foreground/70 flex items-center justify-center shadow-lg">
+					<svg class="w-5 h-5 fill-background ml-0.5" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+				</div>
+			</div>
+		</div>
+	) : (
+		<VideoShimmer duration="45s" />
+	)}
+</div>
+
+<style>
+	.live-badge {
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		border-radius: 0.25rem;
+		padding: 0.125rem 0.375rem;
+		line-height: 1.5;
+	}
+	.live-badge[data-variant="live"] {
+		background-color: oklch(50% 0.14 160);
+		color: white;
+	}
+	.live-badge[data-variant="building"] {
+		background-color: oklch(75% 0.16 75);
+		color: oklch(25% 0.05 75);
+	}
+	:global(.dark) .live-badge[data-variant="live"] {
+		background-color: color-mix(in oklab, oklch(65% 0.17 160) 20%, transparent);
+		color: oklch(78% 0.15 160);
+	}
+	:global(.dark) .live-badge[data-variant="building"] {
+		background-color: color-mix(in oklab, oklch(80% 0.15 75) 15%, transparent);
+		color: oklch(85% 0.15 75);
+	}
+</style>

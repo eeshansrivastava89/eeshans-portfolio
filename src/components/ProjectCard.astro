@@ -1,33 +1,11 @@
 ---
 interface Props {
-	title: string;
-	href?: string;
-	badge?: { label: string; variant: "featured" | "live" };
+	class?: string;
 }
 
-const { title, href, badge } = Astro.props;
+const { class: className = "" } = Astro.props;
 ---
 
-<div class="group mb-8">
-	<div class="flex flex-wrap items-baseline gap-2 mb-1">
-		<h3 class="font-[family-name:var(--font-display)] text-2xl leading-tight">
-			{href ? (
-				<a href={href} class="text-foreground hover:text-link transition-colors">
-					{title}
-				</a>
-			) : (
-				<span>{title}</span>
-			)}
-		</h3>
-		{badge && (
-			<span class:list={[
-				"font-[family-name:var(--font-mono)] text-[0.6rem] font-semibold uppercase tracking-wider rounded px-1.5 py-0.5",
-				badge.variant === "featured" && "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
-				badge.variant === "live" && "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
-			]}>
-				{badge.label}
-			</span>
-		)}
-	</div>
+<div class:list={[className]}>
 	<slot />
 </div>

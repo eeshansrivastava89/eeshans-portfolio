@@ -1,5 +1,5 @@
 ---
-import { getGitHubData } from "@/lib/github";
+import { getGitHubData, GITHUB_USERNAME } from "@/lib/github";
 import { siteConfig } from "@/data/config";
 
 const githubData = await getGitHubData();
@@ -26,14 +26,22 @@ const issueActivity = recentActivity.filter((item) => item.category === "issue")
 const prActivity = recentActivity.filter((item) => item.category === "pr");
 const commitRepoCount = new Set(commitActivity.map((item) => item.repo)).size;
 
-const allDays = allWeeks.flatMap((week) => week.contributionDays);
+// Use displayed weeks only for threshold calculation so the visible heatmap
+// has meaningful color variation. Using all-time data compresses visible days.
+const allDays = weeks.flatMap((week) => week.contributionDays);
 const maxDayCount = Math.max(...allDays.map((day) => day.contributionCount), 1);
+
+// GitHub-style 4-level scale using quartiles of the displayed range
+const sortedCounts = allDays.map((d) => d.contributionCount).filter((c) => c > 0).sort((a, b) => a - b);
+const p25 = sortedCounts.length > 0 ? sortedCounts[Math.floor(sortedCounts.length * 0.25)] : maxDayCount * 0.25;
+const p50 = sortedCounts.length > 0 ? sortedCounts[Math.floor(sortedCounts.length * 0.5)] : maxDayCount * 0.5;
+const p75 = sortedCounts.length > 0 ? sortedCounts[Math.floor(sortedCounts.length * 0.75)] : maxDayCount * 0.75;
 
 function getContribLevel(count: number): number {
 	if (count === 0) return 0;
-	if (count <= maxDayCount * 0.25) return 1;
-	if (count <= maxDayCount * 0.5) return 2;
-	if (count <= maxDayCount * 0.75) return 3;
+	if (count <= p25) return 1;
+	if (count <= p50) return 2;
+	if (count <= p75) return 3;
 	return 4;
 }
 
@@ -61,7 +69,7 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 			target="_blank"
 			rel="noopener noreferrer"
 		>
-			@eeshansrivastava89 →
+			@{GITHUB_USERNAME} →
 		</a>
 	</div>
 

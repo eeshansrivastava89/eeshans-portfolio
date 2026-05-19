@@ -1,0 +1,22 @@
+---
+interface Props {
+	timespan: string;
+	title: string;
+	organization: string;
+	detail?: string;
+	logo?: string;
+}
+
+const { timespan, title, organization, detail, logo } = Astro.props;
+---
+
+<div class="flex items-start gap-4 py-4 border-b border-border last:border-b-0">
+	{logo && (
+		<img src={`/logos/${logo}`} alt="" class="w-10 h-10 rounded-lg border border-border bg-background shrink-0" />
+	)}
+	<div class="min-w-0">
+		<div class="font-[family-name:var(--font-mono)] text-xs text-accent tracking-wide mb-0.5">{timespan}</div>
+		<div class="font-medium text-foreground text-[0.88rem]">{title} · {organization}</div>
+		{detail && <div class="text-[0.88rem] text-foreground/75 mt-0.5">{detail}</div>}
+	</div>
+</div>

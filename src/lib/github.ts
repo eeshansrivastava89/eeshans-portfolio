@@ -1,6 +1,6 @@
 import { fetchWithCache } from "./build-cache";
 
-const GITHUB_USERNAME = "eeshansrivastava89";
+export const GITHUB_USERNAME = "eeshansrivastava89";
 const ACTIVITY_DAYS = 182;
 
 export interface ContributionDay {

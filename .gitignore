@@ -4,12 +4,11 @@ node_modules/
 # build output
 dist/
 
-# cache
-.cache/
-!.cache/substack-feed.json
-
 # astro
 .astro/
+
+# cache (substack snapshot is committed for offline builds)
+.cache/github-data.json
 
 # environment
 .env

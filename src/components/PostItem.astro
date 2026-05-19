@@ -1,14 +1,13 @@
 ---
 interface Props {
 	title: string;
-	description: string;
 	href?: string;
 	excerpt?: string;
 	date?: string;
 	projectLink?: { label: string; href: string };
 }
 
-const { title, description, href, excerpt, date, projectLink } = Astro.props;
+const { title, href, excerpt, date, projectLink } = Astro.props;
 ---
 
 <div class="mb-4 pb-4 border-b border-border last:border-b-0 last:mb-0 last:pb-0">

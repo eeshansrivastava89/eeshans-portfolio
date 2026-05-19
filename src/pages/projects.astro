@@ -1,14 +1,11 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
-import VideoShimmer from "@/components/VideoShimmer.astro";
+import ProjectCardContent from "@/components/ProjectCardContent.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
-import { getCollection } from "astro:content";
+import { getLiveProjects } from "@/data/content";
 
-const projects = await getCollection("projects");
-const sortedProjects = projects
-	.filter((p) => p.data.status === "live")
-	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const sortedProjects = await getLiveProjects();
 
 const categoryOrder = ["featured", "local-ai", "experimentation", "tool"] as const;
 const categoryLabels: Record<string, string> = {
@@ -48,35 +45,21 @@ for (const p of sortedProjects) {
 				{categoryLabels[category] || category}
 			</h2>
 			{catProjects.map((project) => (
-				<ProjectCard title={project.data.title} href={project.data.liveUrl || project.data.repoUrl} badge={project.data.featured ? { label: "Featured", variant: "featured" as const } : project.data.status === "live" ? { label: "Live", variant: "live" as const } : undefined}>
-					<p class="text-base text-foreground/80 leading-relaxed mb-2">{project.data.hook}</p>
-					<div class="flex flex-wrap items-center gap-2.5 font-[family-name:var(--font-mono)] text-xs text-muted-foreground">
-						{project.data.liveUrl && <a href={project.data.liveUrl} class="hover:text-link transition-colors" target="_blank" rel="noopener noreferrer">Live</a>}
-						{project.data.liveUrl && project.data.repoUrl && <span class="text-border">·</span>}
-						{project.data.repoUrl && <a href={project.data.repoUrl} class="hover:text-link transition-colors" target="_blank" rel="noopener noreferrer">Source</a>}
-						{project.data.analysisUrl && <><span class="text-border">·</span><a href={project.data.analysisUrl} class="hover:text-link transition-colors" target="_blank" rel="noopener noreferrer">Analysis</a></>}
-						{project.data.relatedWriting && project.data.relatedWriting.length > 0 && <><span class="text-border">·</span><a href={`/writing`} class="hover:text-link transition-colors">Writeup →</a></>}
-						{(project.data.liveUrl || project.data.repoUrl) && project.data.tech.length > 0 && <span class="text-border">·</span>}
-						<span>{project.data.tech.join(" · ")}</span>
-					</div>
-					{project.data.stats && project.data.stats.length > 0 && (
-						<div class="flex gap-4 mt-2">
-							{project.data.stats.map((stat) => (
-								<span class="font-[family-name:var(--font-mono)] text-xs">
-									<span class="font-semibold text-accent">{stat.value}</span>
-									{stat.label && <span class="text-muted-foreground"> {stat.label}</span>}
-								</span>
-							))}
-						</div>
-					)}
-					{(project.data.videoWebm || project.data.videoMp4) ? (
-						<video autoplay muted loop playsinline preload="metadata" class="mt-3 aspect-video rounded-lg border border-border" poster={project.data.videoPoster}>
-							{project.data.videoWebm && <source src={project.data.videoWebm} type="video/webm" />}
-							{project.data.videoMp4 && <source src={project.data.videoMp4} type="video/mp4" />}
-						</video>
-					) : (
-						<VideoShimmer duration="45s" />
-					)}
+				<ProjectCard>
+					<ProjectCardContent
+						title={project.data.title}
+						status={project.data.status}
+						hook={project.data.hook}
+						liveUrl={project.data.liveUrl}
+						repoUrl={project.data.repoUrl}
+						analysisUrl={project.data.analysisUrl}
+						relatedWriting={project.data.relatedWriting}
+						tech={project.data.tech}
+						stats={project.data.stats}
+						videoWebm={project.data.videoWebm}
+						videoMp4={project.data.videoMp4}
+						videoPoster={project.data.videoPoster}
+					/>
 				</ProjectCard>
 			))}
 		</div>

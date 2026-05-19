@@ -16,6 +16,9 @@ const {
 } = Astro.props;
 
 const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfig.title}`;
+
+const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
+const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 ---
 
 <!doctype html>
@@ -32,9 +35,9 @@ const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfi
 			rel="stylesheet"
 		/>
 		<meta name="generator" content={Astro.generator} />
-		{import.meta.env.PUBLIC_POSTHOG_KEY && import.meta.env.PUBLIC_POSTHOG_HOST && (
-			<script is:inline>
-				!function(t,e){var o,n,a,r;e._posthog=e._posthog||{},(a=e._posthog.q=e._posthog.q||[]).push([Date.now()].concat([].slice.call(arguments,0))),r=e._posthog,r.__SV=1;var i=t.createElement("script");i.type="text/javascript",i.async=!0,i.crossOrigin="anonymous",i.src="{import.meta.env.PUBLIC_POSTHOG_HOST}/array.js",(n=t.getElementsByTagName("script")[0]).parentNode.insertBefore(i,n);for(var s=function(e){return function(){a.push([Date.now()].concat([].slice.call(arguments,0),[e]))}},c=["identify","capture","set","setPersonProperties","optIn","optOut","reset","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatures"],u=0;u<c.length;u++)r[c[u]]=s(c[u])}(document,window);posthog.init('{import.meta.env.PUBLIC_POSTHOG_KEY}',{api_host:'{import.meta.env.PUBLIC_POSTHOG_HOST}'})
+		{posthogKey && posthogHost && (
+			<script is:inline define:vars={{ posthogKey, posthogHost }}>
+				!function(t,e){var o,n,a,r;e._posthog=e._posthog||{},(a=e._posthog.q=e._posthog.q||[]).push([Date.now()].concat([].slice.call(arguments,0))),r=e._posthog,r.__SV=1;var i=t.createElement("script");i.type="text/javascript",i.async=!0,i.crossOrigin="anonymous",i.src=posthogHost+"/array.js",(n=t.getElementsByTagName("script")[0]).parentNode.insertBefore(i,n);for(var s=function(e){return function(){a.push([Date.now()].concat([].slice.call(arguments,0),[e]))}},c=["identify","capture","set","setPersonProperties","optIn","optOut","reset","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatures"],u=0;u<c.length;u++)r[c[u]]=s(c[u])}(document,window);posthog.init(posthogKey,{api_host:posthogHost})
 			</script>
 		)}
 	</head>
@@ -96,5 +99,40 @@ const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfi
 			<span>© {new Date().getFullYear()} Eeshan Srivastava</span>
 			<span>Open source · Non-commercial</span>
 		</footer>
+
+		<script is:inline>
+			// Demo video: click-to-pause with styled overlay, auto-pause when scrolled away
+			document.addEventListener('click', (e) => {
+				const wrap = (e.target).closest('.demo-video');
+				if (!wrap) return;
+				const video = wrap.querySelector('video');
+				const overlay = wrap.querySelector('.demo-video-overlay');
+				if (!video) return;
+				if (video.paused) {
+					video.play();
+					overlay.style.opacity = '0';
+					wrap.classList.remove('paused');
+				} else {
+					video.pause();
+					overlay.style.opacity = '1';
+					wrap.classList.add('paused');
+				}
+			});
+
+			const io = new IntersectionObserver((entries) => {
+				for (const entry of entries) {
+					const video = entry.target.querySelector('video');
+					const overlay = entry.target.querySelector('.demo-video-overlay');
+					if (!video) continue;
+					if (entry.isIntersecting) {
+						if (!entry.target.classList.contains('paused')) video.play();
+					} else {
+						video.pause();
+					}
+				}
+			}, { threshold: 0.25 });
+
+			document.querySelectorAll('.demo-video').forEach((el) => io.observe(el));
+		</script>
 	</body>
 </html>
