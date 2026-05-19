@@ -396,6 +396,17 @@ astro-expressive-code    # Code syntax highlighting
 - [x] Homepage: removed Recognition and About sections (those live on the About page only), intro text driven by `config.ts`
 - [x] Test Substack refresh script — 9 posts fetched successfully from substack.eeshans.com
 - [x] Content editing guide: `CONTENT.md` written with user-friendly instructions for every content type
+- [x] Design pass: warm-tinted `--muted`/`--border` in both light+dark modes (hue 30), removed `bg-paper-2` in favor of `bg-muted`, lighter card treatments (GitHub Activity no border/bg, SeriesCard no bg-muted)
+- [x] Config-driven socials: `config.ts` socials changed from object to array of `{key, label, href}`, labels configurable (e.g. "Asymptotic" not "Substack")
+- [x] Config-driven subscribe box: kicker/tagline/href from `config.ts`, Substack-styled with orange tint, Substack icon on button
+- [x] SocialLinks component: one source of truth for social links on homepage and about page
+- [x] Homepage: no h1 heading, original tagline restored, 3 featured projects (Sidequests + How I Prompt + A/B Simulator), full-width video shimmer, SubscribeBox added
+- [x] Projects page: SubscribeBox added at bottom
+- [x] About page recognition: changed from 2-col card grid to full-width stacked rows (matches Experience/Education pattern)
+- [x] Homepage: removed Recognition and About sections (those live on the About page only)
+- [x] About page: profile photo with text wrapping, no h1, full-width text, social links after bio
+- [x] Substack refresh tested: 9 posts fetched from substack.eeshans.com
+- [x] Vision doc: removed AI-slop positioning recommendation ("Ship it. Test it. Write about it." → use your own voice)
 
 ### Phase 5 — Demo Videos
 
@@ -540,6 +551,14 @@ eeshans-portfolio/
 | No Pagefind | Skipped for V1 |
 | Video infra first, videos later | Build shimmer placeholders now, record with Screen Studio in Phase 5 |
 | No Tailwind CSS config file | Tailwind v4 uses CSS-based config via `@theme` in globals.css |
+| Warm-tinted `--muted`/`--border` in both modes | Hue 30 (amber undertone) in light and dark modes — prevents the neutral gray cards problem |
+| `bg-muted` for all card backgrounds | Replaced custom `bg-paper-2`/`dark:bg-muted` pattern — one class works in both modes via shadcn CSS variables |
+| Socials as array in config | `{key, label, href}` lets labels be configurable ("Asymptotic" not "Substack") — one change updates all pages |
+| SubscribeBox driven by config.ts | Kicker/tagline/href configurable, Substack orange-tinted styling with icon |
+| No AI-slop positioning | Tagline comes from the user's own voice, not generated marketing copy |
+| Recognition as stacked rows, not card grid | Matches the vertical section pattern of Experience/Education on the about page |
+| No h1 on homepage or about page | Name already appears in nav; the h1 just wasted space |
+| Deployment deferred to Phase 6 | No deploy until videos and polish are complete |
 
 ---
 
