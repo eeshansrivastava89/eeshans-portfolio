@@ -1,0 +1,281 @@
+---
+import { getGitHubData } from "@/lib/github";
+import { siteConfig } from "@/data/config";
+
+const githubData = await getGitHubData();
+
+const {
+	followers,
+	publicRepos,
+	totalStars,
+	totalContributions,
+	weeks: allWeeks,
+	recentActivity,
+	activityTotals,
+} = githubData;
+
+const WEEKS_TO_SHOW = 26;
+const weeks = allWeeks.slice(-WEEKS_TO_SHOW);
+const sixMonthContributions = weeks
+	.flatMap((week) => week.contributionDays)
+	.reduce((sum, day) => sum + day.contributionCount, 0);
+
+const commitActivity = recentActivity.filter((item) => item.category === "commit");
+const repoActivity = recentActivity.filter((item) => item.category === "repo");
+const issueActivity = recentActivity.filter((item) => item.category === "issue");
+const prActivity = recentActivity.filter((item) => item.category === "pr");
+const commitRepoCount = new Set(commitActivity.map((item) => item.repo)).size;
+
+const allDays = allWeeks.flatMap((week) => week.contributionDays);
+const maxDayCount = Math.max(...allDays.map((day) => day.contributionCount), 1);
+
+function getContribLevel(count: number): number {
+	if (count === 0) return 0;
+	if (count <= maxDayCount * 0.25) return 1;
+	if (count <= maxDayCount * 0.5) return 2;
+	if (count <= maxDayCount * 0.75) return 3;
+	return 4;
+}
+
+function rows(items: typeof recentActivity, cap: number, prefix: RegExp) {
+	return items.slice(0, cap).map((item) => ({
+		repo: item.repo,
+		detail: item.message.replace(prefix, "").replace(/^·\s*/, "") || item.message,
+		url: item.url,
+	}));
+}
+
+const commitRows = rows(commitActivity, 5, /^$/);
+const repoRows = rows(repoActivity, 3, /^Created repository\s*/i);
+const issueRows = rows(issueActivity, 3, /^Opened issue:\s*/i);
+const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
+---
+
+<div class="mb-6">
+	<!-- Header -->
+	<div class="flex items-baseline justify-between mb-4">
+		<h2 class="font-[family-name:var(--font-display)] text-xl">GitHub Activity</h2>
+		<a
+			href={siteConfig.socials.find(s => s.key === "github")?.href}
+			class="font-[family-name:var(--font-mono)] text-xs text-muted-foreground hover:text-foreground transition-colors"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			@eeshansrivastava89 →
+		</a>
+	</div>
+
+	<!-- Profile stats -->
+	<div class="flex flex-wrap gap-x-5 gap-y-1 font-[family-name:var(--font-mono)] text-xs text-muted-foreground mb-4">
+		<span><span class="font-semibold text-foreground">{followers.toLocaleString()}</span> followers</span>
+		<span><span class="font-semibold text-foreground">{totalStars.toLocaleString()}</span> stars</span>
+		<span><span class="font-semibold text-foreground">{publicRepos.toLocaleString()}</span> repos</span>
+	</div>
+
+	<!-- Contribution count -->
+	<div class="text-[0.88rem] text-foreground/80 mb-3">
+		<span class="font-[family-name:var(--font-mono)] font-semibold text-foreground">{sixMonthContributions.toLocaleString()}</span> contributions in the last 6 months
+	</div>
+
+	<!-- Heatmap -->
+	<div class="gh-contrib-grid mb-4" style={`--weeks: ${weeks.length};`}>
+		{weeks.map((week) => (
+			<div class="gh-contrib-week">
+				{week.contributionDays.map((day) => (
+					<div
+						class:list={[
+							"gh-contrib-day",
+							`l${getContribLevel(day.contributionCount)}`,
+						]}
+						data-tip={`${day.date}: ${day.contributionCount} contribution${day.contributionCount === 1 ? "" : "s"}`}
+					/>
+				))}
+			</div>
+		))}
+	</div>
+
+	<!-- Activity breakdown -->
+	<div class="flex flex-col gap-4 border-t border-border pt-4">
+		<!-- Commits -->
+		{commitRows.length > 0 && (
+			<div>
+				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+					{activityTotals.commits.toLocaleString()} commits in {commitRepoCount} {commitRepoCount === 1 ? "repository" : "repositories"}
+				</h3>
+				{commitRows.map((row) => (
+					<a
+						href={row.url || "#"}
+						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span class="font-medium text-foreground truncate">{row.repo}</span>
+						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
+					</a>
+				))}
+			</div>
+		)}
+
+		<!-- Created repos -->
+		{repoRows.length > 0 && (
+			<div>
+				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+					{activityTotals.repos} {activityTotals.repos === 1 ? "repository" : "repositories"} created
+				</h3>
+				{repoRows.map((row) => (
+					<a
+						href={row.url || "#"}
+						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span class="font-medium text-foreground truncate">{row.repo}</span>
+						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
+					</a>
+				))}
+			</div>
+		)}
+
+		<!-- Issues -->
+		{issueRows.length > 0 && (
+			<div>
+				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+					{activityTotals.issues} {activityTotals.issues === 1 ? "issue" : "issues"} opened
+				</h3>
+				{issueRows.map((row) => (
+					<a
+						href={row.url || "#"}
+						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span class="font-medium text-foreground truncate">{row.repo}</span>
+						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
+					</a>
+				))}
+			</div>
+		)}
+
+		<!-- Pull requests -->
+		{prRows.length > 0 && (
+			<div>
+				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+					{activityTotals.prs} pull {activityTotals.prs === 1 ? "request" : "requests"} opened
+				</h3>
+				{prRows.map((row) => (
+					<a
+						href={row.url || "#"}
+						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span class="font-medium text-foreground truncate">{row.repo}</span>
+						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
+					</a>
+				))}
+			</div>
+		)}
+	</div>
+</div>
+
+<style>
+	/* Contribution heatmap — scoped CSS needed for grid and hover behavior */
+	.gh-contrib-grid {
+		display: grid;
+		grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
+		gap: 3px;
+		overflow: visible;
+	}
+
+	.gh-contrib-week {
+		display: grid;
+		grid-template-rows: repeat(7, minmax(0, 1fr));
+		gap: 3px;
+		min-width: 0;
+		overflow: visible;
+	}
+
+	.gh-contrib-day {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		border-radius: 2px;
+		border: 1px solid var(--color-border);
+		background: var(--color-background);
+		cursor: default;
+		transition:
+			transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+			border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 160ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.gh-contrib-day:hover {
+		z-index: 2;
+		transform: translateY(-3px) scale(1.45);
+		border-color: color-mix(in oklab, var(--color-accent) 70%, var(--color-border));
+		box-shadow:
+			0 7px 14px color-mix(in oklab, var(--color-foreground) 15%, transparent),
+			0 0 0 1px color-mix(in oklab, var(--color-background) 80%, transparent);
+	}
+
+	/* Tooltip */
+	.gh-contrib-day::after {
+		content: attr(data-tip);
+		position: absolute;
+		bottom: calc(100% + 8px);
+		left: 50%;
+		transform: translateX(-50%) scale(0.9);
+		padding: 4px 8px;
+		border-radius: 6px;
+		font-size: 11px;
+		font-family: var(--font-mono);
+		white-space: nowrap;
+		color: var(--color-background);
+		background: var(--color-foreground);
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 120ms ease, transform 120ms ease;
+		z-index: 10;
+	}
+	.gh-contrib-day::before {
+		content: "";
+		position: absolute;
+		bottom: calc(100% + 2px);
+		left: 50%;
+		transform: translateX(-50%);
+		border: 4px solid transparent;
+		border-top-color: var(--color-foreground);
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 120ms ease;
+		z-index: 10;
+	}
+	.gh-contrib-day:hover::after,
+	.gh-contrib-day:hover::before {
+		opacity: 1;
+		transform: translateX(-50%) scale(1);
+	}
+	.gh-contrib-day:hover::before {
+		transform: translateX(-50%);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.gh-contrib-day {
+			transition: none;
+		}
+		.gh-contrib-day:hover {
+			transform: none;
+		}
+	}
+
+	/* Green contribution levels */
+	.gh-contrib-day.l1 { background: var(--color-emerald-200); border-color: var(--color-emerald-300); }
+	.gh-contrib-day.l2 { background: var(--color-emerald-400); border-color: var(--color-emerald-500); }
+	.gh-contrib-day.l3 { background: var(--color-emerald-600); border-color: var(--color-emerald-700); }
+	.gh-contrib-day.l4 { background: var(--color-emerald-800); border-color: var(--color-emerald-900); }
+
+	:global(.dark) .gh-contrib-day.l1 { background: color-mix(in oklab, var(--color-emerald-500) 40%, transparent); border-color: color-mix(in oklab, var(--color-emerald-500) 50%, transparent); }
+	:global(.dark) .gh-contrib-day.l2 { background: color-mix(in oklab, var(--color-emerald-400) 60%, transparent); border-color: color-mix(in oklab, var(--color-emerald-400) 70%, transparent); }
+	:global(.dark) .gh-contrib-day.l3 { background: var(--color-emerald-500); border-color: var(--color-emerald-400); }
+	:global(.dark) .gh-contrib-day.l4 { background: var(--color-emerald-400); border-color: var(--color-emerald-300); }
+</style>

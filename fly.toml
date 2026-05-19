@@ -1,0 +1,20 @@
+# Fly.io configuration for eeshans.com Astro static site
+app = "soma-portfolio"
+primary_region = "dfw"
+
+[build]
+  [build.args]
+    PUBLIC_POSTHOG_KEY = "phc_zfue5Ca8VaxypRHPCi9j2h2R3Qy1eytEHt3TMPWlOOS"
+    PUBLIC_POSTHOG_HOST = "https://api-v2.eeshans.com"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1

@@ -6,6 +6,7 @@ dist/
 
 # cache
 .cache/
+!.cache/substack-feed.json
 
 # astro
 .astro/
@@ -22,6 +23,3 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-
-# cache
-.cache/

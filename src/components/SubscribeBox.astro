@@ -1,15 +1,76 @@
 ---
-import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/data/config";
+
+const { kicker, tagline, href } = siteConfig.subscribe;
 ---
 
-<div class="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-paper-2 p-6 dark:bg-muted">
-	<div>
-		<div class="font-[family-name:var(--font-display)] text-xl">Asymptotic</div>
-		<div class="text-sm text-muted-foreground">Essays on AI, data science, and what holds up after the hype.</div>
+<div class="sub-box">
+	<div class="sub-copy">
+		<span class="sub-kicker">{kicker}</span>
+		<span class="sub-tagline">{tagline}</span>
 	</div>
-	<Button asChild class="bg-accent hover:bg-accent-2 text-white">
-		<a href="https://theasymptotic.substack.com/subscribe" target="_blank" rel="noopener noreferrer">
-			Subscribe ↗
-		</a>
-	</Button>
+	<a href={href} target="_blank" rel="noopener noreferrer" class="sub-button">
+		<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="14" height="14"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+		Subscribe
+	</a>
 </div>
+
+<style>
+	.sub-box {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 18px 20px;
+		border-radius: 16px;
+		border: 1px solid color-mix(in oklab, var(--color-substack, #ff6719) 38%, var(--color-border));
+		background: color-mix(in oklab, var(--color-substack, #ff6719) 8%, var(--color-background));
+	}
+
+	.sub-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.sub-kicker {
+		font-size: 0.85rem;
+		font-weight: 800;
+		letter-spacing: 0.01em;
+		white-space: nowrap;
+		color: var(--color-substack, #ff6719);
+	}
+
+	.sub-tagline {
+		font-size: 1.05rem;
+		color: var(--color-foreground);
+	}
+
+	.sub-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+		flex-shrink: 0;
+		padding: 8px 13px;
+		border-radius: 999px;
+		background: var(--color-substack, #ff6719);
+		color: #fff;
+		font-size: 0.85rem;
+		font-weight: 800;
+		text-decoration: none;
+	}
+
+	.sub-button:hover {
+		background: color-mix(in oklab, var(--color-substack, #ff6719) 85%, #000);
+		color: #fff;
+		text-decoration: none;
+	}
+
+	@media (max-width: 520px) {
+		.sub-box {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+</style>

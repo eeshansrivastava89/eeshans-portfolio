@@ -12,7 +12,7 @@ const { title, description, href, excerpt, date, projectLink } = Astro.props;
 ---
 
 <div class="mb-4 pb-4 border-b border-border last:border-b-0 last:mb-0 last:pb-0">
-	<h3 class="font-[family-name:var(--font-display)] text-lg leading-snug">
+	<h3 class="font-[family-name:var(--font-display)] text-xl leading-snug">
 		{href ? (
 			<a href={href} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
 				{title}
@@ -22,7 +22,7 @@ const { title, description, href, excerpt, date, projectLink } = Astro.props;
 		)}
 	</h3>
 	{excerpt && (
-		<p class="mt-1 text-sm text-muted-foreground leading-relaxed">{excerpt}</p>
+		<p class="mt-1 text-[0.88rem] text-foreground/75 leading-relaxed">{excerpt}</p>
 	)}
 	{date && (
 		<div class="mt-1.5 flex gap-2 font-[family-name:var(--font-mono)] text-[0.65rem] text-muted-foreground">

@@ -6,13 +6,11 @@
 	--font-sans: "Inter", system-ui, -apple-system, sans-serif;
 	--font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-	--color-paper: #faf9f7;
-	--color-paper-2: #f2f0ec;
-	--color-paper-3: #eae7e2;
-	--color-accent: #8b5e0b;
-	--color-accent-2: #a67518;
-	--color-link: #1a6b8a;
-	--color-link-2: #145266;
+	--color-accent: #9a6c14;
+	--color-accent-2: #b5801c;
+	--color-link: #1581a6;
+	--color-link-2: #0f5f7a;
+	--color-substack: #ff6719;
 
 	/* shadcn color tokens */
 	--color-background: hsl(var(--background));
@@ -44,51 +42,49 @@
 @layer base {
 	:root {
 		--background: 0 0% 98%;
-		--foreground: 0 0% 10%;
+		--foreground: 0 0% 6%;
 		--card: 0 0% 98%;
-		--card-foreground: 0 0% 10%;
+		--card-foreground: 0 0% 6%;
 		--popover: 0 0% 98%;
-		--popover-foreground: 0 0% 10%;
-		--primary: 36 81% 29%;
+		--popover-foreground: 0 0% 6%;
+		--primary: 36 80% 36%;
 		--primary-foreground: 0 0% 100%;
-		--secondary: 0 0% 94%;
-		--secondary-foreground: 0 0% 10%;
-		--muted: 0 0% 94%;
-		--muted-foreground: 0 0% 46%;
-		--accent: 36 81% 29%;
+		--secondary: 30 10% 92%;
+		--secondary-foreground: 0 0% 6%;
+		--muted: 30 10% 92%;
+		--muted-foreground: 0 0% 40%;
+		--accent: 36 80% 36%;
 		--accent-foreground: 0 0% 100%;
 		--destructive: 0 84% 60%;
 		--destructive-foreground: 0 0% 100%;
-		--border: 30 10% 88%;
-		--input: 30 10% 88%;
-		--ring: 36 81% 29%;
+		--border: 30 10% 85%;
+		--input: 30 10% 85%;
+		--ring: 36 80% 36%;
 		--radius: 0.5rem;
 	}
 
 	.dark {
 		--background: 0 0% 7%;
-		--foreground: 0 0% 93%;
+		--foreground: 0 0% 95%;
 		--card: 0 0% 10%;
-		--card-foreground: 0 0% 93%;
+		--card-foreground: 0 0% 95%;
 		--popover: 0 0% 10%;
-		--popover-foreground: 0 0% 93%;
-		--primary: 36 81% 55%;
+		--popover-foreground: 0 0% 95%;
+		--primary: 36 85% 60%;
 		--primary-foreground: 0 0% 10%;
-		--secondary: 0 0% 14%;
-		--secondary-foreground: 0 0% 93%;
-		--muted: 0 0% 14%;
-		--muted-foreground: 0 0% 56%;
-		--accent: 36 81% 55%;
+		--secondary: 30 8% 12%;
+		--secondary-foreground: 0 0% 95%;
+		--muted: 30 8% 12%;
+		--muted-foreground: 0 0% 60%;
+		--accent: 36 85% 60%;
 		--accent-foreground: 0 0% 10%;
 		--destructive: 0 62% 50%;
 		--destructive-foreground: 0 0% 100%;
-		--border: 0 0% 18%;
-		--input: 0 0% 18%;
-		--ring: 36 81% 55%;
+		--border: 30 8% 18%;
+		--input: 30 8% 18%;
+		--ring: 36 85% 60%;
 	}
-}
 
-@layer base {
 	* {
 		@apply border-border;
 	}

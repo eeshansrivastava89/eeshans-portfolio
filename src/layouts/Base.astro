@@ -32,6 +32,11 @@ const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfi
 			rel="stylesheet"
 		/>
 		<meta name="generator" content={Astro.generator} />
+		{import.meta.env.PUBLIC_POSTHOG_KEY && import.meta.env.PUBLIC_POSTHOG_HOST && (
+			<script is:inline>
+				!function(t,e){var o,n,a,r;e._posthog=e._posthog||{},(a=e._posthog.q=e._posthog.q||[]).push([Date.now()].concat([].slice.call(arguments,0))),r=e._posthog,r.__SV=1;var i=t.createElement("script");i.type="text/javascript",i.async=!0,i.crossOrigin="anonymous",i.src="{import.meta.env.PUBLIC_POSTHOG_HOST}/array.js",(n=t.getElementsByTagName("script")[0]).parentNode.insertBefore(i,n);for(var s=function(e){return function(){a.push([Date.now()].concat([].slice.call(arguments,0),[e]))}},c=["identify","capture","set","setPersonProperties","optIn","optOut","reset","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatures"],u=0;u<c.length;u++)r[c[u]]=s(c[u])}(document,window);posthog.init('{import.meta.env.PUBLIC_POSTHOG_KEY}',{api_host:'{import.meta.env.PUBLIC_POSTHOG_HOST}'})
+			</script>
+		)}
 	</head>
 	<body class="min-h-screen bg-background text-foreground">
 		<script is:inline>
@@ -83,7 +88,7 @@ const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfi
 			</div>
 		</nav>
 
-		<main class="mx-auto max-w-3xl px-6 pb-20">
+		<main class="mx-auto max-w-3xl px-6 pt-8 pb-20">
 			<slot />
 		</main>
 

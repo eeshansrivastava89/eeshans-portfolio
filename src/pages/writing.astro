@@ -23,25 +23,25 @@ function formatDate(date: Date) {
 ---
 
 <BaseLayout title="Writing" activePage="/writing">
-	<a href="/" class="text-[0.82rem] text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
+	<a href="/" class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
 
-	<h1 class="font-[family-name:var(--font-display)] text-4xl leading-tight mb-2">Writing</h1>
-	<p class="text-sm text-muted-foreground max-w-[580px] leading-relaxed mb-10">
+	<h1 class="font-[family-name:var(--font-display)] text-[3rem] leading-tight mb-3">Writing</h1>
+	<p class="text-base text-foreground/80 leading-relaxed mb-12">
 		Essays on AI, data science, and what holds up after the hype. Published on
 		<a href="https://theasymptotic.substack.com" class="text-accent hover:text-accent-2 transition-colors" target="_blank" rel="noopener noreferrer">Asymptotic</a>.
 	</p>
 
 	<!-- Series -->
 	{localAiSeriesPosts.length > 0 && (
-		<div class="mb-10">
-			<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">Series</h2>
+		<div class="mb-12">
+			<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Series</h2>
 			<SeriesCard seriesSlug="local-ai" />
 		</div>
 	)}
 
 	<!-- Essays -->
-	<div class="mb-10">
-		<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">Essays</h2>
+	<div class="mb-12">
+		<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Essays</h2>
 		{essays.map((post) => (
 			<PostItem
 				title={post.data.title}
@@ -55,8 +55,8 @@ function formatDate(date: Date) {
 
 	<!-- Publications -->
 	{publications.length > 0 && (
-		<div class="mb-10">
-			<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">Publication</h2>
+		<div class="mb-12">
+			<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Publication</h2>
 			{publications.map((post) => (
 				<PostItem
 					title={post.data.title}

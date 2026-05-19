@@ -19,14 +19,14 @@ const seriesPosts = allPosts
 	.sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
 ---
 
-<div class="rounded-lg border border-border bg-paper-2 p-5 mb-6 dark:bg-muted">
+<div class="border border-border rounded-lg p-5 mb-6">
 	<div class="flex items-center gap-2.5 mb-3">
 		<span class="font-[family-name:var(--font-mono)] text-[0.62rem] font-semibold uppercase tracking-wider bg-accent text-white px-2 py-0.5 rounded">
 			{seriesPosts.length} parts
 		</span>
-		<span class="font-[family-name:var(--font-display)] text-lg">{seriesMeta.title}</span>
+		<span class="font-[family-name:var(--font-display)] text-xl">{seriesMeta.title}</span>
 	</div>
-	<p class="text-sm text-muted-foreground leading-relaxed mb-3">{seriesMeta.description}</p>
+	<p class="text-[0.88rem] text-foreground/75 leading-relaxed mb-3">{seriesMeta.description}</p>
 	<div class="flex flex-col gap-2">
 		{seriesPosts.map((post, i) => (
 			<div class="flex items-baseline gap-2.5 text-sm">

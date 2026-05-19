@@ -58,6 +58,7 @@ const experience = defineCollection({
 		timespan: z.string(),
 		title: z.string(),
 		company: z.string(),
+		description: z.string().optional(),
 		logo: z.string().optional(),
 		type: z.enum(["work", "education"]).default("work"),
 		order: z.number().default(0),

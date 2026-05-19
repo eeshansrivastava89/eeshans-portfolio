@@ -282,9 +282,9 @@ The portfolio needs a positioning line that makes someone stop. Current site say
 | **"I build things to test ideas."** | Builder-first, intellectually curious |
 | **"Testing AI claims so you don't have to."** | Provocative, differentiated, writer-adjacent |
 | **"Data science manager. Local AI skeptic. Open-source builder."** | Factual, triple-signal |
-| **"Ship it. Test it. Write about it."** | Action-oriented, covers all three pillars |
+| **Positioning line from your own voice** | Yours — whatever you'd actually say |
 
-**Recommendation:** **"Ship it. Test it. Write about it."** — maps directly to three pillars (projects, experimentation, Substack), it's memorable, and it makes visitors want to see what you've shipped, tested, and written.
+**Recommendation:** Use whatever line sounds like *you*, not marketing copy. The options above are starting points — pick one, combine, or write your own. If it reads like AI generated it, it's wrong.
 
 ---
 
@@ -298,7 +298,7 @@ The portfolio needs a positioning line that makes someone stop. Current site say
 | **Analysis** | Buried single link | Visual finding cards, practitioner showcase |
 | **Hero** | Just your name | Tagline + looping project demo reel |
 | **Motion** | None | Video thumbnails, hover transitions, drawer animations |
-| **Story** | Implicit | Explicit: "Ship it. Test it. Write about it." |
+| **Story** | Implicit | Explicit — in your own words |
 | **Mobile** | Functional but not differentiated | Swipeable project demos, touch-friendly cards |
 | **Social proof** | Inline links | Cards with icons, dates, descriptions |
 | **Newsletter** | No CTA | Substack signup prominently placed |

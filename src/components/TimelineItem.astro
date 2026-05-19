@@ -13,7 +13,7 @@ const { period, title, organization, detail } = Astro.props;
 	<div class="absolute left-0 top-1.5 w-2.5 h-2.5 rounded-full bg-accent border-2 border-background"></div>
 	<div class="before:absolute before:left-0 before:top-3.5 before:bottom-0 before:w-0.5 before:bg-border"></div>
 	<div class="font-[family-name:var(--font-mono)] text-xs text-accent tracking-wide mb-0.5">{period}</div>
-	<div class="font-medium text-foreground text-sm">{title}</div>
-	<div class="text-sm text-muted-foreground">{organization}</div>
+	<div class="font-medium text-foreground text-[0.88rem]">{title}</div>
+	<div class="text-[0.88rem] text-foreground/75">{organization}</div>
 	{detail && <div class="text-xs text-muted-foreground leading-relaxed mt-0.5">{detail}</div>}
 </div>

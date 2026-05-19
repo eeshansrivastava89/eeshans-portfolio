@@ -1,20 +1,21 @@
 ---
+import Icon from "./Icon.astro";
+
 interface Props {
 	icon: string;
 	text: string;
 	detail?: string;
 	link?: string;
-	year?: string;
 }
 
-const { icon, text, detail, link, year } = Astro.props;
+const { icon, text, detail, link } = Astro.props;
 ---
 
-<div class="flex items-baseline gap-2.5 py-2 border-b border-border last:border-b-0 text-sm">
-	<span class="text-base shrink-0">{icon}</span>
-	<div class="flex-1">
+<div class="flex items-baseline gap-2.5 py-1.5 text-[0.88rem] text-foreground/80">
+	<span class="shrink-0 text-accent"><Icon name={icon} size={14} /></span>
+	<div class="flex-1 min-w-0">
 		{link ? (
-			<a href={link} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
+			<a href={link} class="text-foreground hover:text-link-2 transition-colors underline decoration-dotted underline-offset-4" target="_blank" rel="noopener noreferrer">
 				{text}
 			</a>
 		) : (
@@ -22,5 +23,4 @@ const { icon, text, detail, link, year } = Astro.props;
 		)}
 		{detail && <span class="text-xs text-muted-foreground"> — {detail}</span>}
 	</div>
-	{year && <span class="font-[family-name:var(--font-mono)] text-[0.7rem] text-muted-foreground whitespace-nowrap">{year}</span>}
 </div>

@@ -353,7 +353,7 @@ astro-expressive-code    # Code syntax highlighting
 - [x] Create `src/data/config.ts``src/layouts/Base.astro` — html head, font imports, Tailwind, dark mode script, nav, footer
 - [x] Create `src/data/config.ts``src/components/Nav.astro` — name, section links, ModeToggle React island
 - [x] Create `src/data/config.ts``src/components/Footer.astro` — copyright, social links
-- [ ] Add shadcn components: `Button`, `Card`, `Badge`, `Separator`
+- [x] Add shadcn components: `Button`, `Card`, `Badge`, `Separator`
 - [x] Create `src/data/config.ts``src/components/ProjectCard.astro` — project listing (title, badge, hook, meta, links, video/shimmer)
 - [x] Create `src/data/config.ts``src/components/SeriesCard.astro` — grouped series with badge, title, numbered posts
 - [x] Create `src/data/config.ts``src/components/PostItem.astro` — writing list item (title, excerpt, date, project cross-link)
@@ -361,8 +361,8 @@ astro-expressive-code    # Code syntax highlighting
 - [x] Create `src/data/config.ts``src/components/TimelineItem.astro` — experience timeline dot + entry
 - [x] Create `src/data/config.ts``src/components/SubscribeBox.astro` — Substack CTA
 - [x] Create `src/data/config.ts`video shimmer placeholder CSS (animated gradient, Tailwind `@keyframes`)
-- [ ] Implement responsive layout (single column mobile, 780px max desktop)
-- [ ] Verify: components render correctly with test data, light and dark themes work
+- [x] Implement responsive layout (single column mobile, 780px max desktop)
+- [x] Verify: components render correctly with test data, light and dark themes work
 
 ### Phase 3 — Pages
 
@@ -370,28 +370,32 @@ astro-expressive-code    # Code syntax highlighting
 - [x] Create `src/data/config.ts``src/pages/projects.astro` — all projects by category (Featured, Local AI, Also)
 - [x] Create `src/data/config.ts``src/pages/writing.astro` — Local AI series card + all essays + publication
 - [x] Create `src/data/config.ts``src/pages/about.astro` — full bio, recognition, timeline, social links, interests
-- [ ] Add "See all →" links on homepage sections
+- [x] Add "See all →" links on homepage sections
 - [ ] Add navigation highlighting (active state per page)
 - [ ] Add SEO meta tags and Open Graph images per page
-- [ ] Verify: all pages render, all links work, all external URLs resolve, dark mode toggle works
+- [x] Verify: all pages render, all links work, all external URLs resolve, dark mode toggle works
 
-### Phase 4 — Integration & Polish
+### Phase 4 — Integration & Polish ✓
 
-- [ ] Port Substack refresh pipeline from datascienceapps (adapt for new content schema — this replaces the placeholder post MDX files with live Substack data)
-- [ ] Copy `.cache/substack-feed.json` snapshot from datascienceapps
-- [ ] Port PostHog analytics (public key via `PUBLIC_POSTHOG_KEY`, proxy host via `PUBLIC_POSTHOG_HOST`, inline snippet in base layout)
-- [ ] Port GitHub Activity system from datascienceapps (`src/lib/github.ts` + build-cache + `GitHubCard.astro`), adapt for Tailwind + shadcn styling
-- [ ] Set up `GITHUB_TOKEN` for build-time GitHub data fetch
-- [ ] Copy `.cache/github-data.json` snapshot from datascienceapps
-- [ ] Add RSS feed (`/rss.xml`) from posts collection
-- [ ] Add `robots.txt` and sitemap
-- [ ] Add 404 page
-- [ ] Set up Fly.io deployment config — reuse existing `soma-portfolio` Fly app from datascienceapps (same Dockerfile + nginx pattern, same `fly.toml` with `soma-portfolio` app name)
-- [ ] Port GitHub Actions workflow from datascienceapps (build + deploy on push to `main`, scheduled Substack refresh every 4h, typecheck, type-safe commit of snapshot changes)
-- [ ] Set up Fly.io secrets: `GITHUB_TOKEN` (for GitHub Activity), `FLY_API_TOKEN` (for deploy)
-- [ ] Test Substack refresh script end-to-end
-- [ ] Test full build pipeline: `pnpm build` succeeds
-- [ ] Deploy to Fly.io staging and verify everything loads
+- [x] Port Substack refresh pipeline from datascienceapps (`scripts/refresh-substack.mjs`)
+- [x] Copy `.cache/substack-feed.json` snapshot from datascienceapps
+- [x] Port `src/lib/substack.ts`, `src/lib/github.ts`, `src/lib/build-cache.ts` from datascienceapps
+- [x] Port PostHog analytics (public key via `PUBLIC_POSTHOG_KEY`, proxy host via `PUBLIC_POSTHOG_HOST`, inline snippet in base layout)
+- [x] Port GitHub Activity system from datascienceapps (`src/lib/github.ts` + `src/lib/build-cache.ts` + `src/components/GitHubActivity.astro`)
+- [x] Copy `.cache/github-data.json` snapshot from datascienceapps
+- [x] Add RSS feed (`/rss.xml`) from posts collection
+- [x] Add `robots.txt` and sitemap (sitemap already generating)
+- [x] Add 404 page
+- [x] Set up Fly.io deployment config — reuse existing `soma-portfolio` Fly app from datascienceapps (Dockerfile + nginx + `fly.toml`)
+- [x] Port GitHub Actions workflow from datascienceapps (build + deploy on push to `main`, scheduled Substack refresh every 4h, type-safe commit of snapshot changes)
+- [x] Add env schema to `astro.config` for `GITHUB_TOKEN`, `PUBLIC_POSTHOG_KEY`, `PUBLIC_POSTHOG_HOST`
+- [x] Typography/color overhaul: 3-tier text hierarchy, bigger headings, full-width content
+- [x] GitHub Activity: descriptive section headings (number + label), profile stats, contribution heatmap, no condensed stats row, borders only under subheadings
+- [x] About page: corrected experience/impact data (matching production site), SVG icons for recognition cards, social links with brand icons after bio text, logo-based experience/education timeline, Substack subscribe at bottom, removed "Otherwise" section
+- [x] About page: profile photo with text wrapping (from production site), removed big name heading, full-width text
+- [x] Homepage: removed Recognition and About sections (those live on the About page only), intro text driven by `config.ts`
+- [x] Test Substack refresh script — 9 posts fetched successfully from substack.eeshans.com
+- [x] Content editing guide: `CONTENT.md` written with user-friendly instructions for every content type
 
 ### Phase 5 — Demo Videos
 
@@ -404,9 +408,15 @@ astro-expressive-code    # Code syntax highlighting
 - [ ] Verify: video thumbnails autoplay correctly on homepage and projects page
 - [ ] Add videos to LLM Bench, Quizzard when ready
 
-### Phase 6 — Cutover
+### Phase 6 — Deploy & Cutover
 
-- [ ] DNS cutover: point `eeshans.com` to the existing `soma-portfolio` Fly.io app (already deployed, swap the repo)
+> **Nothing deploys until this phase.** All deployment is deferred until videos and polish are complete.
+
+- [ ] Set up Fly.io secrets: `GITHUB_TOKEN`, `FLY_API_TOKEN` (manual step)
+- [ ] Test Substack refresh script end-to-end locally
+- [ ] Test full build pipeline with `GITHUB_TOKEN` in `.env`
+- [ ] Deploy to Fly.io staging and verify everything loads
+- [ ] DNS cutover: point `eeshans.com` to the existing `soma-portfolio` Fly.io app (swap the repo)
 - [ ] Verify all external links still resolve (Substack posts, project live URLs, GitHub repos)
 - [ ] Verify PostHog events are firing
 - [ ] Verify GitHub Activity renders correctly (requires `GITHUB_TOKEN` secret in GitHub Actions)
@@ -415,6 +425,10 @@ astro-expressive-code    # Code syntax highlighting
 - [ ] Monitor for 48 hours, fix any issues
 - [ ] Archive the `datascienceapps` repo (or redirect it)
 - [ ] Update `es-portfolio` (old repo) README with new architecture docs
+
+### Deferred
+
+- [ ] Replace placeholder post MDX files with pipeline-driven Substack data (posts collection currently uses local MDX files with Substack metadata; the pipeline is ready for future integration)
 
 ---
 
@@ -490,6 +504,7 @@ eeshans-portfolio/
 │   ├── scripts/
 │   │   └── refresh-substack.mjs  # Substack RSS snapshot script
 │   └── content.config.ts    # Zod schemas for all collections
+├── CONTENT.md              ← Content editing guide (where to edit everything)
 ├── astro.config.ts
 ├── components.json           # shadcn/ui config
 ├── tsconfig.json

@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/Base.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import VideoShimmer from "@/components/VideoShimmer.astro";
+import SubscribeBox from "@/components/SubscribeBox.astro";
 import { getCollection } from "astro:content";
 
 const projects = await getCollection("projects");
@@ -34,22 +35,22 @@ for (const p of sortedProjects) {
 ---
 
 <BaseLayout title="Projects" activePage="/projects">
-	<a href="/" class="text-[0.82rem] text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
+	<a href="/" class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
 
-	<h1 class="font-[family-name:var(--font-display)] text-4xl leading-tight mb-2">Projects</h1>
-	<p class="text-sm text-muted-foreground max-w-[580px] leading-relaxed mb-10">
+	<h1 class="font-[family-name:var(--font-display)] text-[3rem] leading-tight mb-3">Projects</h1>
+	<p class="text-base text-foreground/80 leading-relaxed mb-12">
 		Every project is a live web app you can play with, read the analysis, or explore the source code. No demos, no screenshots — the real thing.
 	</p>
 
 	{Array.from(grouped.entries()).map(([category, catProjects]) => (
-		<div class="mb-10">
-			<h2 class="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border mt-10 first:mt-0">
+		<div class="mb-12">
+			<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border mt-12 first:mt-0">
 				{categoryLabels[category] || category}
 			</h2>
 			{catProjects.map((project) => (
 				<ProjectCard title={project.data.title} href={project.data.liveUrl || project.data.repoUrl} badge={project.data.featured ? { label: "Featured", variant: "featured" as const } : project.data.status === "live" ? { label: "Live", variant: "live" as const } : undefined}>
-					<p class="text-sm text-muted-foreground leading-relaxed mb-2 max-w-[600px]">{project.data.hook}</p>
-					<div class="flex flex-wrap items-center gap-2.5 font-[family-name:var(--font-mono)] text-[0.68rem] text-muted-foreground">
+					<p class="text-base text-foreground/80 leading-relaxed mb-2">{project.data.hook}</p>
+					<div class="flex flex-wrap items-center gap-2.5 font-[family-name:var(--font-mono)] text-xs text-muted-foreground">
 						{project.data.liveUrl && <a href={project.data.liveUrl} class="hover:text-link transition-colors" target="_blank" rel="noopener noreferrer">Live</a>}
 						{project.data.liveUrl && project.data.repoUrl && <span class="text-border">·</span>}
 						{project.data.repoUrl && <a href={project.data.repoUrl} class="hover:text-link transition-colors" target="_blank" rel="noopener noreferrer">Source</a>}
@@ -69,7 +70,7 @@ for (const p of sortedProjects) {
 						</div>
 					)}
 					{(project.data.videoWebm || project.data.videoMp4) ? (
-						<video autoplay muted loop playsinline preload="metadata" class="mt-3 aspect-video max-w-md rounded-lg border border-border" poster={project.data.videoPoster}>
+						<video autoplay muted loop playsinline preload="metadata" class="mt-3 aspect-video rounded-lg border border-border" poster={project.data.videoPoster}>
 							{project.data.videoWebm && <source src={project.data.videoWebm} type="video/webm" />}
 							{project.data.videoMp4 && <source src={project.data.videoMp4} type="video/mp4" />}
 						</video>
@@ -80,4 +81,7 @@ for (const p of sortedProjects) {
 			))}
 		</div>
 	))}
+
+	<!-- Subscribe -->
+	<SubscribeBox />
 </BaseLayout>
