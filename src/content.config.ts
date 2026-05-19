@@ -1,6 +1,8 @@
 import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { postEnrichment } from "./data/post-enrichment";
+import { getSubstackPosts } from "./lib/substack";
 
 const projects = defineCollection({
 	loader: glob({ base: "src/content/projects", pattern: "**/*.{md,mdx}" }),
@@ -35,7 +37,30 @@ const projects = defineCollection({
 });
 
 const posts = defineCollection({
-	loader: glob({ base: "src/content/posts", pattern: "**/*.{md,mdx}" }),
+	loader: async () => {
+		const substackPosts = await getSubstackPosts();
+
+		return Object.fromEntries(
+			substackPosts.map((post) => {
+				const meta = postEnrichment[post.slug] ?? {};
+				return [
+					post.slug,
+					{
+						title: post.title,
+						createdAt: post.pubDate,
+						description: post.description,
+						source: "substack" as const,
+						externalUrl: post.link,
+						series: meta.series,
+						seriesOrder: meta.seriesOrder,
+						tags: meta.tags ?? [],
+						relatedProject: meta.relatedProject,
+						draft: false,
+					},
+				];
+			}),
+		);
+	},
 	schema: z.object({
 		title: z.string(),
 		createdAt: z.coerce.date(),
@@ -44,8 +69,6 @@ const posts = defineCollection({
 		externalUrl: z.string().url().optional(),
 		series: z.string().optional(),
 		seriesOrder: z.number().optional(),
-		seriesTitle: z.string().optional(),
-		seriesDescription: z.string().optional(),
 		tags: z.array(z.string()).default([]),
 		relatedProject: z.string().optional(),
 		draft: z.boolean().default(false),
