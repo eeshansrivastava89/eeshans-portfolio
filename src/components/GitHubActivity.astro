@@ -81,7 +81,7 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 	</div>
 
 	<!-- Contribution count -->
-	<div class="text-[0.88rem] text-foreground/80 mb-3">
+	<div class="text-sm text-foreground/80 mb-3">
 		<span class="font-[family-name:var(--font-mono)] font-semibold text-foreground">{sixMonthContributions.toLocaleString()}</span> contributions in the last 6 months
 	</div>
 
@@ -107,13 +107,13 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		<!-- Commits -->
 		{commitRows.length > 0 && (
 			<div>
-				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
 					{activityTotals.commits.toLocaleString()} commits in {commitRepoCount} {commitRepoCount === 1 ? "repository" : "repositories"}
 				</h3>
 				{commitRows.map((row) => (
 					<a
 						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -127,13 +127,13 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		<!-- Created repos -->
 		{repoRows.length > 0 && (
 			<div>
-				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
 					{activityTotals.repos} {activityTotals.repos === 1 ? "repository" : "repositories"} created
 				</h3>
 				{repoRows.map((row) => (
 					<a
 						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -147,13 +147,13 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		<!-- Issues -->
 		{issueRows.length > 0 && (
 			<div>
-				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
 					{activityTotals.issues} {activityTotals.issues === 1 ? "issue" : "issues"} opened
 				</h3>
 				{issueRows.map((row) => (
 					<a
 						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -167,13 +167,13 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		<!-- Pull requests -->
 		{prRows.length > 0 && (
 			<div>
-				<h3 class="text-[0.88rem] font-semibold text-foreground mb-1.5 pb-1.5 border-b border-border">
+				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
 					{activityTotals.prs} pull {activityTotals.prs === 1 ? "request" : "requests"} opened
 				</h3>
 				{prRows.map((row) => (
 					<a
 						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
 					>

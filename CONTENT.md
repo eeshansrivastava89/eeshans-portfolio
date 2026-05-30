@@ -46,7 +46,7 @@ src/data/               src/components/  (layout only, no hardcoded content)
 | Social links under intro | `src/data/config.ts` → `socials` | URLs; icons are inline SVGs in `index.astro` |
 | Which projects appear | `src/content/projects/*.mdx` → `featured: true` | Featured projects are prioritized; top 4 shown |
 | How many projects shown | `src/data/config.ts` → `homepageProjectCount` | Defaults to 4 |
-| Writing section | `src/content/posts/*.mdx` | Latest 3 standalone posts + Local AI series card |
+| Writing section | Substack feed (via `pnpm refresh:substack`) | Latest 3 posts |
 | How many posts shown | `src/data/config.ts` → `homepagePostCount` | Defaults to 3 |
 | GitHub Activity | Fetched at build time from GitHub API | See "GitHub Activity" below |
 
@@ -64,10 +64,8 @@ src/data/               src/components/  (layout only, no hardcoded content)
 
 | What | File | Notes |
 |------|------|-------|
-| Post data | `src/content/posts/*.mdx` | One file per post |
-| Series grouping | Frontmatter `series` + `seriesOrder` fields | Posts with the same `series` slug are grouped |
-| Series metadata (title, description) | `src/data/series.ts` | One entry per series slug |
-| External links (Substack posts) | Frontmatter `externalUrl` + `source: "substack"` | Posts link out to Substack, not to internal pages |
+| Post data | Substack feed (via `pnpm refresh:substack`) | Posts are sourced from Substack at build time |
+| External links | Set automatically from Substack | Posts link out to Substack, not to internal pages |
 
 ### Recognition
 
@@ -102,9 +100,8 @@ src/data/               src/components/  (layout only, no hardcoded content)
 
 1. Create `src/content/posts/my-post.mdx`
 2. Required frontmatter: `title`, `createdAt`, `description`
-3. For Substack posts: add `source: "substack"` and `externalUrl`
-4. For series: add `series: "local-ai"` and `seriesOrder`
-5. Build to verify: `pnpm build`
+3. Posts are sourced from Substack — run `pnpm refresh:substack` to update the cache
+4. Build to verify: `pnpm build`
 
 ### Add a new recognition category
 
@@ -127,12 +124,6 @@ src/data/               src/components/  (layout only, no hardcoded content)
 3. Both homepage and about page use the same component — one change updates both
 4. Build to verify: `pnpm build`
 
-### Add a new series
-
-1. Add an entry to `src/data/series.ts` with `slug`, `title`, `description`
-2. Add `series: "your-slug"` and `seriesOrder` to each post's frontmatter
-3. Build to verify: `pnpm build`
-
 ---
 
 ## Content That Comes From External Sources
@@ -150,7 +141,7 @@ Fetched by running `pnpm refresh:substack` (or automatically in CI on schedule).
 - Cache file: `.cache/substack-feed.json`
 - Refresh script: `scripts/refresh-substack.mjs`
 - Data source: `src/lib/substack.ts`
-- Currently, posts use local MDX files. The pipeline is ready for future integration.
+- Posts are sourced entirely from Substack — no local MDX files or enrichment layer.
 
 ---
 
@@ -160,14 +151,13 @@ Fetched by running `pnpm refresh:substack` (or automatically in CI on schedule).
 src/
 ├── content/
 │   ├── projects/          ← Project data (MDX)
-│   ├── posts/              ← Blog posts (MDX)
+│   ├── posts/              ← (empty — posts sourced from Substack)
 │   ├── experience/         ← Work & education timeline (MDX)
 │   ├── impact/             ← Recognition categories (MDX)
 │   └── other/
 │       └── about.mdx       ← About page bio text
 ├── data/
-│   ├── config.ts           ← Site-wide settings, socials, nav, homepage intro
-│   └── series.ts            ← Series metadata (title, description per slug)
+│   └── config.ts           ← Site-wide settings, socials, nav, homepage intro
 ├── components/             ← Layout & styling only (no hardcoded content)
 ├── pages/                  ← Page templates (pull content from collections)
 └── lib/                    ← GitHub Activity, Substack, build cache

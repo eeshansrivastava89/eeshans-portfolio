@@ -3,7 +3,6 @@ import BaseLayout from "@/layouts/Base.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
 import SectionTitle from "@/components/SectionTitle.astro";
-import SeriesCard from "@/components/SeriesCard.astro";
 import PostItem from "@/components/PostItem.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
 import GitHubActivity from "@/components/GitHubActivity.astro";
@@ -20,21 +19,18 @@ const topProjects = featuredProjects.length > 0 ? featuredProjects.slice(0, site
 
 const sortedPosts = await getVisiblePosts();
 
-const localAiSeriesPosts = sortedPosts.filter((p) => p.data.series === "local-ai");
-const standalonePosts = sortedPosts.filter((p) => !p.data.series);
-
 
 ---
 
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
 	<!-- Intro -->
-	<section class="mb-16">
-		<p class="text-base text-foreground/80 leading-relaxed">{siteConfig.intro.tagline}</p>
+	<section class="mb-20">
+		<p class="text-lg text-foreground/80 leading-relaxed">{siteConfig.intro.tagline}</p>
 		<SocialLinks class="mt-4" />
 	</section>
 
 	<!-- Projects -->
-	<section class="mb-16">
+	<section class="mb-20">
 		<SectionTitle label="Projects" href="/projects" />
 		{topProjects.map((project) => (
 			<ProjectCard>
@@ -60,15 +56,13 @@ const standalonePosts = sortedPosts.filter((p) => !p.data.series);
 	<section class="mb-16">
 		<SectionTitle label="Writing" href="/writing" />
 
-		{localAiSeriesPosts.length > 0 && <SeriesCard seriesSlug="local-ai" />}
-
-		{standalonePosts.slice(0, siteConfig.homepagePostCount).map((post) => (
+		{sortedPosts.slice(0, siteConfig.homepagePostCount).map((post) => (
 			<PostItem
 				title={post.data.title}
 				href={post.data.externalUrl}
 				excerpt={post.data.description}
 				date={formatDate(post.data.createdAt)}
-				projectLink={post.data.relatedProject ? { label: post.data.relatedProject, href: `/projects` } : undefined}
+				image={post.data.coverImage}
 			/>
 		))}
 	</section>

@@ -4,36 +4,82 @@ interface Props {
 	href?: string;
 	excerpt?: string;
 	date?: string;
-	projectLink?: { label: string; href: string };
+	image?: string;
 }
 
-const { title, href, excerpt, date, projectLink } = Astro.props;
+const { title, href, excerpt, date, image } = Astro.props;
 ---
 
-<div class="mb-4 pb-4 border-b border-border last:border-b-0 last:mb-0 last:pb-0">
-	<h3 class="font-[family-name:var(--font-display)] text-xl leading-snug">
-		{href ? (
-			<a href={href} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
-				{title}
-			</a>
-		) : (
-			<span>{title}</span>
-		)}
-	</h3>
-	{excerpt && (
-		<p class="mt-1 text-[0.88rem] text-foreground/75 leading-relaxed">{excerpt}</p>
-	)}
-	{date && (
-		<div class="mt-1.5 flex gap-2 font-[family-name:var(--font-mono)] text-[0.65rem] text-muted-foreground">
-			<span>{date}</span>
-			{projectLink && (
-				<>
-					<span>·</span>
-					<a href={projectLink.href} class="text-accent font-medium hover:text-accent-2 transition-colors">
-						→ {projectLink.label}
-					</a>
-				</>
+<div class="mb-5 pb-5 border-b border-border last:border-b-0 last:mb-0 last:pb-0 flex flex-row gap-4 sm:gap-5">
+	<div class="min-w-0 flex-1">
+		<h3 class="font-[family-name:var(--font-display)] text-2xl leading-tight">
+			{href ? (
+				<a href={href} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
+					{title}
+				</a>
+			) : (
+				<span>{title}</span>
 			)}
-		</div>
+		</h3>
+		{excerpt && (
+			<p class="mt-1.5 text-sm text-foreground/75 leading-relaxed">{excerpt}</p>
+		)}
+		{(date || href) && (
+			<div class="mt-2 flex flex-wrap items-center gap-2">
+				{date && (
+					<span class="font-[family-name:var(--font-mono)] text-xs text-muted-foreground">{date}</span>
+				)}
+				{href && (
+					<a href={href} class="substack-pill" target="_blank" rel="noopener noreferrer">
+						<svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+						Read on Substack
+					</a>
+				)}
+			</div>
+		)}
+	</div>
+	{image && href && (
+		<a href={href} class="shrink-0 self-start" target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1">
+			<img
+				src={image}
+				alt=""
+				loading="lazy"
+				decoding="async"
+				class="w-24 sm:w-44 aspect-[3/2] rounded-lg border border-border object-cover"
+			/>
+		</a>
 	)}
 </div>
+
+<style>
+	.substack-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		text-decoration: none;
+		border: 1px solid color-mix(in oklab, var(--color-substack, #ff6719) 30%, var(--color-border));
+		background: color-mix(in oklab, var(--color-substack, #ff6719) 8%, var(--color-background));
+		color: var(--color-substack, #ff6719);
+		transition: background 150ms ease;
+	}
+	.substack-pill:hover {
+		background: color-mix(in oklab, var(--color-substack, #ff6719) 16%, var(--color-background));
+		color: var(--color-substack, #ff6719);
+		text-decoration: none;
+	}
+	:global(.dark) .substack-pill {
+		border-color: color-mix(in oklab, var(--color-substack, #ff6719) 25%, var(--color-border));
+		background: color-mix(in oklab, var(--color-substack, #ff6719) 12%, var(--color-background));
+		color: color-mix(in oklab, var(--color-substack, #ff6719) 85%, var(--color-foreground));
+	}
+	:global(.dark) .substack-pill:hover {
+		background: color-mix(in oklab, var(--color-substack, #ff6719) 20%, var(--color-background));
+	}
+</style>

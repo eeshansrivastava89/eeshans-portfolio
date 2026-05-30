@@ -1,6 +1,6 @@
 # Portfolio Rebuild — Architecture & Implementation Plan
 
-> Updated 2026-05-18
+> Updated 2026-05-29
 
 ---
 
@@ -8,19 +8,19 @@
 
 ### Why this exists
 
-The current portfolio (eeshans.com) undersells what I've built. Projects are text cards with no demos, writing is a flat list with no series branding, and about is a wall of text. Meanwhile, every project is a live interactive web app, the writing forms coherent series, and there are real credibility signals (5 Under 35, UCLA talk, podcasts, publications) buried in sub-sections.
+The current portfolio (eeshans.com) undersells what I've built. Projects are text cards with no demos, writing is a flat list with no series branding, and about is a wall of text. Meanwhile, every project is a live interactive web app, and there are real credibility signals (5 Under 35, UCLA talk, podcasts, publications) buried in sub-sections.
 
 The rebuild makes the portfolio actually represent the work.
 
 ### Core goals
 
-1. **Demo-first, never describe when you can show.** Every project is a live web app. A 10-second autoplay video thumbnail says more than 200 words of description. Record demo videos with Screen Studio and embed them directly.
+1. **Demo-first, never describe when you can show.** Every project is a live web app. A 10-second autoplay video thumbnail says more than 200 words of description. Record demo videos and embed them directly.
 
 2. **Professional, not junior.** This is a portfolio for a senior data science leader. It should feel like a personal site from someone who's been doing this for 12 years — clean, restrained, editorial. Not a dashboard, not a card grid, not a startup landing page.
 
 3. **Content-driven, not hard-coded.** Adding a new project or publishing a new post should mean creating an MDX file, not editing a component. The entire portfolio should be renderable from content collections and data files.
 
-4. **Writing is a product, not an archive.** The Local AI Series is a franchise, not three random posts. Standalone essays deserve visual treatment that reflects their weight. Posts should link to related projects and vice versa.
+4. **Writing is a product, not an archive.** Posts sourced from Substack, displayed with visual hierarchy.
 
 5. **Credibility needs visual weight.** An inline link to "5 Under 35" is forgettable. A recognition section with the award, the year, and a link is memorable.
 
@@ -81,7 +81,7 @@ shadcn/ui is the primary component library. It's not a dependency — it's copy-
 
 - **Accessible by default.** Radix UI primitives under every component. Keyboard nav, ARIA, focus management built in.
 - **Dark mode built in.** Every component respects the theme variables. Light and dark look correct by default.
-- **Composable.** Card, Badge, Separator, Button, Sheet (drawer), DropdownMenu, etc. All composable for project cards, recognition rows, series cards, etc.
+- **Composable.** Card, Badge, Separator, Button, Sheet (drawer), DropdownMenu, etc. All composable for project cards, recognition rows, etc.
 - **Extensible.** Need a new UI pattern later? `npx shadcn@latest add [component]`. Zero refactoring.
 - **No lock-in.** Components are source code in our repo. Modify anything, anytime.
 
@@ -121,14 +121,14 @@ schema: z.object({
   status: z.enum(["live", "archived", "draft"]).default("live"),
   featured: z.boolean().default(false),
   category: z.enum(["featured", "local-ai", "experimentation", "events", "tool"]).default("experimentation"),
-  liveUrl: z.url().optional(),
-  repoUrl: z.url().optional(),
-  analysisUrl: z.url().optional(),
+  liveUrl: z.string().url().optional(),
+  repoUrl: z.string().url().optional(),
+  analysisUrl: z.string().url().optional(),
   relatedWriting: z.array(z.string()).default([]),  // post slugs
   tech: z.array(z.string()).default([]),
   videoWebm: z.string().optional(),     // path in public/videos/
   videoMp4: z.string().optional(),
-  videoPoster: z.string().optional(),
+  videoPoster: z.string().optional(),   // also used as fallback image when no video
   image: z.string().optional(),        // fallback when no video
   stats: z.array(z.object({
     value: z.string(),
@@ -139,7 +139,7 @@ schema: z.object({
 
 The MDX body is the project's expanded content.
 
-**Posts** (`src/content/posts/*.mdx`)
+**Posts** (sourced from Substack — no local MDX files)
 
 ```ts
 schema: z.object({
@@ -147,29 +147,19 @@ schema: z.object({
   createdAt: z.coerce.date(),
   description: z.string(),
   source: z.enum(["substack", "manual"]).default("substack"),
-  externalUrl: z.url().optional(),      // required when source is "substack"
-  series: z.string().optional(),          // slug grouping posts into a series
-  seriesOrder: z.number().optional(),    // order within the series
-  seriesTitle: z.string().optional(),    // display title (only on first post)
-  seriesDescription: z.string().optional(),
-  tags: z.array(z.string()).default([]),
-  relatedProject: z.string().optional(), // project slug
+  externalUrl: z.string().url().optional(),      // required when source is "substack"
   draft: z.boolean().default(false),
 })
 ```
 
-Substack posts are **not** hardcoded local MDX files. They come from the Substack refresh pipeline:
+Posts come from the Substack refresh pipeline:
 
 1. **`scripts/refresh-substack.mjs`** fetches all posts from the Substack API
 2. Saves a snapshot to `.cache/substack-feed.json`
-3. At build time, the posts collection loader reads the snapshot and merges it with local MDX files
+3. At build time, the posts collection loader reads the snapshot directly — no local MDX files, no enrichment layer
 4. GitHub Actions runs the refresh on a 4-hour schedule
 
-Authors edit on Substack, not in the repo. The `source: "substack"` frontmatter field and `externalUrl` are assigned from the pipeline, not manually. Local MDX files are only for **manual posts** (posts not on Substack) with `source: "manual"`.
-
-**Current state:** Phase 1 uses placeholder MDX files with Substack post metadata. These will be replaced by the pipeline in Phase 4.
-
-**Series** — not a separate collection. Inferred from the `series` field on posts. Templates group posts by series slug and display them together. This avoids duplication and keeps series metadata close to the posts.
+Authors edit on Substack, not in the repo. The `source` and `externalUrl` fields are assigned from the pipeline, not manually.
 
 **Experience** (`src/content/experience/*.mdx`)
 
@@ -178,6 +168,7 @@ schema: z.object({
   timespan: z.string(),
   title: z.string(),
   company: z.string(),
+  description: z.string().optional(),
   logo: z.string().optional(),
   type: z.enum(["work", "education"]).default("work"),
   order: z.number().default(0),
@@ -195,7 +186,7 @@ schema: z.object({
   items: z.array(z.object({
     text: z.string(),
     meta: z.string().optional(),
-    link: z.url().optional(),
+    link: z.string().url().optional(),
   })),
 })
 ```
@@ -204,17 +195,19 @@ schema: z.object({
 
 ### Data files
 
-**`src/data/config.ts`** — site config (URLs, social links, nav items, posts per section).
+**`src/data/config.ts`** — site config (URLs, social links, nav items, posts per section, project categories).
 
-**`src/data/series.ts`** — series metadata (slug, display title, description). Lets series have a description without putting it on every post.
+**`src/data/content.ts`** — helper functions for querying collections (getLiveProjects, getVisiblePosts, formatDate).
+
+**`src/data/icons.ts`** — brand SVG icons keyed by social link key.
 
 ### Page routes
 
 | Route | Source | What it renders |
 |---|---|---|
-| `/` | Projects + Posts + Impact + About + GitHub | Homepage: top 4 featured projects, latest writing, recognition, about teaser, GitHub activity |
-| `/projects/` | Projects collection | All projects, organized by category |
-| `/writing/` | Posts collection | Local AI series card + all essays + publication |
+| `/` | Projects + Posts + GitHub | Homepage: intro, top featured projects, latest writing, GitHub activity, subscribe |
+| `/projects/` | Projects collection | All projects, organized by category (from config.ts) |
+| `/writing/` | Posts collection | All posts (flat list, sourced from Substack) |
 | `/about/` | About MDX + Impact + Experience | Bio, recognition, timeline, social links, interests |
 
 No project detail pages. No analysis route (links to external sites).
@@ -228,46 +221,42 @@ No project detail pages. No analysis route (links to external sites).
 
 **React components via shadcn/ui** (interactive islands):
 - `ModeToggle` — dark/light/system toggle
-- `Sheet` — if we add project expand/drawer later
 - Any future interactive component
-
-**shadcn/ui components we'll use:**
-
-| Component | Where | Why |
-|---|---|---|
-| `Button` | Subscribe CTA, nav links | Consistent styling, hover states, variants |
-| `Card`, `CardHeader`, `CardContent` | Project cards, series cards, recognition items | Standard layout, composable |
-| `Badge` | Project status (Live, Featured), series labels | Consistent small labels |
-| `Separator` | Section dividers | Replaces custom `<hr>` |
-| `Sheet` | Future project expansion/drawer | Accessible slide-in panel, ready when we need it |
-| `DropdownMenu` | Mode toggle | Accessible theme switcher |
-| `Typography` | Headings, prose | Consistent text styles |
-| `Tooltip` | Stat labels, meta info | Progressive disclosure |
 
 ### Video handling
 
-Projects optionally have `videoWebm`, `videoMp4`, and `videoPoster` in their frontmatter. When present, the project card renders an autoplay muted looping `<video>` tag. When absent, it renders a shimmer placeholder with a play icon.
+Projects optionally have `videoWebm`, `videoMp4`, and `videoPoster` in their frontmatter. The project card renders them in a fallback chain:
 
-Recording workflow (deferred to Phase 5):
-1. Record with Screen Studio, ~45s per app
-2. Encode: WebM (AV1) for thumbnails, MP4 (H.264) for fallback, poster JPG
-3. Drop files into `public/videos/` and update frontmatter
-4. No build step for videos — static files served directly
+1. **Video** — if `videoWebm` or `videoMp4` is set, render an autoplay muted looping `<video>` tag
+2. **Poster** — if no video but `videoPoster` is set, render the poster image (same aspect ratio, same border/rounded treatment as video)
+3. **Shimmer** — if neither, render an animated gradient placeholder with a play icon
+
+Video compression recipe (1280px wide, no audio):
+- WebM: VP9, CRF 35, two-pass
+- MP4: H.264, CRF 28, slow preset, faststart
+- Poster: first frame, quality 2
 
 ### Typography
 
-**Instrument Serif** (display headings), **Inter** (body text), **JetBrains Mono** (labels, meta, badges).
+**Lora** (display headings), **Inter** (body text), **JetBrains Mono** (labels, meta, badges).
 
-Loaded via Google Fonts CDN for simplicity. Self-hosting with `@fontsource` packages is an option if performance or privacy becomes a concern.
+All fonts are self-hosted from `public/fonts/` as woff2 files with `font-display: block` — no Google Fonts CDN, no FOUT/flicker.
 
 Configured as custom font families in Tailwind's `@theme` block:
-- `font-display` → Instrument Serif
+- `font-display` → Lora
 - `font-sans` → Inter
 - `font-mono` → JetBrains Mono
 
+### Layout and spacing
+
+- **Max width:** `max-w-4xl` (896px) on nav, main content, and footer
+- **Sections:** `mb-20` on homepage, `mt-16` between about page sections
+- **Font sizes:** section labels at `text-[0.8rem]`, meta text at `text-sm`, body at `text-lg`, post titles at `text-2xl`, project titles at `text-[1.7rem]`
+- **No micro text:** nothing below `text-xs` (12px) anywhere on the site
+
 ### Responsive design
 
-Single column on mobile (<640px), comfortable reading width on desktop (780px max content area). shadcn/ui components are responsive by default. Tailwind's `sm:`, `md:`, `lg:` breakpoints handle layout shifts.
+Single column on mobile (<640px), comfortable reading width on desktop (896px max content area). shadcn/ui components are responsive by default. Tailwind's `sm:`, `md:`, `lg:` breakpoints handle layout shifts.
 
 ### Deployment
 
@@ -287,6 +276,8 @@ Single column on mobile (<640px), comfortable reading width on desktop (780px ma
 - **No analysis route**. Links to external sites (absim.eeshans.com/analysis/).
 - **No Pagefind** for V1. Search skipped.
 - **No project detail pages**. `/projects/` is the single project experience.
+- **No post enrichment/series layer.** Posts are sourced directly from Substack. Series grouping, tags, and related-project cross-links were deprecated — the enrichment layer added complexity without proportionate value.
+- **No Google Fonts CDN.** Fonts are self-hosted to avoid FOUT/flicker.
 
 ---
 
@@ -298,8 +289,7 @@ Single column on mobile (<640px), comfortable reading width on desktop (780px ma
 | UI Components | shadcn/ui (React) | Accessible, composable, dark mode, future-proof. Copy-paste source, not a dependency |
 | Styling | Tailwind CSS v4 | Utility-first, dark mode, shadcn requirement, zero custom CSS |
 | Content | Astro Content Collections + MDX | Built-in, type-safe, no external CMS |
-| Icons | lucide-react | shadcn/ui default, comprehensive, tree-shakable |
-| Fonts | Google Fonts CDN (Instrument Serif, Inter, JetBrains Mono) | Matches mockup design |
+| Fonts | Self-hosted woff2 (Lora, Inter, JetBrains Mono) | No CDN, no FOUT, privacy-friendly |
 | Typography | @tailwindcss/typography | Prose styling for MDX content |
 | Dark Mode | shadcn dark mode system | CSS variables + inline script + ModeToggle component |
 | Analytics | PostHog (public key, build-time inlined) | Same as current site, with proxy host |
@@ -308,22 +298,23 @@ Single column on mobile (<640px), comfortable reading width on desktop (780px ma
 | Deploy | Fly.io (`soma-portfolio` app) + GitHub Actions | Reuse existing Fly app from datascienceapps |
 | Package manager | pnpm | Same as es-portfolio |
 
-### Key npm dependencies
+### Key npm dependencies (17)
 
 ```
 astro                    # Core framework
-@astrojs/react           # React integration for shadcn islands
 @astrojs/mdx             # MDX support for content
+@astrojs/react           # React integration for shadcn islands
+@astrojs/rss             # RSS feed generation
 @astrojs/sitemap         # Sitemap generation
+@tailwindcss/typography  # Prose styling for MDX content
 @tailwindcss/vite        # Tailwind v4 Vite plugin
-tailwindcss              # Tailwind v4
-react / react-dom        # React for shadcn islands
-lucide-react             # Icons
-class-variance-authority # shadcn utility (comes with shadcn init)
-clsx                     # shadcn utility
-tailwind-merge           # shadcn utility
-sharp                    # Image optimization
 astro-expressive-code    # Code syntax highlighting
+class-variance-authority # shadcn utility
+clsx                     # shadcn utility
+react / react-dom        # React for shadcn islands
+sharp                    # Image optimization
+tailwind-merge           # shadcn utility
+tailwindcss              # Tailwind v4
 ```
 
 ---
@@ -333,95 +324,67 @@ astro-expressive-code    # Code syntax highlighting
 ### Phase 1 — Foundation & Scaffolding ✓
 
 - [x] Initialize Astro 6 project in this repo with React + Tailwind + MDX integrations
-- [ ] Run `npx shadcn@latest init` to set up shadcn/ui with custom theme (warm paper palette for light, dark with amber accents)
-- [x] Configure `components.json``components.json` for shadcn (path aliases, React, Tailwind v4)
-- [x] Configure `components.json`Tailwind v4 `@theme` tokens (colors, fonts, spacing matching mockups)
-- [x] Set up `src/styles/globals.css``src/styles/globals.css` with shadcn theme variables + custom Tailwind `@theme` block
-- [x] Set up `src/styles/globals.css`dark mode inline script in base layout
+- [x] Configure `components.json` for shadcn (path aliases, React, Tailwind v4)
+- [x] Configure Tailwind v4 `@theme` tokens (colors, fonts, spacing matching mockups)
+- [x] Set up `src/styles/globals.css` with shadcn theme variables + custom Tailwind `@theme` block + self-hosted @font-face declarations
+- [x] Set up dark mode inline script in base layout
 - [x] Define content collections in `src/content.config.ts` (projects, posts, experience, impact, about)
-- [x] Create `src/data/config.ts``src/data/config.ts` (site URL, title, social links, nav items)
-- [x] Create `src/data/config.ts``src/data/series.ts` (Local AI series metadata)
-- [x] Create `src/data/config.ts`all project MDX files from mockup content (Sidequests, How I Prompt, A/B Simulator, LLM Visual Bench, LLM Bench, Quizzard — no Brewfolio)
-- [x] Create `src/data/config.ts`all post MDX files (9 Substack posts + series grouping)
-- [x] Create `src/data/config.ts`experience collection entries (Starbucks, Overstock, Amazon, S&P, HCL, MBA, CS)
-- [x] Create `src/data/config.ts`impact collection entries (5 Under 35, UCLA talk, podcasts, publications, open source)
-- [x] Create `src/data/config.ts`about MDX with humanized copy from mockup
-- [ ] Verify: `astro build` succeeds, all collections validate
+- [x] Create `src/data/config.ts` (site URL, title, social links, nav items, project categories)
+- [x] Create project MDX files (Sidequests, How I Prompt, A/B Simulator, LLM Visual Bench)
+- [x] Create experience collection entries (Starbucks, Overstock, Amazon, S&P, HCL, MBA, CS)
+- [x] Create impact collection entries (5 Under 35, UCLA talk, podcasts, publications, open source)
+- [x] Create about MDX with humanized copy from mockup
+- [x] `astro build` succeeds, all collections validate
 
-### Phase 2 — Visual Layer & Layout
+### Phase 2 — Visual Layer & Layout ✓
 
-- [x] Create `src/data/config.ts``src/layouts/Base.astro` — html head, font imports, Tailwind, dark mode script, nav, footer
-- [x] Create `src/data/config.ts``src/components/Nav.astro` — name, section links, ModeToggle React island
-- [x] Create `src/data/config.ts``src/components/Footer.astro` — copyright, social links
-- [x] Add shadcn components: `Button`, `Card`, `Badge`, `Separator`
-- [x] Create `src/data/config.ts``src/components/ProjectCard.astro` — project listing (title, badge, hook, meta, links, video/shimmer)
-- [x] Create `src/data/config.ts``src/components/SeriesCard.astro` — grouped series with badge, title, numbered posts
-- [x] Create `src/data/config.ts``src/components/PostItem.astro` — writing list item (title, excerpt, date, project cross-link)
-- [x] Create `src/data/config.ts``src/components/RecogItem.astro` — recognition entry (icon, title, meta, link, year)
-- [x] Create `src/data/config.ts``src/components/TimelineItem.astro` — experience timeline dot + entry
-- [x] Create `src/data/config.ts``src/components/SubscribeBox.astro` — Substack CTA
-- [x] Create `src/data/config.ts`video shimmer placeholder CSS (animated gradient, Tailwind `@keyframes`)
-- [x] Implement responsive layout (single column mobile, 780px max desktop)
-- [x] Verify: components render correctly with test data, light and dark themes work
+- [x] Create `src/layouts/Base.astro` — html head, font imports, Tailwind, dark mode script, nav, footer
+- [x] Create components: ProjectCard, ProjectCardContent, PostItem, SectionTitle, SocialLinks, SubscribeBox, VideoShimmer, TimelineEntry, Icon, GitHubActivity
+- [x] Self-hosted fonts in `public/fonts/` with @font-face declarations and `font-display: block`
+- [x] Video shimmer placeholder (animated gradient)
+- [x] Implement responsive layout (single column mobile, 896px max desktop)
+- [x] Typography pass: bumped all micro text sizes, expanded spacing, Lora display font
 
-### Phase 3 — Pages
+### Phase 3 — Pages ✓
 
-- [x] Create `src/data/config.ts``src/pages/index.astro` — homepage: intro, top 4 projects, latest writing, recognition, about teaser, subscribe
-- [x] Create `src/data/config.ts``src/pages/projects.astro` — all projects by category (Featured, Local AI, Also)
-- [x] Create `src/data/config.ts``src/pages/writing.astro` — Local AI series card + all essays + publication
-- [x] Create `src/data/config.ts``src/pages/about.astro` — full bio, recognition, timeline, social links, interests
+- [x] Create `src/pages/index.astro` — homepage: intro, featured projects, latest writing, GitHub activity, subscribe
+- [x] Create `src/pages/projects.astro` — all projects by category (from config.ts)
+- [x] Create `src/pages/writing.astro` — all posts (flat list from Substack)
+- [x] Create `src/pages/about.astro` — full bio, recognition, timeline, social links, interests
 - [x] Add "See all →" links on homepage sections
 - [ ] Add navigation highlighting (active state per page)
 - [ ] Add SEO meta tags and Open Graph images per page
-- [x] Verify: all pages render, all links work, all external URLs resolve, dark mode toggle works
 
 ### Phase 4 — Integration & Polish ✓
 
 - [x] Port Substack refresh pipeline from datascienceapps (`scripts/refresh-substack.mjs`)
-- [x] Copy `.cache/substack-feed.json` snapshot from datascienceapps
+- [x] Posts sourced directly from Substack — no local MDX stubs, no enrichment layer
 - [x] Port `src/lib/substack.ts`, `src/lib/github.ts`, `src/lib/build-cache.ts` from datascienceapps
 - [x] Port PostHog analytics (public key via `PUBLIC_POSTHOG_KEY`, proxy host via `PUBLIC_POSTHOG_HOST`, inline snippet in base layout)
-- [x] Port GitHub Activity system from datascienceapps (`src/lib/github.ts` + `src/lib/build-cache.ts` + `src/components/GitHubActivity.astro`)
-- [x] Copy `.cache/github-data.json` snapshot from datascienceapps
+- [x] Port GitHub Activity system from datascienceapps
 - [x] Add RSS feed (`/rss.xml`) from posts collection
-- [x] Add `robots.txt` and sitemap (sitemap already generating)
+- [x] Add `robots.txt` and sitemap
 - [x] Add 404 page
-- [x] Set up Fly.io deployment config — reuse existing `soma-portfolio` Fly app from datascienceapps (Dockerfile + nginx + `fly.toml`)
-- [x] Port GitHub Actions workflow from datascienceapps (build + deploy on push to `main`, scheduled Substack refresh every 4h, type-safe commit of snapshot changes)
-- [x] Add env schema to `astro.config` for `GITHUB_TOKEN`, `PUBLIC_POSTHOG_KEY`, `PUBLIC_POSTHOG_HOST`
-- [x] Typography/color overhaul: 3-tier text hierarchy, bigger headings, full-width content
-- [x] GitHub Activity: descriptive section headings (number + label), profile stats, contribution heatmap, no condensed stats row, borders only under subheadings
-- [x] About page: corrected experience/impact data (matching production site), SVG icons for recognition cards, social links with brand icons after bio text, logo-based experience/education timeline, Substack subscribe at bottom, removed "Otherwise" section
-- [x] About page: profile photo with text wrapping (from production site), removed big name heading, full-width text
-- [x] Homepage: removed Recognition and About sections (those live on the About page only), intro text driven by `config.ts`
-- [x] Test Substack refresh script — 9 posts fetched successfully from substack.eeshans.com
-- [x] Content editing guide: `CONTENT.md` written with user-friendly instructions for every content type
-- [x] Design pass: warm-tinted `--muted`/`--border` in both light+dark modes (hue 30), removed `bg-paper-2` in favor of `bg-muted`, lighter card treatments (GitHub Activity no border/bg, SeriesCard no bg-muted)
-- [x] Config-driven socials: `config.ts` socials changed from object to array of `{key, label, href}`, labels configurable (e.g. "Asymptotic" not "Substack")
-- [x] Config-driven subscribe box: kicker/tagline/href from `config.ts`, Substack-styled with orange tint, Substack icon on button
-- [x] SocialLinks component: one source of truth for social links on homepage and about page
-- [x] Homepage: no h1 heading, original tagline restored, 3 featured projects (Sidequests + How I Prompt + A/B Simulator), full-width video shimmer, SubscribeBox added
-- [x] Projects page: SubscribeBox added at bottom
-- [x] About page recognition: changed from 2-col card grid to full-width stacked rows (matches Experience/Education pattern)
-- [x] Homepage: removed Recognition and About sections (those live on the About page only)
-- [x] About page: profile photo with text wrapping, no h1, full-width text, social links after bio
-- [x] Substack refresh tested: 9 posts fetched from substack.eeshans.com
-- [x] Vision doc: removed AI-slop positioning recommendation ("Ship it. Test it. Write about it." → use your own voice)
+- [x] Set up Fly.io deployment config
+- [x] Port GitHub Actions workflow from datascienceapps
+- [x] Config-driven socials, subscribe box, and project categories
+- [x] Design pass: warm-tinted muted/border, Lora font, widened layout, expanded typography and spacing
+- [x] About page: profile photo with text wrapping, recognition as stacked rows, social links after bio
+- [x] Homepage: no h1, tagline intro, featured projects, flat post list, GitHub activity, subscribe
 
-### Phase 5 — Demo Videos
+### Phase 5 — Demo Videos ✓
 
-- [ ] Record Sidequests demo (~45s) with Screen Studio
-- [ ] Record How I Prompt demo (~45s)
-- [ ] Record A/B Simulator demo (~45s)
-- [ ] Record Local LLM Visual Bench demo (~30s)
-- [ ] Encode each: WebM (AV1) + MP4 (H.264) + poster JPG
-- [ ] Add `videoWebm`, `videoMp4`, `videoPoster` to project frontmatter
-- [ ] Verify: video thumbnails autoplay correctly on homepage and projects page
-- [ ] Add videos to LLM Bench, Quizzard when ready
+- [x] Sidequests demo — WebM + MP4 + poster JPG
+- [x] How I Prompt demo — WebM + MP4 + poster JPG
+- [x] A/B Simulator demo — WebM + MP4 + poster JPG
+- [x] LLM Visual Bench demo — WebM + MP4 + poster JPG
+- [x] Video fallback chain: video → poster image → shimmer placeholder
+- [x] Video compression: 1280px, VP9 CRF 35 (webm) + H264 CRF 28 (mp4), audio stripped
+- [x] Click-to-pause overlay with IntersectionObserver auto-pause
 
 ### Phase 6 — Deploy & Cutover
 
-> **Nothing deploys until this phase.** All deployment is deferred until videos and polish are complete.
+> **Nothing deploys until this phase.** All deployment is deferred until polish is complete.
 
 - [ ] Set up Fly.io secrets: `GITHUB_TOKEN`, `FLY_API_TOKEN` (manual step)
 - [ ] Test Substack refresh script end-to-end locally
@@ -437,68 +400,49 @@ astro-expressive-code    # Code syntax highlighting
 - [ ] Archive the `datascienceapps` repo (or redirect it)
 - [ ] Update `es-portfolio` (old repo) README with new architecture docs
 
-### Deferred
-
-- [ ] Replace placeholder post MDX files with pipeline-driven Substack data (posts collection currently uses local MDX files with Substack metadata; the pipeline is ready for future integration)
-
 ---
 
-## 5. File Structure (Target)
+## 5. File Structure
 
 ```
 eeshans-portfolio/
 ├── public/
-│   ├── videos/              # Demo videos (added in Phase 5)
-│   ├── images/              # Project screenshots, OG images
-│   ├── fonts/               # (Optional) Self-hosted fonts
+│   ├── fonts/              # Self-hosted woff2 font files (Lora, Inter, JetBrains Mono)
+│   ├── images/             # Profile photo
+│   ├── logos/              # Company/education logos
+│   ├── videos/             # Project demo videos (webm + mp4 + poster jpg)
 │   └── favicon.svg
 ├── src/
 │   ├── components/
-│   │   ├── ui/              # shadcn/ui components (auto-generated)
-│   │   │   ├── button.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── badge.tsx
-│   │   │   ├── separator.tsx
-│   │   │   ├── dropdown-menu.tsx
-│   │   │   └── sheet.tsx
-│   │   ├── ModeToggle.tsx   # React component for theme switching
-│   │   ├── GitHubActivity.astro # GitHub contribution heatmap + recent activity
-│   │   ├── Nav.astro
-│   │   ├── Footer.astro
-│   │   ├── ProjectCard.astro
-│   │   ├── SeriesCard.astro
-│   │   ├── PostItem.astro
-│   │   ├── RecogItem.astro
-│   │   ├── TimelineItem.astro
-│   │   ├── SubscribeBox.astro
-│   │   └── VideoShimmer.astro
+│   │   ├── ui/             # shadcn/ui components
+│   │   │   └── button.tsx
+│   │   ├── GitHubActivity.astro  # GitHub contribution heatmap + recent activity
+│   │   ├── Icon.astro            # SVG icon helper
+│   │   ├── ModeToggle.tsx        # React component for theme switching
+│   │   ├── PostItem.astro        # Writing list item
+│   │   ├── ProjectCard.astro     # Project card wrapper
+│   │   ├── ProjectCardContent.astro  # Project card content (title, badge, hook, links, video)
+│   │   ├── SectionTitle.astro    # Section header with optional "See all" link
+│   │   ├── SocialLinks.astro     # Social links row (homepage + about)
+│   │   ├── SubscribeBox.astro    # Substack CTA
+│   │   ├── TimelineEntry.astro   # Experience/education timeline entry
+│   │   └── VideoShimmer.astro    # Animated placeholder for missing demo videos
 │   ├── content/
 │   │   ├── projects/        # MDX files for each project
 │   │   │   ├── sidequests.mdx
 │   │   │   ├── how-i-prompt.mdx
 │   │   │   ├── ab-simulator.mdx
-│   │   │   ├── local-llm-visual-bench.mdx
-│   │   │   ├── local-llm-bench.mdx
-│   │   │   └── quizzard.mdx
-│   │   ├── posts/           # Substack posts (sourced from pipeline, see Phase 4)
-│   │   │   ├── its-time-for-the-regular-person-to.md
-│   │   │   ├── local-ai-series-2-the-regular-persons.md
-│   │   │   ├── local-ai-series-3-testing-local-ai.md
-│   │   │   ├── agentic-coding-for-non-vibe-coders.md
-│   │   │   ├── how-i-de-vibed-a-vibe-coded-nlp-app.md
-│   │   │   ├── dopamine-trap-of-ai-coding.md
-│   │   │   ├── why-local-ai-is-more-important-than.md
-│   │   │   ├── building-an-ab-testing-memory-game.md
-│   │   │   └── i-built-a-spotify-wrapped-for-my.md
+│   │   │   └── local-llm-visual-bench.mdx
 │   │   ├── experience/      # MDX files for timeline entries
 │   │   ├── impact/          # MDX files for recognition entries
 │   │   └── other/
 │   │       └── about.mdx
 │   ├── data/
-│   │   ├── config.ts        # Site config (URLs, social links, nav)
-│   │   └── series.ts        # Series metadata
+│   │   ├── config.ts        # Site config (URLs, socials, nav, subscribe, project categories)
+│   │   ├── content.ts       # Collection query helpers (getLiveProjects, getVisiblePosts)
+│   │   └── icons.ts         # Brand SVG icons
 │   ├── layouts/
-│   │   └── Base.astro       # Main layout (head, fonts, dark mode script, PostHog)
+│   │   └── Base.astro       # Main layout (head, fonts, dark mode script, PostHog, nav, footer)
 │   ├── lib/
 │   │   ├── utils.ts         # shadcn cn() utility
 │   │   ├── github.ts        # GitHub GraphQL data fetcher (build-time)
@@ -509,20 +453,25 @@ eeshans-portfolio/
 │   │   ├── projects.astro   # All projects
 │   │   ├── writing.astro    # All writing
 │   │   ├── about.astro      # About page
-│   │   └── 404.astro
+│   │   ├── 404.astro
+│   │   ├── robots.txt.ts
+│   │   └── rss.xml.ts
 │   ├── styles/
-│   │   └── globals.css      # Tailwind directives + shadcn theme variables
-│   ├── scripts/
-│   │   └── refresh-substack.mjs  # Substack RSS snapshot script
-│   └── content.config.ts    # Zod schemas for all collections
+│   │   └── globals.css     # @font-face declarations + Tailwind directives + shadcn theme variables
+│   └── content.config.ts   # Zod schemas for all collections
+├── scripts/
+│   └── refresh-substack.mjs # Substack RSS snapshot script
 ├── CONTENT.md              ← Content editing guide (where to edit everything)
+├── internal_docs/
+│   ├── portfolio-architecture.md  ← This file
+│   └── portfolio-rebuild-analysis.md  ← Brand/product analysis
 ├── astro.config.ts
-├── components.json           # shadcn/ui config
+├── components.json          # shadcn/ui config
 ├── tsconfig.json
 ├── package.json
-├── .env.example              # Required env vars (GITHUB_TOKEN, PUBLIC_POSTHOG_KEY, etc.)
-├── Dockerfile                # Fly.io deployment (nginx serving static build, same pattern as datascienceapps)
-├── fly.toml                  # Fly.io config (app = soma-portfolio, reuse existing app)
+├── .env.example             # Required env vars (GITHUB_TOKEN, PUBLIC_POSTHOG_KEY, etc.)
+├── Dockerfile               # Fly.io deployment (nginx serving static build)
+├── fly.toml                 # Fly.io config (app = soma-portfolio)
 ├── .cache/                  # Build-time cache (substack-feed.json, github-data.json)
 └── .github/
     └── workflows/
@@ -540,25 +489,29 @@ eeshans-portfolio/
 | shadcn/ui | Accessible, composable, dark mode ready, extensible, copy-paste source |
 | Dark mode (light + dark) | shadcn built-in system, CSS variables, inline script, ModeToggle |
 | Content Collections (not Keystatic) | Built-in, type-safe, no external dependency, git-based workflow |
-| lucide-react icons | shadcn default, comprehensive, tree-shakable |
-| Google Fonts CDN | Simplicity, matches mockup. Can self-host later if needed |
+| Self-hosted fonts (no CDN) | Eliminates FOUT/flicker, no external dependency, privacy-friendly |
+| Lora display font | Warmer and heavier than Instrument Serif, readable at all sizes |
+| `max-w-4xl` layout width | Less cramped than `max-w-3xl`, better for video thumbnails |
+| Minimum `text-xs` everywhere | Nothing below 12px — micro text is unreadable |
 | GitHub Activity | Build-time fetch via GraphQL API, cached in `.cache/`. No client-side API calls |
 | PostHog | Public key inlined at build time, proxy via `api-v2.eeshans.com`. No client-side secret |
-| Substack proxy | Uses `substack.eeshans.com` API to avoid CORS/rate-limiting. Same pattern as datascienceapps |
+| Substack proxy | Uses `substack.eeshans.com` API to avoid CORS/rate-limiting |
+| No post enrichment layer | Deprecated — added complexity (series, tags, relatedProject) without proportionate value. Posts are sourced directly from Substack. |
+| No series grouping | Series cards, `series.ts`, `post-enrichment.ts` all removed. Writing page shows a flat post list. |
+| Project categories in config.ts | Single source of truth for category slugs, labels, and display order — not duplicated in page templates |
+| `videoPoster` as fallback image | When no video exists, the poster image is shown instead of the shimmer. Same field, same files — no separate image pipeline. |
 | No project detail pages | `/projects/` is the single project experience |
 | No analysis route | Links to external sites (absim.eeshans.com/analysis/) |
-| No Brewfolio | Removed from project list |
+| No Brewfolio | Not included in the project list |
 | No Pagefind | Skipped for V1 |
-| Video infra first, videos later | Build shimmer placeholders now, record with Screen Studio in Phase 5 |
-| No Tailwind CSS config file | Tailwind v4 uses CSS-based config via `@theme` in globals.css |
-| Warm-tinted `--muted`/`--border` in both modes | Hue 30 (amber undertone) in light and dark modes — prevents the neutral gray cards problem |
-| `bg-muted` for all card backgrounds | Replaced custom `bg-paper-2`/`dark:bg-muted` pattern — one class works in both modes via shadcn CSS variables |
+| No Quizzard or LLM Bench | Removed from project list (Quizzard offline, LLM Bench deprecated) |
+| Warm-tinted `--muted`/`--border` in both modes | Hue 30 (amber undertone) — prevents the neutral gray cards problem |
 | Socials as array in config | `{key, label, href}` lets labels be configurable ("Asymptotic" not "Substack") — one change updates all pages |
 | SubscribeBox driven by config.ts | Kicker/tagline/href configurable, Substack orange-tinted styling with icon |
 | No AI-slop positioning | Tagline comes from the user's own voice, not generated marketing copy |
 | Recognition as stacked rows, not card grid | Matches the vertical section pattern of Experience/Education on the about page |
 | No h1 on homepage or about page | Name already appears in nav; the h1 just wasted space |
-| Deployment deferred to Phase 6 | No deploy until videos and polish are complete |
+| Deployment deferred to Phase 6 | No deploy until polish is complete |
 
 ---
 
@@ -568,4 +521,8 @@ eeshans-portfolio/
 - The `soma-portfolio` Fly.io app is already deployed and serving `eeshans.com`. Cutover means pointing this app to the new repo's build, not creating a new app.
 - The GitHub Actions workflow from datascienceapps (build + deploy on push, Substack refresh every 4h) will be ported and adapted.
 - User controls the dev server. Do not start one unless asked.
-- Do not push commits.
+- Do not push commits without asking.
+- Substack refresh: `pnpm refresh:substack` — updates `.cache/substack-feed.json`
+- Posts are Substack-sourced: custom content collection loader reads cache, no local MDX stubs
+- Content editing guide at `CONTENT.md`
+- Demo video workflow: drop raw .mp4 in `public/videos/`, compress with ffmpeg (VP9 CRF 35 webm + H264 CRF 28 mp4 + poster jpg), update project MDX frontmatter

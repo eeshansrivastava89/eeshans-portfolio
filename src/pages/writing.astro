@@ -1,20 +1,10 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
-import SeriesCard from "@/components/SeriesCard.astro";
 import PostItem from "@/components/PostItem.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
-import { getVisiblePosts, formatDateMonthYear } from "@/data/content";
+import { getVisiblePosts, formatDate } from "@/data/content";
 
 const sortedPosts = await getVisiblePosts();
-
-const localAiSeriesPosts = sortedPosts.filter((p) => p.data.series === "local-ai");
-const standalonePosts = sortedPosts.filter((p) => !p.data.series);
-
-// Find publications (TDS etc.)
-const publications = sortedPosts.filter((p) => p.data.tags?.includes("publication"));
-const essays = standalonePosts.filter((p) => !p.data.tags?.includes("publication"));
-
-
 ---
 
 <BaseLayout title="Writing" activePage="/writing">
@@ -26,42 +16,15 @@ const essays = standalonePosts.filter((p) => !p.data.tags?.includes("publication
 		<a href="https://theasymptotic.substack.com" class="text-accent hover:text-accent-2 transition-colors" target="_blank" rel="noopener noreferrer">Asymptotic</a>.
 	</p>
 
-	<!-- Series -->
-	{localAiSeriesPosts.length > 0 && (
-		<div class="mb-12">
-			<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Series</h2>
-			<SeriesCard seriesSlug="local-ai" />
-		</div>
-	)}
-
-	<!-- Essays -->
-	<div class="mb-12">
-		<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Essays</h2>
-		{essays.map((post) => (
-			<PostItem
-				title={post.data.title}
-				href={post.data.externalUrl}
-				excerpt={post.data.description}
-				date={formatDateMonthYear(post.data.createdAt)}
-				projectLink={post.data.relatedProject ? { label: post.data.relatedProject, href: `/projects` } : undefined}
-			/>
-		))}
-	</div>
-
-	<!-- Publications -->
-	{publications.length > 0 && (
-		<div class="mb-12">
-			<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Publication</h2>
-			{publications.map((post) => (
-				<PostItem
-					title={post.data.title}
-					href={post.data.externalUrl}
-					excerpt={post.data.description}
-					date="Publication"
-				/>
-			))}
-		</div>
-	)}
+	{sortedPosts.map((post) => (
+		<PostItem
+			title={post.data.title}
+			href={post.data.externalUrl}
+			excerpt={post.data.description}
+			date={formatDate(post.data.createdAt)}
+			image={post.data.coverImage}
+		/>
+	))}
 
 	<SubscribeBox />
 </BaseLayout>

@@ -7,14 +7,14 @@ const { duration = "45s" } = Astro.props;
 ---
 
 <div class="mt-3 aspect-video rounded-lg border border-border bg-muted flex items-center justify-center relative overflow-hidden">
-	<div class="absolute inset-0 bg-[linear-gradient(135deg,var(--color-muted)_0%,var(--color-muted-foreground/5)_25%,var(--color-muted)_50%,var(--color-muted-foreground/5)_75%,var(--color-muted)_100%)] bg-[length:400%_400%] animate-[shimmer_12s_ease-in-out_infinite]"></div>
+	<div class="absolute inset-0 bg-[linear-gradient(135deg,var(--color-muted)_0%,color-mix(in_oklab,var(--color-muted-foreground)_5%,transparent)_25%,var(--color-muted)_50%,color-mix(in_oklab,var(--color-muted-foreground)_5%,transparent)_75%,var(--color-muted)_100%)] bg-[length:400%_400%] animate-[shimmer_12s_ease-in-out_infinite]"></div>
 	<div class="relative z-10 flex flex-col items-center gap-1.5">
 		<div class="w-9 h-9 rounded-full border border-border bg-background/80 dark:bg-background/80 flex items-center justify-center">
 			<svg class="w-3.5 h-3.5 fill-muted-foreground ml-0.5" viewBox="0 0 24 24">
 				<polygon points="5,3 19,12 5,21" />
 			</svg>
 		</div>
-		<span class="font-[family-name:var(--font-mono)] text-[0.6rem] text-muted-foreground tracking-wide">Demo · {duration}</span>
+		<span class="font-[family-name:var(--font-mono)] text-xs text-muted-foreground tracking-wide">Demo · {duration}</span>
 	</div>
 </div>
 

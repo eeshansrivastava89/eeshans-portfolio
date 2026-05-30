@@ -26,31 +26,31 @@ const visibleImpact = impact
 	<a href="/" class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
 
 	<!-- Profile photo + bio -->
-	<div class="mb-10 after:clear-both after:block">
+	<div class="mb-14 after:clear-both after:block">
 		<img
 			src="/images/art-profile-eeshan.jpeg"
 			alt="Eeshan Srivastava"
 			class="w-[min(240px,45vw)] h-auto float-left mr-7 mb-4 rounded-2xl border border-border"
 		/>
-		{aboutRendered && <div class="text-base text-foreground/80 leading-relaxed [&>p]:mb-4 [&>p>a]:text-accent [&>p>a]:hover:text-accent-2 [&>p>a]:transition-colors [&>strong]:text-foreground [&>strong]:font-semibold"><aboutRendered.Content /></div>}
+		{aboutRendered && <div class="text-lg text-foreground/80 leading-relaxed [&>p]:mb-5 [&>p>a]:text-accent [&>p>a]:hover:text-accent-2 [&>p>a]:transition-colors [&>strong]:text-foreground [&>strong]:font-semibold"><aboutRendered.Content /></div>}
 	</div>
 
 	<!-- Social links -->
-	<SocialLinks class="mb-4" />
+	<SocialLinks class="mb-6" />
 
 	<!-- Recognition & Leadership -->
-	<section class="mt-14">
-		<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Recognition & Leadership</h2>
+	<section class="mt-16">
+		<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Recognition & Leadership</h2>
 		<div class="flex flex-col">
 			{visibleImpact.map((cat) => (
-				<div class="py-4 border-b border-border last:border-b-0">
-					<h3 class="text-[0.88rem] font-semibold text-foreground mb-2 flex items-center gap-2">
+				<div class="py-5 border-b border-border last:border-b-0">
+					<h3 class="text-sm font-semibold text-foreground mb-2.5 flex items-center gap-2">
 						<Icon name={cat.data.icon} size={14} className="text-accent" />
 						{cat.data.title}
 					</h3>
 					<ul class="space-y-1.5">
 						{cat.data.items.map((item: { text: string; meta?: string; link?: string }) => (
-							<li class="text-[0.88rem] text-foreground/80">
+							<li class="text-sm text-foreground/80">
 								{item.link ? (
 									<a href={item.link} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
 										{item.text}
@@ -70,8 +70,8 @@ const visibleImpact = impact
 	</section>
 
 	<!-- Experience -->
-	<section class="mt-14">
-		<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Experience</h2>
+	<section class="mt-16">
+		<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Experience</h2>
 		<div class="flex flex-col">
 			{work.map((entry) => (
 				<TimelineEntry
@@ -86,8 +86,8 @@ const visibleImpact = impact
 	</section>
 
 	<!-- Education -->
-	<section class="mt-14">
-		<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Education</h2>
+	<section class="mt-16">
+		<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Education</h2>
 		<div class="flex flex-col">
 			{education.map((entry) => (
 				<TimelineEntry
@@ -102,7 +102,7 @@ const visibleImpact = impact
 	</section>
 
 	<!-- Substack -->
-	<div class="mt-14">
+	<div class="mt-16">
 		<SubscribeBox />
 	</div>
 </BaseLayout>

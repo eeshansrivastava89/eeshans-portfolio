@@ -8,14 +8,14 @@ const { label, href } = Astro.props;
 ---
 
 {label && href ? (
-	<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border flex justify-between items-baseline">
+	<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border flex justify-between items-baseline">
 		<span>{label}</span>
-		<a href={href} class="font-normal normal-case tracking-normal text-[0.78rem] text-muted-foreground hover:text-foreground transition-colors">
+		<a href={href} class="font-normal normal-case tracking-normal text-sm text-muted-foreground hover:text-foreground transition-colors">
 			See all →
 		</a>
 	</h2>
 ) : (
-	<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">
+	<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-5 pb-2 border-b border-border">
 		{label}
 	</h2>
 )}

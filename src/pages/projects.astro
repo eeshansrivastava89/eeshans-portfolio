@@ -4,31 +4,30 @@ import ProjectCard from "@/components/ProjectCard.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
 import { getLiveProjects } from "@/data/content";
+import { siteConfig } from "@/data/config";
 
 const sortedProjects = await getLiveProjects();
 
-const categoryOrder = ["featured", "local-ai", "experimentation", "tool"] as const;
-const categoryLabels: Record<string, string> = {
-	featured: "Featured",
-	"local-ai": "Local AI",
-	experimentation: "Experimentation",
-	tool: "Also",
-	events: "Events",
-};
+const categoryConfig = siteConfig.projectCategories;
 
-// Group projects by category, maintaining order
+// Group projects by category, maintaining config order
 const grouped = new Map<string, typeof sortedProjects>();
-for (const cat of categoryOrder) {
-	const catProjects = sortedProjects.filter((p) => p.data.category === cat);
-	if (catProjects.length > 0) grouped.set(cat, catProjects);
+for (const cat of categoryConfig) {
+	const catProjects = sortedProjects.filter((p) => p.data.category === cat.slug);
+	if (catProjects.length > 0) grouped.set(cat.slug, catProjects);
 }
-// Add any categories not in the order
+// Add any categories not in config
 for (const p of sortedProjects) {
 	if (!grouped.has(p.data.category)) {
 		const existing = grouped.get(p.data.category) || [];
 		grouped.set(p.data.category, [...existing, p]);
 	}
 }
+
+const categoryLabel = (slug: string) => {
+	const found = categoryConfig.find((c) => c.slug === slug);
+	return found ? found.label : slug;
+};
 ---
 
 <BaseLayout title="Projects" activePage="/projects">
@@ -41,8 +40,8 @@ for (const p of sortedProjects) {
 
 	{Array.from(grouped.entries()).map(([category, catProjects]) => (
 		<div class="mb-12">
-			<h2 class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border mt-12 first:mt-0">
-				{categoryLabels[category] || category}
+			<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border mt-14 first:mt-0">
+				{categoryLabel(category)}
 			</h2>
 			{catProjects.map((project) => (
 				<ProjectCard>

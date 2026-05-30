@@ -27,4 +27,11 @@ export const siteConfig = {
 	],
 	homepageProjectCount: 4,
 	homepagePostCount: 3,
+	/** Project categories — defines section order and display labels on the projects page */
+	projectCategories: [
+		{ slug: "featured", label: "Featured" },
+		{ slug: "local-ai", label: "Local AI" },
+		{ slug: "experimentation", label: "Experimentation" },
+		{ slug: "tool", label: "Tools" },
+	] as const,
 } as const;

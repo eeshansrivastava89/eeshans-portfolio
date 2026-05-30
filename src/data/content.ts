@@ -19,9 +19,5 @@ export async function getVisiblePosts(): Promise<PostEntry[]> {
 }
 
 export function formatDate(date: Date): string {
-	return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
-export function formatDateMonthYear(date: Date): string {
-	return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+	return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }

@@ -28,12 +28,6 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content={description} />
 		<title>{fullTitle}</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-			rel="stylesheet"
-		/>
 		<meta name="generator" content={Astro.generator} />
 		{posthogKey && posthogHost && (
 			<script is:inline define:vars={{ posthogKey, posthogHost }}>
@@ -65,7 +59,7 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 			}
 		</script>
 
-		<nav class="mx-auto flex max-w-3xl items-baseline justify-between border-b border-border px-6 pb-6 pt-12">
+		<nav class="mx-auto flex max-w-4xl items-baseline justify-between border-b border-border px-6 pb-6 pt-12">
 			<div class="font-[family-name:var(--font-display)] text-lg">
 				<a href="/" class="text-foreground hover:text-foreground/80">
 					Eeshan <em>Srivastava</em>
@@ -91,11 +85,11 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 			</div>
 		</nav>
 
-		<main class="mx-auto max-w-3xl px-6 pt-8 pb-20">
+		<main class="mx-auto max-w-4xl px-6 pt-10 pb-24">
 			<slot />
 		</main>
 
-		<footer class="mx-auto flex max-w-3xl items-center justify-between border-t border-border px-6 py-6 text-xs text-muted-foreground">
+		<footer class="mx-auto flex max-w-4xl items-center justify-between border-t border-border px-6 py-8 text-xs text-muted-foreground">
 			<span>© {new Date().getFullYear()} Eeshan Srivastava</span>
 			<span>Open source · Non-commercial</span>
 		</footer>
