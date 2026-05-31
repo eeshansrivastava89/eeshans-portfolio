@@ -1,0 +1,31 @@
+# Build artifacts (ensure clean builds)
+dist/
+.astro/
+
+# Dependencies (reinstalled in container)
+node_modules/
+
+# Dev/local only
+.env
+.env.*
+.git/
+.github/
+.vscode/
+
+# Cache (substack snapshot is committed for offline builds, github-data is not)
+.cache/github-data.json
+
+# Internal docs and mockups (not needed in production)
+internal_docs/
+mockups/
+CONTENT.md
+AGENTS.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Pi context (not needed in production)
+.pi/
+.claude/
+.codex/

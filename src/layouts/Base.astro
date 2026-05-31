@@ -31,7 +31,7 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 		<meta name="generator" content={Astro.generator} />
 		{posthogKey && posthogHost && (
 			<script is:inline define:vars={{ posthogKey, posthogHost }}>
-				!function(t,e){var o,n,a,r;e._posthog=e._posthog||{},(a=e._posthog.q=e._posthog.q||[]).push([Date.now()].concat([].slice.call(arguments,0))),r=e._posthog,r.__SV=1;var i=t.createElement("script");i.type="text/javascript",i.async=!0,i.crossOrigin="anonymous",i.src=posthogHost+"/array.js",(n=t.getElementsByTagName("script")[0]).parentNode.insertBefore(i,n);for(var s=function(e){return function(){a.push([Date.now()].concat([].slice.call(arguments,0),[e]))}},c=["identify","capture","set","setPersonProperties","optIn","optOut","reset","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatures"],u=0;u<c.length;u++)r[c[u]]=s(c[u])}(document,window);posthog.init(posthogKey,{api_host:posthogHost})
+				!function(t,e){var o,n,a,r;e._posthog=e._posthog||{},(a=e._posthog.q=e._posthog.q||[]).push([Date.now()].concat([].slice.call(arguments,0))),r=e._posthog,r.__SV=1;var i=t.createElement("script");i.type="text/javascript",i.async=!0,i.crossOrigin="anonymous",i.src=posthogHost+"/array.js",(n=t.getElementsByTagName("script")[0]).parentNode.insertBefore(i,n);for(var s=function(e){return function(){a.push([Date.now()].concat([].slice.call(arguments,0),[e]))}},c=["identify","capture","set","setPersonProperties","optIn","optOut","reset","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatures"],u=0;u<c.length;u++)r[c[u]]=s(c[u])}(document,window);posthog.init(posthogKey,{api_host:posthogHost,ui_host:'https://us.posthog.com',person_profiles:'identified_only',capture_pageview:true})
 			</script>
 		)}
 	</head>
