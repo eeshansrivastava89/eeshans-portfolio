@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "fonts:generate": "node scripts/generate-fonts.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "refresh:substack": "node scripts/refresh-substack.mjs"

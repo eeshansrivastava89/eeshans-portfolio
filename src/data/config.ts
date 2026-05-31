@@ -17,7 +17,7 @@ export const siteConfig = {
 	/** Substack subscribe box — displayed at the bottom of pages */
 	subscribe: {
 		kicker: "The Asymptotic",
-		tagline: "Follow me on Substack for posts on AI, data science, and what holds up after the hype.",
+		tagline: "Follow me on Substack. I write about local AI, data science, and essays on human-centric approaches to working with technology.",
 		href: "https://theasymptotic.substack.com/subscribe",
 	},
 	nav: [
