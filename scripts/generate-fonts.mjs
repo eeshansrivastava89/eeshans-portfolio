@@ -16,9 +16,9 @@ const fonts = {
 		styles: ["normal", "italic"],
 	},
 	sans: {
-		name: "Source Sans 3",
+		name: "Geist",
 		fallback: "system-ui, -apple-system, sans-serif",
-		weights: [300, 400, 600],
+		weights: [300, 400, 500, 600],
 		styles: ["normal"],
 	},
 	mono: {
@@ -104,7 +104,7 @@ async function main() {
 					lines.push(`\tfont-family: "${font.name}";`);
 					lines.push(`\tfont-style: ${style};`);
 					lines.push(`\tfont-weight: ${weight};`);
-					lines.push("\tfont-display: block;");
+					lines.push("\tfont-display: swap;");
 					lines.push(`\tsrc: url("/fonts/${fileName}") format("woff2");`);
 					lines.push(`\tunicode-range: ${range};`);
 					lines.push("}");

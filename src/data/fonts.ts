@@ -4,7 +4,8 @@
  * To change a font:
  * 1. Update the config below
  * 2. Run: pnpm fonts:generate
- * 3. Build — everything updates from here
+ * 3. Update the --font-* vars in globals.css @theme
+ * 4. Build — everything updates from here
  *
  * Components use var(--font-sans), var(--font-display), var(--font-mono)
  * so no template changes needed when swapping fonts.
@@ -18,9 +19,9 @@ export const fonts = {
 		styles: ["normal", "italic"],
 	},
 	sans: {
-		name: "Source Sans 3",
+		name: "Geist",
 		fallback: "system-ui, -apple-system, sans-serif",
-		weights: [300, 400, 600],
+		weights: [300, 400, 500, 600],
 		styles: ["normal"],
 	},
 	mono: {
