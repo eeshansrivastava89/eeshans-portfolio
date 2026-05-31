@@ -6,6 +6,7 @@ import SubscribeBox from "@/components/SubscribeBox.astro";
 import TimelineEntry from "@/components/TimelineEntry.astro";
 import { getCollection, render } from "astro:content";
 import { siteConfig } from "@/data/config";
+import { linkTypeIcons } from "@/data/icons";
 
 const aboutEntries = await getCollection("other");
 const about = aboutEntries.find((e) => e.id === "about");
@@ -40,26 +41,27 @@ const visibleImpact = impact
 
 	<!-- Recognition & Leadership -->
 	<section class="mt-16">
-		<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Recognition & Leadership</h2>
+		<h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Recognition & Leadership</h2>
 		<div class="flex flex-col">
 			{visibleImpact.map((cat) => (
 				<div class="py-5 border-b border-border last:border-b-0">
-					<h3 class="text-sm font-semibold text-foreground mb-2.5 flex items-center gap-2">
-						<Icon name={cat.data.icon} size={14} className="text-accent" />
+					<h3 class="font-semibold text-foreground mb-2.5 flex items-center gap-2">
+						<Icon name={cat.data.icon} size={15} className="text-accent" />
 						{cat.data.title}
 					</h3>
 					<ul class="space-y-1.5">
-						{cat.data.items.map((item: { text: string; meta?: string; link?: string }) => (
-							<li class="text-sm text-foreground/80">
+						{cat.data.items.map((item: { text: string; meta?: string; link?: string; linkType?: string }) => (
+							<li class="text-foreground/80">
 								{item.link ? (
-									<a href={item.link} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
+									<a href={item.link} class="inline-flex items-center gap-1.5 text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
 										{item.text}
+										<Icon name={linkTypeIcons[item.linkType] || "externalLink"} size={14} className="shrink-0" />
 									</a>
 								) : (
 									<span class="text-foreground">{item.text}</span>
 								)}
 								{item.meta && (
-									<span class="text-xs text-muted-foreground ml-2">{item.meta}</span>
+									<span class="text-sm text-muted-foreground ml-2">{item.meta}</span>
 								)}
 							</li>
 						))}
@@ -71,7 +73,7 @@ const visibleImpact = impact
 
 	<!-- Experience -->
 	<section class="mt-16">
-		<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Experience</h2>
+		<h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Experience</h2>
 		<div class="flex flex-col">
 			{work.map((entry) => (
 				<TimelineEntry
@@ -87,7 +89,7 @@ const visibleImpact = impact
 
 	<!-- Education -->
 	<section class="mt-16">
-		<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Education</h2>
+		<h2 class="text-sm font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border">Education</h2>
 		<div class="flex flex-col">
 			{education.map((entry) => (
 				<TimelineEntry

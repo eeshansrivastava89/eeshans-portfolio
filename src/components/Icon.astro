@@ -1,17 +1,24 @@
 ---
-import { lucideIcons } from "@/data/icons";
+import { lucideIcons, brandIcons, fillIcons } from "@/data/icons";
 
 interface Props {
 	name: string;
 	className?: string;
+	size?: number;
 }
 
-const { name, className = "" } = Astro.props;
-const icon = lucideIcons[name.toLowerCase()];
+const { name, className = "", size = 16 } = Astro.props;
+const key = name.toLowerCase();
+const isFill = fillIcons.has(key);
+const icon = isFill ? brandIcons[key] : lucideIcons[key];
 ---
 
 {icon ? (
-	<svg class={className} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox={icon.viewBox || "0 0 24 24"} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icon.path} />
+	isFill ? (
+		<svg class={className} xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox={icon.viewBox || "0 0 24 24"} fill="currentColor" set:html={`<path d="${icon.path}"/>`} />
+	) : (
+		<svg class={className} xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox={icon.viewBox || "0 0 24 24"} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icon.path} />
+	)
 ) : (
 	<span class={className}>{name}</span>
 )}

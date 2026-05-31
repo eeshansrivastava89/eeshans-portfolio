@@ -5,9 +5,10 @@ interface Props {
 	excerpt?: string;
 	date?: string;
 	image?: string;
+	tags?: { name: string; slug: string }[];
 }
 
-const { title, href, excerpt, date, image } = Astro.props;
+const { title, href, excerpt, date, image, tags = [] } = Astro.props;
 ---
 
 <div class="mb-5 pb-5 border-b border-border last:border-b-0 last:mb-0 last:pb-0 flex flex-row gap-4 sm:gap-5">
@@ -35,6 +36,13 @@ const { title, href, excerpt, date, image } = Astro.props;
 						Read on Substack
 					</a>
 				)}
+			</div>
+		)}
+		{tags.length > 0 && (
+			<div class="mt-1.5 flex flex-wrap items-center gap-1.5">
+				{tags.map((tag) => (
+					<span class="tag-pill">{tag.name}</span>
+				))}
 			</div>
 		)}
 	</div>
@@ -81,5 +89,21 @@ const { title, href, excerpt, date, image } = Astro.props;
 	}
 	:global(.dark) .substack-pill:hover {
 		background: color-mix(in oklab, var(--color-substack, #ff6719) 20%, var(--color-background));
+	}
+	.tag-pill {
+		display: inline-block;
+		padding: 0.125rem 0.5rem;
+		border-radius: 9999px;
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		border: 1px solid color-mix(in oklab, var(--color-foreground) 12%, var(--color-border));
+		background: color-mix(in oklab, var(--color-foreground) 4%, var(--color-background));
+		color: var(--color-muted-foreground);
+	}
+	:global(.dark) .tag-pill {
+		border-color: color-mix(in oklab, var(--color-foreground) 10%, var(--color-border));
+		background: color-mix(in oklab, var(--color-foreground) 6%, var(--color-background));
 	}
 </style>

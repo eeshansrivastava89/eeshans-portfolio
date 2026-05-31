@@ -18,6 +18,7 @@ export interface SubstackPost {
 	pubDate: Date;
 	description: string;
 	content: string;
+	tags: { name: string; slug: string }[];
 	coverImage?: string;
 }
 

@@ -8,15 +8,35 @@ interface Props {
 }
 
 const { timespan, title, organization, detail, logo } = Astro.props;
+const isSvg = logo?.endsWith(".svg");
 ---
 
-<div class="flex items-start gap-5 py-5 border-b border-border last:border-b-0">
+<div class="flex items-start gap-4 py-5 border-b border-border last:border-b-0">
 	{logo && (
-		<img src={`/logos/${logo}`} alt="" class="w-11 h-11 rounded-lg border border-border bg-background shrink-0" />
+		<img src={`/logos/${logo}`} alt="" class:list={["logo-img", { "logo-img--svg": isSvg }]} />
 	)}
 	<div class="min-w-0">
 		<div class="font-[family-name:var(--font-mono)] text-sm text-accent tracking-wide mb-0.5">{timespan}</div>
-		<div class="font-medium text-foreground">{title} · {organization}</div>
+		<div class="text-foreground">{title} <span class="font-semibold text-accent">· {organization}</span></div>
 		{detail && <div class="text-sm text-foreground/75 mt-0.5">{detail}</div>}
 	</div>
 </div>
+
+<style>
+	.logo-img {
+		width: 5rem;
+		height: 5rem;
+		flex-shrink: 0;
+		object-fit: contain;
+		border-radius: 0.5rem;
+		border: 1px solid var(--color-border);
+		background: var(--color-background);
+		padding: 0.375rem;
+	}
+	.logo-img--svg {
+		color: var(--color-foreground);
+	}
+	:global(.dark) .logo-img:not(.logo-img--svg) {
+		filter: brightness(0.85);
+	}
+</style>

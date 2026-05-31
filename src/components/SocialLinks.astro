@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from "@/data/config";
-import { brandIcons } from "@/data/icons";
+import Icon from "@/components/Icon.astro";
 
 /**
  * Social links row — used on homepage and about page.
@@ -17,13 +17,10 @@ const socials = siteConfig.socials;
 ---
 
 <div class:list={["flex flex-wrap items-center gap-5", className]}>
-	{socials.map((social) => {
-		const icon = brandIcons[social.key];
-		return (
-			<a href={social.href} class="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 text-sm" target="_blank" rel="noopener noreferrer">
-				{icon && <svg class="w-4 h-4" viewBox={icon.viewBox || "0 0 24 24"} fill="currentColor"><path d={icon.path} /></svg>}
-				{social.label}
-			</a>
-		);
-	})}
+	{socials.map((social) => (
+		<a href={social.href} class="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 text-sm" target="_blank" rel="noopener noreferrer">
+			<Icon name={social.key} className="w-4 h-4" />
+			{social.label}
+		</a>
+	))}
 </div>

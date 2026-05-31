@@ -58,6 +58,12 @@ function normalizePost(post) {
       post.truncated_body_text.trim()) ||
     "";
 
+  const tags = Array.isArray(post.postTags)
+    ? post.postTags
+        .filter((t) => t && !t.hidden)
+        .map((t) => ({ name: t.name, slug: t.slug }))
+    : [];
+
   return {
     title,
     link,
@@ -65,6 +71,7 @@ function normalizePost(post) {
     pubDate: normalizeDate(post.post_date, postLabel),
     description,
     content,
+    tags,
     coverImage:
       typeof post.cover_image === "string" && post.cover_image.length > 0
         ? post.cover_image

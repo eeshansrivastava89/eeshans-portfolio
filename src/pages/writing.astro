@@ -23,6 +23,7 @@ const sortedPosts = await getVisiblePosts();
 			excerpt={post.data.description}
 			date={formatDate(post.data.createdAt)}
 			image={post.data.coverImage}
+			tags={post.data.tags}
 		/>
 	))}
 
