@@ -33,6 +33,10 @@ export default defineConfig({
 			}),
 		},
 	},
+	redirects: {
+		"/posts": "/writing",
+		"/posts/**": "/writing",
+	},
 	vite: {
 		plugins: [tailwindcss()],
 	},

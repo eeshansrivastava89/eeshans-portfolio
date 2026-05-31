@@ -22,3 +22,8 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# agent context
+.pi/
+.claude/
+.codex/
