@@ -17,21 +17,10 @@ const projects = defineCollection({
 			.default("experimentation"),
 		liveUrl: z.string().url().optional(),
 		repoUrl: z.string().url().optional(),
-		analysisUrl: z.string().url().optional(),
-		relatedWriting: z.array(z.string()).default([]),
 		tech: z.array(z.string()).default([]),
 		videoWebm: z.string().optional(),
 		videoMp4: z.string().optional(),
 		videoPoster: z.string().optional(),
-		image: z.string().optional(),
-		stats: z
-			.array(
-				z.object({
-					value: z.string(),
-					label: z.string().optional(),
-				}),
-			)
-			.optional(),
 	}),
 });
 
