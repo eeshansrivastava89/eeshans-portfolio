@@ -31,7 +31,13 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 		<meta name="generator" content={Astro.generator} />
 		{posthogKey && posthogHost && (
 			<script is:inline define:vars={{ posthogKey, posthogHost }}>
-				!function(t,e){var o,n,a,r;e._posthog=e._posthog||{},(a=e._posthog.q=e._posthog.q||[]).push([Date.now()].concat([].slice.call(arguments,0))),r=e._posthog,r.__SV=1;var i=t.createElement("script");i.type="text/javascript",i.async=!0,i.crossOrigin="anonymous",i.src=posthogHost+"/array.js",(n=t.getElementsByTagName("script")[0]).parentNode.insertBefore(i,n);for(var s=function(e){return function(){a.push([Date.now()].concat([].slice.call(arguments,0),[e]))}},c=["identify","capture","set","setPersonProperties","optIn","optOut","reset","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatures"],u=0;u<c.length;u++)r[c[u]]=s(c[u])}(document,window);posthog.init(posthogKey,{api_host:posthogHost,ui_host:'https://us.posthog.com',person_profiles:'identified_only',capture_pageview:true})
+				!function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.crossOrigin='anonymous',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString=function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString=function(){return u.toString(1)+'.people (stub)'},o='init capture identify alias register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+				posthog.init(posthogKey, {
+					api_host: posthogHost,
+					ui_host: 'https://us.posthog.com',
+					person_profiles: 'identified_only',
+					capture_pageview: true
+				});
 			</script>
 		)}
 	</head>
