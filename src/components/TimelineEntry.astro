@@ -36,6 +36,9 @@ const isSvg = logo?.endsWith(".svg");
 	.logo-img--svg {
 		color: var(--color-foreground);
 	}
+	:global(.dark) .logo-img--svg {
+		filter: invert(1);
+	}
 	:global(.dark) .logo-img:not(.logo-img--svg) {
 		filter: brightness(0.85);
 	}
