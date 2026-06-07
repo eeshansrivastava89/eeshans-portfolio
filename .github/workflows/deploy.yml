@@ -107,10 +107,10 @@ jobs:
           --build-arg PUBLIC_POSTHOG_HOST="$PUBLIC_POSTHOG_HOST"
           --build-arg PUBLIC_POSTHOG_UI_HOST="$PUBLIC_POSTHOG_UI_HOST"
           --build-arg PUBLIC_ANALYTICS_ALLOWED_HOSTS="$PUBLIC_ANALYTICS_ALLOWED_HOSTS"
-          --build-secret GITHUB_TOKEN="$GITHUB_TOKEN"
+          --build-secret GITHUB_TOKEN="$BUILD_GITHUB_TOKEN"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUILD_GITHUB_TOKEN: ${{ secrets.BUILD_GITHUB_TOKEN }}
           PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
           PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
           PUBLIC_POSTHOG_UI_HOST: ${{ vars.PUBLIC_POSTHOG_UI_HOST || 'https://us.posthog.com' }}
