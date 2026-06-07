@@ -5,6 +5,19 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
+# Public build arguments inlined by Astro at build time.
+# These are public client-side values (they ship in the HTML),
+# so build-arg is appropriate. If absent, analytics is silently omitted.
+ARG PUBLIC_POSTHOG_KEY
+ARG PUBLIC_POSTHOG_HOST
+ARG PUBLIC_POSTHOG_UI_HOST
+ARG PUBLIC_ANALYTICS_ALLOWED_HOSTS
+
+ENV PUBLIC_POSTHOG_KEY=$PUBLIC_POSTHOG_KEY
+ENV PUBLIC_POSTHOG_HOST=$PUBLIC_POSTHOG_HOST
+ENV PUBLIC_POSTHOG_UI_HOST=$PUBLIC_POSTHOG_UI_HOST
+ENV PUBLIC_ANALYTICS_ALLOWED_HOSTS=$PUBLIC_ANALYTICS_ALLOWED_HOSTS
+
 # Install pnpm globally
 RUN npm install -g pnpm@10
 
@@ -17,19 +30,9 @@ RUN pnpm install --frozen-lockfile
 # Copy source
 COPY . .
 
-# Build — all secrets mounted at build time, not baked into image history.
-# If a secret is absent (e.g. fork deploy without PostHog), the build still
-# succeeds with analytics silently omitted.
+# Build. GITHUB_TOKEN is a real secret — passed via Docker build secret.
 RUN --mount=type=secret,id=GITHUB_TOKEN \
-    --mount=type=secret,id=PUBLIC_POSTHOG_KEY \
-    --mount=type=secret,id=PUBLIC_POSTHOG_HOST \
-    --mount=type=secret,id=PUBLIC_POSTHOG_UI_HOST \
-    --mount=type=secret,id=PUBLIC_ANALYTICS_ALLOWED_HOSTS \
     GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN 2>/dev/null || true)" \
-    PUBLIC_POSTHOG_KEY="$(cat /run/secrets/PUBLIC_POSTHOG_KEY 2>/dev/null || true)" \
-    PUBLIC_POSTHOG_HOST="$(cat /run/secrets/PUBLIC_POSTHOG_HOST 2>/dev/null || true)" \
-    PUBLIC_POSTHOG_UI_HOST="$(cat /run/secrets/PUBLIC_POSTHOG_UI_HOST 2>/dev/null || echo 'https://us.posthog.com')" \
-    PUBLIC_ANALYTICS_ALLOWED_HOSTS="$(cat /run/secrets/PUBLIC_ANALYTICS_ALLOWED_HOSTS 2>/dev/null || true)" \
     pnpm run build
 
 # Runtime stage — serve static files with Nginx
