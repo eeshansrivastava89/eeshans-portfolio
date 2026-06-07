@@ -65,21 +65,53 @@ jobs:
           fi
 
       # ─────────────────────────────────────────────────────────────
-      # 4. Typecheck + Build Astro site
+      # 4. Typecheck
       # ─────────────────────────────────────────────────────────────
       - name: Typecheck
         run: pnpm astro check
 
-      - name: Build Astro site
-        run: pnpm run build
+      # ─────────────────────────────────────────────────────────────
+      # 5. Validate analytics config
+      # ─────────────────────────────────────────────────────────────
+      - name: Validate analytics config
+        run: |
+          if [ "$PUBLIC_ENABLE_ANALYTICS" = "true" ]; then
+            if [ -z "$PUBLIC_POSTHOG_KEY" ]; then
+              echo "::error::PUBLIC_ENABLE_ANALYTICS is true but PUBLIC_POSTHOG_KEY secret is missing."
+              exit 1
+            fi
+            if [ -z "$PUBLIC_POSTHOG_HOST" ]; then
+              echo "::error::PUBLIC_ENABLE_ANALYTICS is true but PUBLIC_POSTHOG_HOST secret is missing."
+              exit 1
+            fi
+            if [ -z "$PUBLIC_ANALYTICS_ALLOWED_HOSTS" ]; then
+              echo "::error::PUBLIC_ENABLE_ANALYTICS is true but PUBLIC_ANALYTICS_ALLOWED_HOSTS variable is missing."
+              exit 1
+            fi
+          else
+            echo "Analytics disabled — skipping validation."
+          fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLIC_ENABLE_ANALYTICS: ${{ vars.PUBLIC_ENABLE_ANALYTICS }}
+          PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
+          PUBLIC_ANALYTICS_ALLOWED_HOSTS: ${{ vars.PUBLIC_ANALYTICS_ALLOWED_HOSTS }}
 
       # ─────────────────────────────────────────────────────────────
-      # 5. Deploy to Fly.io
+      # 6. Deploy to Fly.io (remote build with secrets/args from GitHub)
       # ─────────────────────────────────────────────────────────────
       - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only --build-secret GITHUB_TOKEN="$GITHUB_TOKEN"
+        run: >
+          flyctl deploy --remote-only
+          --build-arg PUBLIC_POSTHOG_KEY="$PUBLIC_POSTHOG_KEY"
+          --build-arg PUBLIC_POSTHOG_HOST="$PUBLIC_POSTHOG_HOST"
+          --build-arg PUBLIC_POSTHOG_UI_HOST="$PUBLIC_POSTHOG_UI_HOST"
+          --build-arg PUBLIC_ANALYTICS_ALLOWED_HOSTS="$PUBLIC_ANALYTICS_ALLOWED_HOSTS"
+          --build-secret GITHUB_TOKEN="$GITHUB_TOKEN"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
+          PUBLIC_POSTHOG_UI_HOST: ${{ vars.PUBLIC_POSTHOG_UI_HOST || 'https://us.posthog.com' }}
+          PUBLIC_ANALYTICS_ALLOWED_HOSTS: ${{ vars.PUBLIC_ANALYTICS_ALLOWED_HOSTS }}
