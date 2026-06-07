@@ -5,13 +5,6 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-# Public build arguments inlined by Astro at build time.
-ARG PUBLIC_POSTHOG_KEY
-ARG PUBLIC_POSTHOG_HOST
-
-ENV PUBLIC_POSTHOG_KEY=$PUBLIC_POSTHOG_KEY
-ENV PUBLIC_POSTHOG_HOST=$PUBLIC_POSTHOG_HOST
-
 # Install pnpm globally
 RUN npm install -g pnpm@10
 
@@ -24,9 +17,20 @@ RUN pnpm install --frozen-lockfile
 # Copy source
 COPY . .
 
-# Build. GITHUB_TOKEN is required at build time for GitHub GraphQL data.
+# Build — all secrets mounted at build time, not baked into image history.
+# If a secret is absent (e.g. fork deploy without PostHog), the build still
+# succeeds with analytics silently omitted.
 RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN)" pnpm run build
+    --mount=type=secret,id=PUBLIC_POSTHOG_KEY \
+    --mount=type=secret,id=PUBLIC_POSTHOG_HOST \
+    --mount=type=secret,id=PUBLIC_POSTHOG_UI_HOST \
+    --mount=type=secret,id=PUBLIC_ANALYTICS_ALLOWED_HOSTS \
+    GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN 2>/dev/null || true)" \
+    PUBLIC_POSTHOG_KEY="$(cat /run/secrets/PUBLIC_POSTHOG_KEY 2>/dev/null || true)" \
+    PUBLIC_POSTHOG_HOST="$(cat /run/secrets/PUBLIC_POSTHOG_HOST 2>/dev/null || true)" \
+    PUBLIC_POSTHOG_UI_HOST="$(cat /run/secrets/PUBLIC_POSTHOG_UI_HOST 2>/dev/null || echo 'https://us.posthog.com')" \
+    PUBLIC_ANALYTICS_ALLOWED_HOSTS="$(cat /run/secrets/PUBLIC_ANALYTICS_ALLOWED_HOSTS 2>/dev/null || true)" \
+    pnpm run build
 
 # Runtime stage — serve static files with Nginx
 FROM nginx:alpine
@@ -37,7 +41,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Configure nginx
 #
 # IMPORTANT — the try_files order is `$uri $uri/index.html` (NOT
-# `$uri $uri/`). Serving `$uri/` triggers nginx to issue a trailing-slash
+# `$uri/`). Serving `$uri/` triggers nginx to issue a trailing-slash
 # 301 redirect, and that redirect uses nginx internal listener scheme
 # (http://) instead of the scheme the Fly edge proxy received the request
 # with (https://). Serving `$uri/index.html` directly avoids that redirect.
@@ -50,8 +54,6 @@ RUN echo 'server { \
     server_name _; \
     root /usr/share/nginx/html; \
     index index.html; \
-    port_in_redirect off; \
-    absolute_redirect off; \
     \
     location / { \
         try_files $uri $uri/index.html /index.html; \
