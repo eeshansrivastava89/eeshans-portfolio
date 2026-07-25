@@ -9,7 +9,8 @@
     "fonts:generate": "node scripts/generate-fonts.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "refresh:substack": "node scripts/refresh-substack.mjs"
+    "refresh:substack": "node scripts/refresh-substack.mjs",
+    "deploy:worker": "cd workers/substack-proxy && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",

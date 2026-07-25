@@ -5,6 +5,10 @@ import fs from "node:fs";
 import path from "node:path";
 
 const PUBLICATION_URL = "https://theasymptotic.substack.com";
+// Fetches via the substack-proxy Cloudflare Worker (source:
+// workers/substack-proxy/). Direct API access is NOT possible from CI:
+// Substack's Cloudflare returns 403 for datacenter IPs. Do not "simplify"
+// this back to a direct fetch — it will fail every scheduled run.
 const POSTS_API_URL = "https://substack.eeshans.com/substack/posts";
 const SNAPSHOT_PATH = path.join(process.cwd(), ".cache", "substack-feed.json");
 const MAX_RESPONSE_BYTES = 20 * 1024 * 1024;

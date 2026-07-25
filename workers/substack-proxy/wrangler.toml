@@ -1,0 +1,6 @@
+name = "substack-proxy"
+main = "worker.js"
+compatibility_date = "2026-07-25"
+
+# Custom domain binding (replaces the dashboard-managed one).
+routes = [{ pattern = "substack.eeshans.com", custom_domain = true }]
