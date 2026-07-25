@@ -5,7 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const PUBLICATION_URL = "https://theasymptotic.substack.com";
-const POSTS_API_URL = `${PUBLICATION_URL}/api/v1/posts?limit=50`;
+const POSTS_API_URL = "https://substack.eeshans.com/substack/posts";
 const SNAPSHOT_PATH = path.join(process.cwd(), ".cache", "substack-feed.json");
 const MAX_RESPONSE_BYTES = 20 * 1024 * 1024;
 
