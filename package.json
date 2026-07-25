@@ -32,5 +32,8 @@
     "simple-icons": "^16.22.0",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.114.0"
   }
 }
