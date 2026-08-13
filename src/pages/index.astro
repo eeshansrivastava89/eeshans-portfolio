@@ -1,25 +1,19 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
 import SectionTitle from "@/components/SectionTitle.astro";
 import PostItem from "@/components/PostItem.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
 import GitHubActivity from "@/components/GitHubActivity.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
-import { getCollection } from "astro:content";
 import { siteConfig } from "@/data/config";
-import { getLiveProjects, getVisiblePosts, formatDate } from "@/data/content";
+import { getProjects, getVisiblePosts, formatDate } from "@/data/content";
 
-const projects = await getLiveProjects();
-
-const sortedProjects = projects;
-const featuredProjects = sortedProjects.filter((p) => p.data.featured);
-const topProjects = featuredProjects.length > 0 ? featuredProjects.slice(0, siteConfig.homepageProjectCount) : sortedProjects.slice(0, siteConfig.homepageProjectCount);
+const projects = await getProjects();
+const featured = projects.filter((p) => p.data.featured);
+const topProjects = (featured.length > 0 ? featured : projects).slice(0, siteConfig.homepageProjectCount);
 
 const sortedPosts = await getVisiblePosts();
-
-
 ---
 
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
@@ -29,28 +23,8 @@ const sortedPosts = await getVisiblePosts();
 		<SocialLinks class="mt-4" />
 	</section>
 
-	<!-- Projects -->
-	<section class="mb-20">
-		<SectionTitle label="Projects" href="/projects" />
-		{topProjects.map((project) => (
-			<ProjectCard>
-				<ProjectCardContent
-					title={project.data.title}
-					status={project.data.status}
-					hook={project.data.hook}
-					liveUrl={project.data.liveUrl}
-					repoUrl={project.data.repoUrl}
-					tech={project.data.tech}
-					videoWebm={project.data.videoWebm}
-					videoMp4={project.data.videoMp4}
-					videoPoster={project.data.videoPoster}
-				/>
-			</ProjectCard>
-		))}
-	</section>
-
 	<!-- Writing -->
-	<section class="mb-16">
+	<section class="mb-20">
 		<SectionTitle label="Writing" href="/writing" />
 
 		{sortedPosts.slice(0, siteConfig.homepagePostCount).map((post) => (
@@ -63,6 +37,24 @@ const sortedPosts = await getVisiblePosts();
 				tags={post.data.tags}
 			/>
 		))}
+	</section>
+
+	<!-- Projects -->
+	<section class="mb-20">
+		<SectionTitle label="Projects" href="/projects" />
+		<div class="project-grid">
+			{topProjects.map((project) => (
+				<ProjectCardContent
+					title={project.data.title}
+					hook={project.data.hook}
+					liveUrl={project.data.liveUrl}
+					repoUrl={project.data.repoUrl}
+					videoWebm={project.data.videoWebm}
+					videoMp4={project.data.videoMp4}
+					videoPoster={project.data.videoPoster}
+				/>
+			))}
+		</div>
 	</section>
 
 	<!-- GitHub Activity -->

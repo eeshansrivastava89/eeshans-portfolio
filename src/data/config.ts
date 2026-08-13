@@ -21,17 +21,10 @@ export const siteConfig = {
 		href: "https://theasymptotic.substack.com/subscribe",
 	},
 	nav: [
-		{ label: "Projects", href: "/projects" },
 		{ label: "Writing", href: "/writing" },
+		{ label: "Projects", href: "/projects" },
 		{ label: "About", href: "/about" },
 	],
-	homepageProjectCount: 4,
+	homepageProjectCount: 3,
 	homepagePostCount: 3,
-	/** Project categories — defines section order and display labels on the projects page */
-	projectCategories: [
-		{ slug: "featured", label: "Featured" },
-		{ slug: "local-ai", label: "Local AI" },
-		{ slug: "experimentation", label: "Experimentation" },
-		{ slug: "tool", label: "Tools" },
-	] as const,
 } as const;

@@ -10,14 +10,9 @@ const projects = defineCollection({
 		hook: z.string(),
 		description: z.string(),
 		date: z.coerce.date(),
-		status: z.enum(["live", "archived", "draft"]).default("live"),
 		featured: z.boolean().default(false),
-		category: z
-			.enum(["featured", "local-ai", "experimentation", "events", "tool"])
-			.default("experimentation"),
 		liveUrl: z.string().url().optional(),
 		repoUrl: z.string().url().optional(),
-		tech: z.array(z.string()).default([]),
 		videoWebm: z.string().optional(),
 		videoMp4: z.string().optional(),
 		videoPoster: z.string().optional(),

@@ -1,33 +1,10 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
-import { getLiveProjects } from "@/data/content";
-import { siteConfig } from "@/data/config";
+import { getProjects } from "@/data/content";
 
-const sortedProjects = await getLiveProjects();
-
-const categoryConfig = siteConfig.projectCategories;
-
-// Group projects by category, maintaining config order
-const grouped = new Map<string, typeof sortedProjects>();
-for (const cat of categoryConfig) {
-	const catProjects = sortedProjects.filter((p) => p.data.category === cat.slug);
-	if (catProjects.length > 0) grouped.set(cat.slug, catProjects);
-}
-// Add any categories not in config
-for (const p of sortedProjects) {
-	if (!grouped.has(p.data.category)) {
-		const existing = grouped.get(p.data.category) || [];
-		grouped.set(p.data.category, [...existing, p]);
-	}
-}
-
-const categoryLabel = (slug: string) => {
-	const found = categoryConfig.find((c) => c.slug === slug);
-	return found ? found.label : slug;
-};
+const projects = await getProjects();
 ---
 
 <BaseLayout title="Projects" activePage="/projects">
@@ -35,31 +12,22 @@ const categoryLabel = (slug: string) => {
 
 	<h1 class="font-[family-name:var(--font-display)] text-[3rem] leading-tight mb-3">Projects</h1>
 	<p class="text-base text-foreground/80 leading-relaxed mb-12">
-		Every project is a live web app you can play with, read the analysis, or explore the source code. No demos, no screenshots — the real thing.
+		Every project is a live web app you can play with, read the analysis, or explore the source code.
 	</p>
 
-	{Array.from(grouped.entries()).map(([category, catProjects]) => (
-		<div class="mb-12">
-			<h2 class="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-6 pb-2 border-b border-border mt-14 first:mt-0">
-				{categoryLabel(category)}
-			</h2>
-			{catProjects.map((project) => (
-				<ProjectCard>
-					<ProjectCardContent
-						title={project.data.title}
-						status={project.data.status}
-						hook={project.data.hook}
-						liveUrl={project.data.liveUrl}
-						repoUrl={project.data.repoUrl}
-						tech={project.data.tech}
-						videoWebm={project.data.videoWebm}
-						videoMp4={project.data.videoMp4}
-						videoPoster={project.data.videoPoster}
-					/>
-				</ProjectCard>
-			))}
-		</div>
-	))}
+	<div class="project-grid mb-20">
+		{projects.map((project) => (
+			<ProjectCardContent
+				title={project.data.title}
+				hook={project.data.hook}
+				liveUrl={project.data.liveUrl}
+				repoUrl={project.data.repoUrl}
+				videoWebm={project.data.videoWebm}
+				videoMp4={project.data.videoMp4}
+				videoPoster={project.data.videoPoster}
+			/>
+		))}
+	</div>
 
 	<!-- Subscribe -->
 	<SubscribeBox />

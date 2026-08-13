@@ -112,39 +112,49 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 			<span>Open source · Non-commercial</span>
 		</footer>
 
+		<dialog
+			id="demo-modal"
+			class="p-0 border-none rounded-xl w-[min(92vw,960px)] bg-neutral-950 text-neutral-100 overflow-hidden backdrop:bg-black/55"
+		>
+			<div class="flex items-center justify-between px-4 py-2.5 font-[family-name:var(--font-mono)] text-xs">
+				<span class="modal-title"></span>
+				<button type="button" class="modal-close cursor-pointer px-2 py-1 opacity-70 hover:opacity-100" aria-label="Close">✕</button>
+			</div>
+			<video controls playsinline preload="none" class="block w-full">
+				<source type="video/webm" />
+				<source type="video/mp4" />
+			</video>
+		</dialog>
+
 		<script is:inline>
-			// Demo video: click-to-pause with styled overlay, auto-pause when scrolled away
-			document.addEventListener('click', (e) => {
-				const wrap = (e.target).closest('.demo-video');
-				if (!wrap) return;
-				const video = wrap.querySelector('video');
-				const overlay = wrap.querySelector('.demo-video-overlay');
-				if (!video) return;
-				if (video.paused) {
-					video.play();
-					overlay.style.opacity = '0';
-					wrap.classList.remove('paused');
-				} else {
-					video.pause();
-					overlay.style.opacity = '1';
-					wrap.classList.add('paused');
-				}
+			// Demo video modal: any [data-demo] trigger opens the shared dialog
+			const dialog = document.getElementById("demo-modal");
+			const video = dialog.querySelector("video");
+			const webmSource = dialog.querySelector("source[type='video/webm']");
+			const mp4Source = dialog.querySelector("source[type='video/mp4']");
+			const modalTitle = dialog.querySelector(".modal-title");
+
+			document.addEventListener("click", (e) => {
+				const trigger = e.target.closest("[data-demo]");
+				if (!trigger) return;
+				e.preventDefault();
+				webmSource.src = trigger.dataset.webm;
+				mp4Source.src = trigger.dataset.mp4;
+				modalTitle.textContent = trigger.dataset.title;
+				video.load();
+				dialog.showModal();
+				video.play().catch(() => {});
 			});
 
-			const io = new IntersectionObserver((entries) => {
-				for (const entry of entries) {
-					const video = entry.target.querySelector('video');
-					const overlay = entry.target.querySelector('.demo-video-overlay');
-					if (!video) continue;
-					if (entry.isIntersecting) {
-						if (!entry.target.classList.contains('paused')) video.play();
-					} else {
-						video.pause();
-					}
-				}
-			}, { threshold: 0.25 });
-
-			document.querySelectorAll('.demo-video').forEach((el) => io.observe(el));
+			function closeModal() {
+				video.pause();
+				dialog.close();
+			}
+			dialog.querySelector(".modal-close").addEventListener("click", closeModal);
+			dialog.addEventListener("click", (e) => {
+				if (e.target === dialog) closeModal();
+			});
+			dialog.addEventListener("close", () => video.pause());
 		</script>
 	</body>
 </html>

@@ -95,3 +95,17 @@
 		-webkit-font-smoothing: antialiased;
 	}
 }
+/* Shared project card grid: 1 col mobile → 2 cols ≥640px → 3 cols ≥880px */
+@utility project-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	column-gap: 1.5rem;
+	row-gap: 2.5rem;
+
+	@media (min-width: 640px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	@media (min-width: 880px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

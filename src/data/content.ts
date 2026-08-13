@@ -4,11 +4,9 @@ import type { CollectionEntry } from "astro:content";
 export type ProjectEntry = CollectionEntry<"projects">;
 export type PostEntry = CollectionEntry<"posts">;
 
-export async function getLiveProjects(): Promise<ProjectEntry[]> {
+export async function getProjects(): Promise<ProjectEntry[]> {
 	const projects = await getCollection("projects");
-	return projects
-		.filter((p) => p.data.status === "live")
-		.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+	return projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
 export async function getVisiblePosts(): Promise<PostEntry[]> {
