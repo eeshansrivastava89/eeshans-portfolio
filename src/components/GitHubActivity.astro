@@ -233,6 +233,7 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		bottom: calc(100% + 8px);
 		left: 50%;
 		transform: translateX(-50%) scale(0.9);
+		transform-origin: 50% 100%;
 		padding: 4px 8px;
 		border-radius: 6px;
 		font-size: 11px;
@@ -267,6 +268,12 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		transform: translateX(-50%);
 	}
 
+	/* While scrubbing the grid, subsequent tooltips appear instantly */
+	.gh-contrib-grid[data-scrubbing] .gh-contrib-day::after,
+	.gh-contrib-grid[data-scrubbing] .gh-contrib-day::before {
+		transition-duration: 0ms;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.gh-contrib-day {
 			transition: none;
@@ -287,3 +294,21 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 	:global(.dark) .gh-contrib-day.l3 { background: var(--color-emerald-500); border-color: var(--color-emerald-400); }
 	:global(.dark) .gh-contrib-day.l4 { background: var(--color-emerald-400); border-color: var(--color-emerald-300); }
 </style>
+
+<script>
+	const grid = document.querySelector(".gh-contrib-grid");
+	if (grid) {
+		let lastShown = 0;
+		grid.addEventListener("pointerover", (e) => {
+			const day = (e.target as HTMLElement).closest(".gh-contrib-day");
+			if (!day) return;
+			const now = performance.now();
+			if (now - lastShown < 800) {
+				grid.setAttribute("data-scrubbing", "");
+			} else {
+				grid.removeAttribute("data-scrubbing");
+			}
+			lastShown = now;
+		});
+	}
+</script>
