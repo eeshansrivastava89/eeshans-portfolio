@@ -2,6 +2,9 @@
 @import "./fonts.css";
 @plugin "@tailwindcss/typography";
 
+/* Class-based dark mode: the site toggles .dark on <html> (Base.astro theme script) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--font-display: "Lora", Georgia, serif;
 	--font-sans: "Geist", system-ui, -apple-system, sans-serif;
