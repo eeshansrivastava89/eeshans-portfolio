@@ -109,3 +109,55 @@
 		grid-template-columns: repeat(3, 1fr);
 	}
 }
+
+/* Demo modal enter/exit — native <dialog> animated via @starting-style + allow-discrete */
+#demo-modal {
+	opacity: 0;
+	transform: scale(0.97);
+	transition:
+		opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+		transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+		overlay 200ms cubic-bezier(0.23, 1, 0.32, 1) allow-discrete,
+		display 200ms cubic-bezier(0.23, 1, 0.32, 1) allow-discrete;
+}
+#demo-modal[open] {
+	opacity: 1;
+	transform: scale(1);
+	transition-duration: 250ms;
+}
+@starting-style {
+	#demo-modal[open] {
+		opacity: 0;
+		transform: scale(0.97);
+	}
+}
+#demo-modal::backdrop {
+	background-color: rgb(0 0 0 / 0);
+	transition:
+		background-color 200ms ease,
+		overlay 200ms ease allow-discrete,
+		display 200ms ease allow-discrete;
+}
+#demo-modal[open]::backdrop {
+	background-color: rgb(0 0 0 / 0.55);
+}
+@starting-style {
+	#demo-modal[open]::backdrop {
+		background-color: rgb(0 0 0 / 0);
+	}
+}
+
+/* Reduced motion: keep the opacity fade, drop the scale */
+@media (prefers-reduced-motion: reduce) {
+	#demo-modal {
+		transform: none;
+	}
+	#demo-modal[open] {
+		transform: none;
+	}
+	@starting-style {
+		#demo-modal[open] {
+			transform: none;
+		}
+	}
+}

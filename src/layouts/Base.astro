@@ -114,11 +114,11 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 
 		<dialog
 			id="demo-modal"
-			class="p-0 border-none rounded-xl w-[min(92vw,960px)] bg-neutral-950 text-neutral-100 overflow-hidden backdrop:bg-black/55"
+			class="m-auto p-0 border-none rounded-xl w-[min(92vw,960px)] bg-neutral-950 text-neutral-100 overflow-hidden"
 		>
 			<div class="flex items-center justify-between px-4 py-2.5 font-[family-name:var(--font-mono)] text-xs">
 				<span class="modal-title"></span>
-				<button type="button" class="modal-close cursor-pointer px-2 py-1 opacity-70 hover:opacity-100" aria-label="Close">✕</button>
+				<button type="button" class="modal-close cursor-pointer px-2 py-1 opacity-70 hover:opacity-100 transition-[opacity,transform] duration-150 ease-out active:scale-[0.95]" aria-label="Close">✕</button>
 			</div>
 			<video controls playsinline preload="none" class="block w-full">
 				<source type="video/webm" />

@@ -20,7 +20,7 @@ const hasVideo = Boolean(videoWebm || videoMp4);
 		hasVideo && videoPoster && (
 			<button
 				type="button"
-				class="group/poster relative block w-full aspect-video rounded-lg border border-border overflow-hidden cursor-pointer bg-muted mb-3.5 p-0"
+				class="group/poster relative block w-full aspect-video rounded-lg border border-border overflow-hidden cursor-pointer bg-muted mb-3.5 p-0 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98]"
 				data-demo
 				data-title={title}
 				data-webm={videoWebm}
