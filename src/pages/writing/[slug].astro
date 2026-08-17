@@ -1,0 +1,34 @@
+---
+import BaseLayout from "@/layouts/Base.astro";
+import SubscribeBox from "@/components/SubscribeBox.astro";
+import { getVisiblePosts, formatDate } from "@/data/content";
+import { siteConfig } from "@/data/config";
+
+export async function getStaticPaths() {
+	const posts = await getVisiblePosts();
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const substackUrl = post.data.externalUrl ?? siteConfig.subscribe.href;
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} activePage="/writing" canonical={substackUrl}>
+	<a href="/writing" class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Writing</a>
+
+	<header class="mb-10">
+		<h1 class="font-[family-name:var(--font-display)] text-[2.5rem] leading-tight mb-3">{post.data.title}</h1>
+		<p class="text-sm text-muted-foreground">
+			{formatDate(post.data.createdAt)}
+			{" · "}
+			<a href={substackUrl} class="text-link hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">Originally published on Asymptotic ↗</a>
+		</p>
+	</header>
+
+	<article class="post-body prose prose-neutral dark:prose-invert max-w-none mb-16" set:html={post.data.body} />
+
+	<SubscribeBox />
+</BaseLayout>

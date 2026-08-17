@@ -19,7 +19,8 @@ const sortedPosts = await getVisiblePosts();
 	{sortedPosts.map((post) => (
 		<PostItem
 			title={post.data.title}
-			href={post.data.externalUrl}
+			href={`/writing/${post.id}`}
+			substackUrl={post.data.externalUrl}
 			excerpt={post.data.description}
 			date={formatDate(post.data.createdAt)}
 			image={post.data.coverImage}

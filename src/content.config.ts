@@ -1,7 +1,7 @@
 import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
-import { getSubstackPosts } from "./lib/substack";
+import { getSubstackPosts, renderPostHtml } from "./lib/substack";
 
 const projects = defineCollection({
 	loader: glob({ base: "src/content/projects", pattern: "**/*.{md,mdx}" }),
@@ -32,6 +32,7 @@ const posts = defineCollection({
 					description: post.description,
 					coverImage: post.coverImage,
 					tags: post.tags,
+					body: renderPostHtml(post.content),
 					source: "substack" as const,
 					externalUrl: post.link,
 					draft: false,
@@ -47,6 +48,7 @@ const posts = defineCollection({
 		source: z.enum(["substack", "manual"]).default("substack"),
 			externalUrl: z.string().url().optional(),
 		tags: z.array(z.object({ name: z.string(), slug: z.string() })).default([]),
+		body: z.string().default(""),
 		draft: z.boolean().default(false),
 	}),
 });

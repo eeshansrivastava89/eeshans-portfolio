@@ -113,6 +113,36 @@
 	}
 }
 
+/* Substack post body: site display font for headings, site link color,
+   and Substack footnote markup (kept as-is from the feed) styled to match */
+.post-body :is(h1, h2, h3, h4) {
+	font-family: var(--font-display);
+}
+.post-body a {
+	color: var(--color-link);
+}
+.post-body a:hover {
+	color: var(--color-link-2);
+}
+.post-body a.footnote-anchor {
+	font-size: 0.75em;
+	line-height: 0;
+	vertical-align: super;
+	text-decoration: none;
+}
+.post-body .footnotes-divider {
+	margin-bottom: 0.5rem;
+}
+.post-body .footnote {
+	display: flex;
+	gap: 0.5rem;
+	font-size: 0.875em;
+	color: var(--color-muted-foreground);
+}
+.post-body .footnote p {
+	margin: 0;
+}
+
 /* Demo modal enter/exit — native <dialog> animated via @starting-style + allow-discrete */
 #demo-modal {
 	opacity: 0;

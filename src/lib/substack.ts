@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import * as cheerio from "cheerio";
 
 export const SUBSTACK_PUBLICATION_URL =
 	"https://theasymptotic.substack.com";
@@ -32,6 +33,51 @@ function readSubstackSnapshot(): SubstackPost[] {
 	return JSON.parse(
 		fs.readFileSync(SUBSTACK_SNAPSHOT_PATH, "utf-8"),
 	) as SubstackPost[];
+}
+
+export function renderPostHtml(html: string): string {
+	// isDocument=false: keep fragment mode so $.html() returns the body fragment
+	const $ = cheerio.load(html, null, false);
+
+	// Subscribe CTAs — the post page renders its own SubscribeBox
+	$(
+		".subscription-widget-wrap, .subscription-widget-wrap-editor, p.button-wrapper",
+	).remove();
+
+	// Third-party embed scripts (e.g. Datawrapper auto-resize) — never run
+	// inline scripts from feed HTML; the iframe keeps its fixed dimensions
+	$("script").remove();
+
+	// Unwrap Substack's image containers down to plain figure/img/figcaption,
+	// keeping the full-res link around the image
+	$(".captioned-image-container").each((_, el) => {
+		$(el).replaceWith($(el).children("figure"));
+	});
+	$(".image2-inset").each((_, el) => {
+		$(el).replaceWith($(el).contents());
+	});
+	$("img").attr("loading", "lazy").attr("decoding", "async");
+
+	// Footnotes: anchor ids are preserved (same-page links keep working);
+	// just visually separate the list from the body
+	$(".footnote").first().before('<hr class="footnotes-divider" />');
+
+	// Strip Substack bookkeeping attributes
+	$("[data-attrs]").removeAttr("data-attrs");
+	$("[data-component-name]").removeAttr("data-component-name");
+	$("[contenteditable]").removeAttr("contenteditable");
+	$("[tabindex]").removeAttr("tabindex");
+
+	// New-tab links get rel; empty paragraphs go away
+	$('a[target="_blank"]').attr("rel", "noopener noreferrer");
+	$("p").each((_, el) => {
+		const $el = $(el);
+		if ($el.children().length === 0 && $el.text().trim() === "") {
+			$el.remove();
+		}
+	});
+
+	return $.html();
 }
 
 export async function getSubstackPosts(): Promise<SubstackPost[]> {

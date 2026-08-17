@@ -2,20 +2,21 @@
 interface Props {
 	title: string;
 	href?: string;
+	substackUrl?: string;
 	excerpt?: string;
 	date?: string;
 	image?: string;
 	tags?: { name: string; slug: string }[];
 }
 
-const { title, href, excerpt, date, image, tags = [] } = Astro.props;
+const { title, href, substackUrl, excerpt, date, image, tags = [] } = Astro.props;
 ---
 
 <div class="mb-5 pb-5 border-b border-border last:border-b-0 last:mb-0 last:pb-0 flex flex-row gap-4 sm:gap-5">
 	<div class="min-w-0 flex-1">
 		<h3 class="font-[family-name:var(--font-display)] text-2xl leading-tight">
 			{href ? (
-				<a href={href} class="text-foreground hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">
+				<a href={href} class="text-foreground hover:text-link-2 transition-colors">
 					{title}
 				</a>
 			) : (
@@ -25,13 +26,13 @@ const { title, href, excerpt, date, image, tags = [] } = Astro.props;
 		{excerpt && (
 			<p class="mt-1.5 text-sm text-foreground/75 leading-relaxed">{excerpt}</p>
 		)}
-		{(date || href) && (
+		{(date || substackUrl) && (
 			<div class="mt-2 flex flex-wrap items-center gap-2">
 				{date && (
 					<span class="font-[family-name:var(--font-mono)] text-xs text-muted-foreground">{date}</span>
 				)}
-				{href && (
-					<a href={href} class="substack-pill" target="_blank" rel="noopener noreferrer">
+				{substackUrl && (
+					<a href={substackUrl} class="substack-pill" target="_blank" rel="noopener noreferrer">
 						<svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
 						Read on Substack
 					</a>
@@ -47,7 +48,7 @@ const { title, href, excerpt, date, image, tags = [] } = Astro.props;
 		)}
 	</div>
 	{image && href && (
-		<a href={href} class="shrink-0 self-start" target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1">
+		<a href={href} class="shrink-0 self-start" aria-hidden="true" tabindex="-1">
 			<img
 				src={image}
 				alt=""

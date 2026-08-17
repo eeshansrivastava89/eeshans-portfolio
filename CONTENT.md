@@ -65,7 +65,8 @@ src/data/               src/components/  (layout only, no hardcoded content)
 | What | File | Notes |
 |------|------|-------|
 | Post data | Substack feed (via `pnpm refresh:substack`) | Posts are sourced from Substack at build time |
-| External links | Set automatically from Substack | Posts link out to Substack, not to internal pages |
+| Post pages | `src/pages/writing/[slug].astro` | Full posts render on-site; feed HTML is cleaned at build time by `renderPostHtml()` in `src/lib/substack.ts` |
+| External links | Set automatically from Substack | Titles/images link internally; "Read on Substack" pill links out; post pages set `rel="canonical"` to the Substack URL |
 
 ### Recognition
 

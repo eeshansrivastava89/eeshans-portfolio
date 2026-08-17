@@ -18,7 +18,7 @@ export async function GET() {
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.createdAt,
-			link: post.data.externalUrl || `${siteConfig.url}/writing`,
+			link: `/writing/${post.id}`,
 		})),
 	});
 }
