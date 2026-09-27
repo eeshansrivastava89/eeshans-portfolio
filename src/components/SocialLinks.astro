@@ -18,7 +18,7 @@ const socials = siteConfig.socials;
 
 <div class:list={["flex flex-wrap items-center gap-5", className]}>
 	{socials.map((social) => (
-		<a href={social.href} class="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 text-sm" target="_blank" rel="noopener noreferrer">
+		<a href={social.href} class="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 text-sm" target="_blank" rel="noopener noreferrer" data-ph-event="social_link_clicked" data-ph-target-type={social.key} data-ph-placement="social_links">
 			<Icon name={social.key} className="w-4 h-4" />
 			{social.label}
 		</a>

@@ -130,6 +130,20 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 		</dialog>
 
 		<script is:inline>
+			// Named event capture: any [data-ph-event] click reports to PostHog
+			document.addEventListener("click", (event) => {
+				if (!(event.target instanceof Element)) return;
+				const analyticsTarget = event.target.closest("[data-ph-event]");
+				if (!analyticsTarget || !window.posthog) return;
+				window.posthog.capture(analyticsTarget.dataset.phEvent, {
+					placement: analyticsTarget.dataset.phPlacement,
+					target_type: analyticsTarget.dataset.phTargetType,
+					source_path: window.location.pathname,
+				});
+			});
+		</script>
+
+		<script is:inline>
 			// Demo video modal: any [data-demo] trigger opens the shared dialog
 			const dialog = document.getElementById("demo-modal");
 			const video = dialog.querySelector("video");
@@ -146,6 +160,10 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 				modalTitle.textContent = trigger.dataset.title;
 				video.load();
 				dialog.showModal();
+				window.posthog?.capture("project_demo_opened", {
+					placement: trigger.classList.contains("group/poster") ? "project_poster" : "project_actions",
+					source_path: window.location.pathname,
+				});
 				video.play().catch(() => {});
 			});
 

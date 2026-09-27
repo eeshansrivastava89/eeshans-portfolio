@@ -11,7 +11,7 @@ const substackIcon = brandIcons.substack;
 		<span class="sub-kicker">{kicker}</span>
 		<span class="sub-tagline">{tagline}</span>
 	</div>
-	<a href={href} target="_blank" rel="noopener noreferrer" class="sub-button">
+	<a href={href} target="_blank" rel="noopener noreferrer" class="sub-button" data-ph-event="subscription_cta_clicked" data-ph-placement="subscribe_box">
 		<svg viewBox={substackIcon.viewBox || "0 0 24 24"} fill="currentColor" aria-hidden="true" width="14" height="14"><path d={substackIcon.path} /></svg>
 		Subscribe
 	</a>

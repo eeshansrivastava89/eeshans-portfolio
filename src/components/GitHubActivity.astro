@@ -68,6 +68,8 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 			class="font-[family-name:var(--font-mono)] text-xs text-muted-foreground hover:text-foreground transition-colors"
 			target="_blank"
 			rel="noopener noreferrer"
+			data-ph-event="github_activity_clicked"
+			data-ph-target-type="profile"
 		>
 			@{GITHUB_USERNAME} →
 		</a>
@@ -116,6 +118,8 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
+						data-ph-event="github_activity_clicked"
+						data-ph-target-type="commit"
 					>
 						<span class="font-medium text-foreground truncate">{row.repo}</span>
 						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
@@ -136,6 +140,8 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
+						data-ph-event="github_activity_clicked"
+						data-ph-target-type="repository"
 					>
 						<span class="font-medium text-foreground truncate">{row.repo}</span>
 						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
@@ -156,6 +162,8 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
+						data-ph-event="github_activity_clicked"
+						data-ph-target-type="issue"
 					>
 						<span class="font-medium text-foreground truncate">{row.repo}</span>
 						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
@@ -176,6 +184,8 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
 						target="_blank"
 						rel="noopener noreferrer"
+						data-ph-event="github_activity_clicked"
+						data-ph-target-type="pull_request"
 					>
 						<span class="font-medium text-foreground truncate">{row.repo}</span>
 						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
