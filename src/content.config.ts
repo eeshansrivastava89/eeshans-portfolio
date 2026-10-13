@@ -2,6 +2,7 @@ import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { getSubstackPosts, renderPostHtml } from "./lib/substack";
+import { getWordPressPosts, renderWordPressHtml } from "./lib/wordpress";
 
 const projects = defineCollection({
 	loader: glob({ base: "src/content/projects", pattern: "**/*.{md,mdx}" }),
@@ -53,6 +54,40 @@ const posts = defineCollection({
 	}),
 });
 
+const blog = defineCollection({
+	loader: async () => {
+		const wordPressPosts = await getWordPressPosts();
+
+		return Object.fromEntries(
+			wordPressPosts.map((post) => [
+				post.slug,
+				{
+					title: post.title,
+					createdAt: post.date,
+					description: post.excerpt,
+					coverImage: post.coverImage,
+					categories: post.categories,
+					body: renderWordPressHtml(post.content),
+					source: "wordpress" as const,
+					externalUrl: post.link,
+					draft: false,
+				},
+			]),
+		);
+	},
+	schema: z.object({
+		title: z.string(),
+		createdAt: z.coerce.date(),
+		description: z.string(),
+		coverImage: z.string().url().optional(),
+		categories: z.array(z.object({ name: z.string(), slug: z.string() })).default([]),
+		source: z.enum(["wordpress", "manual"]).default("wordpress"),
+		externalUrl: z.string().url(),
+		body: z.string().default(""),
+		draft: z.boolean().default(false),
+	}),
+});
+
 const experience = defineCollection({
 	loader: glob({ base: "src/content/experience", pattern: "**/*.{md,mdx}" }),
 	schema: z.object({
@@ -88,4 +123,4 @@ const other = defineCollection({
 	loader: glob({ base: "src/content/other", pattern: "**/*.{md,mdx}" }),
 });
 
-export const collections = { projects, posts, experience, impact, other };
+export const collections = { projects, posts, blog, experience, impact, other };

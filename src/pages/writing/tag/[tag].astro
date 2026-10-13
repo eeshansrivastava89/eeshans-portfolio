@@ -1,0 +1,68 @@
+---
+import BaseLayout from "@/layouts/Base.astro";
+import FeedLayout from "@/components/FeedLayout.astro";
+import { getVisiblePosts } from "@/data/content";
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+export async function getStaticPaths() {
+	const allPosts = await getVisiblePosts();
+	const slugs = new Map<string, string>(); // slug → name
+	for (const post of allPosts) {
+		for (const tag of post.data.tags) {
+			slugs.set(tag.slug, tag.name);
+		}
+	}
+	return [...slugs.entries()].map(([slug]) => ({ params: { tag: slug } }));
+}
+
+const requestedTagSlug = Astro.params.tag!;
+const allPosts = await getVisiblePosts();
+const tagName = allPosts.flatMap((p) => p.data.tags).find((t) => t.slug === requestedTagSlug)?.name;
+if (!tagName) {
+	throw new Error(`Unknown tag slug "${requestedTagSlug}" on /writing/tag`);
+}
+
+const byYear = new Map<string, number>();
+for (const post of allPosts) {
+	const y = post.data.createdAt.getFullYear().toString();
+	byYear.set(y, (byYear.get(y) ?? 0) + 1);
+}
+const yearLinks = [...byYear.entries()]
+	.sort((a, b) => Number(b[0]) - Number(a[0]))
+	.map(([y, count]) => ({
+		label: y,
+		href: `/writing/${y}`,
+		count,
+		active: false,
+	}));
+
+const tagCounts = new Map<string, { name: string; count: number }>();
+for (const post of allPosts) {
+	for (const tag of post.data.tags) {
+		const entry = tagCounts.get(tag.slug) ?? { name: tag.name, count: 0 };
+		entry.count += 1;
+		tagCounts.set(tag.slug, entry);
+	}
+}
+const tagLinks = [...tagCounts.entries()]
+	.sort((a, b) => b[1].count - a[1].count)
+	.map(([slug, { name, count }]) => ({ label: name, href: `/writing/tag/${slug}`, count, active: slug === requestedTagSlug }));
+
+// Tag view spans all years (the tag panel is the filter, year panel stays navigable)
+const posts = allPosts
+	.filter((p) => p.data.tags.some((t) => t.slug === requestedTagSlug))
+	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/writing/${p.id}` }));
+---
+
+<BaseLayout title={`Technical Writing — ${tagName}`} activePage="/writing">
+	<FeedLayout
+		title="Technical Writing"
+		feed="substack"
+		posts={posts}
+		yearLinks={yearLinks}
+		secondTitle="Tags"
+		secondLinks={tagLinks}
+		filterLabel={`${tagName} · ${posts.length} essays`}
+	/>
+</BaseLayout>

@@ -2,7 +2,7 @@
  * Font configuration — single source of truth.
  *
  * To change a font:
- * 1. Update the config below
+ * 1. Update the config below (and the duplicated const in scripts/generate-fonts.mjs)
  * 2. Run: pnpm fonts:generate
  * 3. Update the --font-* vars in globals.css @theme
  * 4. Build — everything updates from here
@@ -13,19 +13,19 @@
 
 export const fonts = {
 	display: {
-		name: "Lora",
+		name: "Libre Franklin",
 		fallback: "Georgia, serif",
-		weights: [400, 700],
+		weights: [400, 500, 600, 700, 800],
 		styles: ["normal", "italic"],
 	},
 	sans: {
-		name: "Geist",
+		name: "Libre Franklin",
 		fallback: "system-ui, -apple-system, sans-serif",
-		weights: [300, 400, 500, 600],
+		weights: [400, 500, 600, 700, 800],
 		styles: ["normal"],
 	},
 	mono: {
-		name: "JetBrains Mono",
+		name: "IBM Plex Mono",
 		fallback: '"Fira Code", monospace',
 		weights: [400, 500],
 		styles: ["normal"],

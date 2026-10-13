@@ -1,0 +1,109 @@
+---
+import GitHubActivity from "@/components/GitHubActivity.astro";
+import { siteConfig } from "@/data/config";
+import { getVisiblePosts, getBlogPosts, getProjects } from "@/data/content";
+
+interface GroupLink {
+	label: string;
+	href: string;
+	count: number;
+	active: boolean;
+}
+
+interface Props {
+	/** Extra grouping panel above About (section pages only) */
+	grouping?: {
+		title: string;
+		links: GroupLink[];
+	};
+}
+
+const { grouping } = Astro.props;
+
+// Stats for the About panel — live counts, not hardcoded mockup numbers
+const [posts, blogPosts, projects] = await Promise.all([
+	getVisiblePosts(),
+	getBlogPosts(),
+	getProjects(),
+]);
+const writingSince = Math.min(
+	...blogPosts.map((p) => p.data.createdAt.getFullYear()),
+	2008,
+);
+---
+
+<aside class="sidebar flex flex-col gap-4">
+	{
+		grouping && (
+			<div class="panel">
+				<div class="ph">
+					<h2>{grouping.title}</h2>
+				</div>
+				<div class="pb">
+					{grouping.links.map((link) => (
+						<a
+							class:list={[
+								"group-row meta flex items-baseline justify-between py-1 text-[13px] hover:text-accent transition-colors",
+								link.active && "text-accent",
+							]}
+							href={link.href}
+						>
+							<span class="truncate">{link.label}</span>
+							<span class="shrink-0 text-text-faint">{link.count}</span>
+						</a>
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	<div class="panel">
+		<div class="ph">
+			<h2>About</h2>
+			<span class="more"><a href="/about">full story →</a></span>
+		</div>
+		<div class="pb">
+			<p class="text-[14px] text-text-soft leading-[1.65] mb-2.5">
+				Hi! I'm <b class="text-text font-semibold">Eeshan</b>. I currently lead a data science team at Starbucks focused on AI/ML, personalization, and experimentation.
+			</p>
+			<p class="text-[14px] text-text-soft leading-[1.65] mb-2.5">
+				Been in the field for 12+ years across engineering, data science, and technical leadership. I'm not a hype-follower — a lot of my content is about testing new technologies and seeing what remains after the hype cycle passes.
+			</p>
+			<p class="text-[14px] text-text-soft leading-[1.65]">
+				In my free time, I enjoy <b class="text-text font-semibold">kickboxing</b>, <b class="text-text font-semibold">painting</b>, <b class="text-text font-semibold">reading</b>, and <b class="text-text font-semibold">basketball</b>.
+			</p>
+			<div class="mt-2.5">
+				<div class="meta flex justify-between py-1.5 border-b border-line text-[13px]">
+					<span>writing since</span><b class="font-medium text-text">{writingSince}</b>
+				</div>
+				<div class="meta flex justify-between py-1.5 border-b border-line text-[13px]">
+					<span>personal posts</span><b class="font-medium text-text">{blogPosts.length}</b>
+				</div>
+				<div class="meta flex justify-between py-1.5 border-b border-line text-[13px]">
+					<span>technical essays</span><b class="font-medium text-text">{posts.length}</b>
+				</div>
+				<div class="meta flex justify-between py-1.5 text-[13px]">
+					<span>projects shipped</span><b class="font-medium text-text">{projects.length}</b>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel">
+		<div class="ph">
+			<h2>GitHub Activity</h2>
+			<span class="more">
+				<a
+					href={siteConfig.socials.find((s) => s.key === "github")?.href}
+					target="_blank"
+					rel="noopener noreferrer"
+					data-ph-event="github_activity_clicked"
+					data-ph-target-type="profile"
+				>@eeshansrivastava89 →</a>
+			</span>
+		</div>
+		<div class="pb">
+			<GitHubActivity />
+		</div>
+	</div>
+</aside>

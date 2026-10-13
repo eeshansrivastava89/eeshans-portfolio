@@ -1,0 +1,54 @@
+---
+import BaseLayout from "@/layouts/Base.astro";
+import FeedLayout from "@/components/FeedLayout.astro";
+import { getBlogPosts } from "@/data/content";
+
+// Shared grouping data for the /blog section (index, years, categories).
+// Default view = current year only; the Years panel switches.
+// Category URLs use WP category slugs.
+
+const allPosts = await getBlogPosts();
+const CURRENT_YEAR = new Date().getFullYear();
+
+const byYear = new Map<string, number>();
+for (const post of allPosts) {
+	const year = post.data.createdAt.getFullYear().toString();
+	byYear.set(year, (byYear.get(year) ?? 0) + 1);
+}
+const yearLinks = [...byYear.entries()]
+	.sort((a, b) => Number(b[0]) - Number(a[0]))
+	.map(([year, count]) => ({
+		label: year,
+		href: `/blog/${year}`,
+		count,
+		active: Number(year) === CURRENT_YEAR,
+	}));
+
+const catCounts = new Map<string, { name: string; count: number }>();
+for (const post of allPosts) {
+	for (const cat of post.data.categories) {
+		const entry = catCounts.get(cat.slug) ?? { name: cat.name, count: 0 };
+		entry.count += 1;
+		catCounts.set(cat.slug, entry);
+	}
+}
+const categoryLinks = [...catCounts.entries()]
+	.sort((a, b) => b[1].count - a[1].count)
+	.map(([slug, { name, count }]) => ({ label: name, href: `/blog/category/${slug}`, count, active: false }));
+
+const posts = allPosts
+	.filter((p) => p.data.createdAt.getFullYear() === CURRENT_YEAR)
+	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/blog/${p.id}` }));
+---
+
+<BaseLayout title="Personal Blog" activePage="/blog">
+	<FeedLayout
+		title="Personal Blog"
+		feed="wordpress"
+		posts={posts}
+		yearLinks={yearLinks}
+		secondTitle="Categories"
+		secondLinks={categoryLinks}
+		filterLabel={`${CURRENT_YEAR} · ${posts.length} posts`}
+	/>
+</BaseLayout>

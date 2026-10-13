@@ -1,66 +1,107 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
+import Sidebar from "@/components/Sidebar.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
-import SectionTitle from "@/components/SectionTitle.astro";
-import PostItem from "@/components/PostItem.astro";
-import SubscribeBox from "@/components/SubscribeBox.astro";
-import GitHubActivity from "@/components/GitHubActivity.astro";
-import SocialLinks from "@/components/SocialLinks.astro";
 import { siteConfig } from "@/data/config";
-import { getProjects, getVisiblePosts, formatDate } from "@/data/content";
+import { getProjects, getVisiblePosts, getBlogPosts, formatDate } from "@/data/content";
+import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/substack";
+import { WORDPRESS_FOLLOW_URL } from "@/lib/wordpress";
 
 const projects = await getProjects();
-const featured = projects.filter((p) => p.data.featured);
-const topProjects = (featured.length > 0 ? featured : projects).slice(0, siteConfig.homepageProjectCount);
+const posts = await getVisiblePosts();
+const blogPosts = await getBlogPosts();
 
-const sortedPosts = await getVisiblePosts();
+const topProjects = projects.slice(0, 4);
+
+// Homepage feeds show the same number of rows in both panels
+const HOMEPAGE_FEED_COUNT = 5;
 ---
 
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
-	<!-- Intro -->
-	<section class="mb-20">
-		<p class="text-lg text-foreground/80 leading-relaxed">{siteConfig.intro.tagline}</p>
-		<SocialLinks class="mt-4" />
-	</section>
+	<div class="layout">
+		<Sidebar />
 
-	<!-- Writing -->
-	<section class="mb-20">
-		<SectionTitle label="Writing" href="/writing" />
+		<div class="main flex min-w-0 flex-col gap-4">
+			<div class="panel">
+				<div class="ph">
+					<h2 class="!text-tech">Technical Writing</h2>
+					<a
+						class="pill tech"
+						href={SUBSTACK_SUBSCRIBE_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						data-ph-event="subscription_cta_clicked"
+						data-ph-placement="writing_panel_header"
+						data-ph-target-type="substack"
+					>SUBSTACK</a>
+					<span class="more"><a href="/writing">all {posts.length} essays →</a></span>
+				</div>
+				<div class="pb feed">
+					{posts.slice(0, HOMEPAGE_FEED_COUNT).map((post) => (
+						<a
+							class="item"
+							href={`/writing/${post.id}`}
+							data-ph-event="writing_item_clicked"
+							data-ph-placement="home_writing_feed"
+							data-ph-target-type="writing_item"
+						>
+							<span class="d">{formatDate(post.data.createdAt)}</span>
+							<span class="t">{post.data.title}</span>
+						</a>
+					))}
+				</div>
+			</div>
 
-		{sortedPosts.slice(0, siteConfig.homepagePostCount).map((post) => (
-			<PostItem
-				title={post.data.title}
-				href={`/writing/${post.id}`}
-				substackUrl={post.data.externalUrl}
-				excerpt={post.data.description}
-				date={formatDate(post.data.createdAt)}
-				image={post.data.coverImage}
-				tags={post.data.tags}
-			/>
-		))}
-	</section>
+			<div class="panel">
+				<div class="ph">
+					<h2 class="!text-human">Personal Blog</h2>
+					<a
+						class="pill human"
+						href={WORDPRESS_FOLLOW_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						data-ph-event="subscription_cta_clicked"
+						data-ph-placement="blog_panel_header"
+						data-ph-target-type="wordpress"
+					>WORDPRESS</a>
+					<span class="more"><a href="/blog">all {blogPosts.length} posts →</a></span>
+				</div>
+				<div class="pb feed">
+					{blogPosts.slice(0, HOMEPAGE_FEED_COUNT).map((post) => (
+						<a
+							class="item"
+							href={`/blog/${post.id}`}
+							data-ph-event="blog_item_clicked"
+							data-ph-placement="home_blog_feed"
+							data-ph-target-type="blog_item"
+						>
+							<span class="d">{formatDate(post.data.createdAt)}</span>
+							<span class="t">{post.data.title}</span>
+						</a>
+					))}
+				</div>
+			</div>
 
-	<!-- Projects -->
-	<section class="mb-20">
-		<SectionTitle label="Projects" href="/projects" />
-		<div class="project-grid">
-			{topProjects.map((project) => (
-				<ProjectCardContent
-					title={project.data.title}
-					hook={project.data.hook}
-					liveUrl={project.data.liveUrl}
-					repoUrl={project.data.repoUrl}
-					videoWebm={project.data.videoWebm}
-					videoMp4={project.data.videoMp4}
-					videoPoster={project.data.videoPoster}
-				/>
-			))}
+			<div class="panel">
+				<div class="ph">
+					<h2 class="!text-accent">Projects</h2>
+					<span class="more"><a href="/projects">all →</a></span>
+				</div>
+				<div class="project-grid p-3 pb-3.5">
+					{topProjects.map((project) => (
+						<ProjectCardContent
+							title={project.data.title}
+							hook={project.data.hook}
+							liveUrl={project.data.liveUrl}
+							repoUrl={project.data.repoUrl}
+							videoWebm={project.data.videoWebm}
+							videoMp4={project.data.videoMp4}
+							videoPoster={project.data.videoPoster}
+							compact
+						/>
+					))}
+				</div>
+			</div>
 		</div>
-	</section>
-
-	<!-- GitHub Activity -->
-	<GitHubActivity />
-
-	<!-- Subscribe -->
-	<SubscribeBox />
+	</div>
 </BaseLayout>

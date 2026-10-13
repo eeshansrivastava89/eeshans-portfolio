@@ -7,20 +7,31 @@ interface Props {
 	videoWebm?: string;
 	videoMp4?: string;
 	videoPoster?: string;
+	/** Dashboard grid: compact card without poster, per locked design */
+	compact?: boolean;
 }
 
-const { title, hook, liveUrl, repoUrl, videoWebm, videoMp4, videoPoster } =
-	Astro.props;
+const {
+	title,
+	hook,
+	liveUrl,
+	repoUrl,
+	videoWebm,
+	videoMp4,
+	videoPoster,
+	compact = false,
+} = Astro.props;
 
 const hasVideo = Boolean(videoWebm || videoMp4);
+const repoName = repoUrl ? repoUrl.split("/").at(-1) : undefined;
 ---
 
-<article class="flex flex-col">
+<article class="flex min-w-0 flex-col p-3.5">
 	{
-		hasVideo && videoPoster && (
+		!compact && hasVideo && videoPoster && (
 			<button
 				type="button"
-				class="group/poster relative block w-full aspect-video rounded-lg border border-border overflow-hidden cursor-pointer bg-muted mb-3.5 p-0 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98]"
+				class="group/poster relative block w-full aspect-video rounded-lg border border-line overflow-hidden cursor-pointer bg-bg-inset mb-3.5 p-0 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98]"
 				data-demo
 				data-title={title}
 				data-webm={videoWebm}
@@ -29,85 +40,39 @@ const hasVideo = Boolean(videoWebm || videoMp4);
 			>
 				<img
 					src={videoPoster}
-					alt={`${title} screenshot`}
+					alt={`${title} preview`}
 					loading="lazy"
-					class="w-full h-full object-cover transition-transform duration-300 group-hover/poster:scale-[1.02]"
+					decoding="async"
+					class="h-full w-full object-cover"
 				/>
-				<span class="absolute inset-0 flex items-center justify-center bg-foreground/5 opacity-0 transition-opacity duration-200 group-hover/poster:opacity-100">
-					<span class="w-12 h-12 rounded-full bg-foreground/80 flex items-center justify-center shadow-lg">
-						<svg class="w-5 h-5 fill-background ml-0.5" viewBox="0 0 24 24">
-							<polygon points="5,3 19,12 5,21" />
-						</svg>
-					</span>
+				<span class="absolute inset-0 flex items-center justify-center bg-text/5 opacity-0 transition-opacity duration-200 group-hover/poster:opacity-100">
+					<span class="flex h-10 w-10 items-center justify-center rounded-full bg-text/85 text-bg">▶</span>
 				</span>
 			</button>
 		)
 	}
 
-	<h3
-		class="font-[family-name:var(--font-display)] text-[1.3rem] leading-snug mb-1.5"
-	>
-		<a
-			href={liveUrl || repoUrl || "#"}
-			class="text-foreground hover:text-link transition-colors"
-			target="_blank"
-			rel="noopener noreferrer"
-			data-ph-event="project_link_clicked"
-			data-ph-target-type={liveUrl ? "live_site" : "source_repository"}
-			data-ph-placement="project_title"
-		>
-			{title}
-		</a>
+	<h3 class="text-[16px] font-bold tracking-[-0.01em] leading-snug">
+		<a href={liveUrl ?? repoUrl} class="hover:text-accent transition-colors">{title}</a>
 	</h3>
 
-	<p class="text-sm text-foreground/80 leading-relaxed line-clamp-3 mb-3">
+	<p class="mt-1 flex-1 text-[14px] text-text-soft leading-[1.55] line-clamp-3">
 		{hook}
 	</p>
 
-	<div class="mt-auto flex items-center gap-4 text-sm">
+	<div class="mt-3 flex flex-wrap gap-3">
 		{
 			liveUrl && (
 				<a
 					href={liveUrl}
-					class="inline-flex items-center gap-1 text-link hover:text-link-2 transition-colors"
+					class="meta text-[13px] text-tech transition-colors hover:text-link-2"
 					target="_blank"
 					rel="noopener noreferrer"
 					data-ph-event="project_link_clicked"
 					data-ph-target-type="live_site"
 					data-ph-placement="project_actions"
 				>
-					<svg
-						class="w-3 h-3"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path d="M15 3h6v6" />
-						<path d="M10 14 21 3" />
-						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-					</svg>
-					Live
-				</a>
-			)
-		}
-		{
-			repoUrl && (
-				<a
-					href={repoUrl}
-					class="inline-flex items-center gap-1 text-link hover:text-link-2 transition-colors"
-					target="_blank"
-					rel="noopener noreferrer"
-					data-ph-event="project_link_clicked"
-					data-ph-target-type="source_repository"
-					data-ph-placement="project_actions"
-				>
-					<svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-						<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.37 1.23-3.21-.12-.3-.54-1.515.12-3.15 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.635.24 2.85.12 3.15.765.84 1.23 1.905 1.23 3.21 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-					</svg>
-					Source
+					{liveUrl.replace(/^https?:\/\//, "").split("/")[0]}
 				</a>
 			)
 		}
@@ -115,17 +80,19 @@ const hasVideo = Boolean(videoWebm || videoMp4);
 			hasVideo && (
 				<button
 					type="button"
-					class="inline-flex items-center gap-1 text-link hover:text-link-2 transition-colors cursor-pointer"
+					class="meta cursor-pointer text-[13px] text-tech transition-colors hover:text-link-2"
 					data-demo
 					data-title={title}
 					data-webm={videoWebm}
 					data-mp4={videoMp4}
 				>
-					<svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-						<polygon points="5,3 19,12 5,21" />
-					</svg>
 					Demo
 				</button>
+			)
+		}
+		{
+			repoName && (
+				<span class="meta ml-auto max-w-full text-[13px] text-text-faint">{repoName}</span>
 			)
 		}
 	</div>

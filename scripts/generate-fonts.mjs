@@ -10,19 +10,19 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 // ── Config (synced with src/data/fonts.ts) ──────────────────────────
 const fonts = {
 	display: {
-		name: "Lora",
+		name: "Libre Franklin",
 		fallback: "Georgia, serif",
-		weights: [400, 700],
+		weights: [400, 500, 600, 700, 800],
 		styles: ["normal", "italic"],
 	},
 	sans: {
-		name: "Geist",
+		name: "Libre Franklin",
 		fallback: "system-ui, -apple-system, sans-serif",
-		weights: [300, 400, 500, 600],
+		weights: [400, 500, 600, 700, 800],
 		styles: ["normal"],
 	},
 	mono: {
-		name: "JetBrains Mono",
+		name: "IBM Plex Mono",
 		fallback: '"Fira Code", monospace',
 		weights: [400, 500],
 		styles: ["normal"],
@@ -37,14 +37,10 @@ const subsets = {
 
 // ── FontSource CDN slugs ────────────────────────────────────────────
 const fontSlugs = {
+	"Libre Franklin": "libre-franklin",
+	"IBM Plex Mono": "ibm-plex-mono",
 	"Lora": "lora",
-	"Source Sans 3": "source-sans-3",
 	"JetBrains Mono": "jetbrains-mono",
-	"Inter": "inter",
-	"Raleway": "raleway",
-	"Geist": "geist",
-	"Plus Jakarta Sans": "plus-jakarta-sans",
-	"Outfit": "outfit",
 };
 
 // CDN uses hyphenated subset names in URLs

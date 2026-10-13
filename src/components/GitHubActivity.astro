@@ -1,6 +1,5 @@
 ---
-import { getGitHubData, GITHUB_USERNAME } from "@/lib/github";
-import { siteConfig } from "@/data/config";
+import { getGitHubData } from "@/lib/github";
 
 const githubData = await getGitHubData();
 
@@ -8,7 +7,6 @@ const {
 	followers,
 	publicRepos,
 	totalStars,
-	totalContributions,
 	weeks: allWeeks,
 	recentActivity,
 	activityTotals,
@@ -37,167 +35,76 @@ const p25 = sortedCounts.length > 0 ? sortedCounts[Math.floor(sortedCounts.lengt
 const p50 = sortedCounts.length > 0 ? sortedCounts[Math.floor(sortedCounts.length * 0.5)] : maxDayCount * 0.5;
 const p75 = sortedCounts.length > 0 ? sortedCounts[Math.floor(sortedCounts.length * 0.75)] : maxDayCount * 0.75;
 
-function getContribLevel(count: number): number {
+const levelFor = (count: number): number => {
 	if (count === 0) return 0;
 	if (count <= p25) return 1;
 	if (count <= p50) return 2;
 	if (count <= p75) return 3;
 	return 4;
-}
+};
 
-function rows(items: typeof recentActivity, cap: number, prefix: RegExp) {
-	return items.slice(0, cap).map((item) => ({
+const rows = (items: typeof recentActivity, cap: number, prefix: RegExp) =>
+	items.slice(0, cap).map((item) => ({
 		repo: item.repo,
 		detail: item.message.replace(prefix, "").replace(/^·\s*/, "") || item.message,
 		url: item.url,
 	}));
-}
 
 const commitRows = rows(commitActivity, 5, /^$/);
 const repoRows = rows(repoActivity, 3, /^Created repository\s*/i);
 const issueRows = rows(issueActivity, 3, /^Opened issue:\s*/i);
 const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
+
+const sections = [
+	{ title: `${activityTotals.commits.toLocaleString()} commits in ${commitRepoCount} ${commitRepoCount === 1 ? "repository" : "repositories"}`, rows: commitRows, type: "commit" },
+	{ title: `${activityTotals.repos} ${activityTotals.repos === 1 ? "repository" : "repositories"} created`, rows: repoRows, type: "repository" },
+	{ title: `${activityTotals.issues} ${activityTotals.issues === 1 ? "issue" : "issues"} opened`, rows: issueRows, type: "issue" },
+	{ title: `${activityTotals.prs} pull ${activityTotals.prs === 1 ? "request" : "requests"} opened`, rows: prRows, type: "pull_request" },
+];
 ---
 
-<div class="mb-6">
-	<!-- Header -->
-	<div class="flex items-baseline justify-between mb-4">
-		<h2 class="font-[family-name:var(--font-display)] text-xl">GitHub Activity</h2>
-		<a
-			href={siteConfig.socials.find(s => s.key === "github")?.href}
-			class="font-[family-name:var(--font-mono)] text-xs text-muted-foreground hover:text-foreground transition-colors"
-			target="_blank"
-			rel="noopener noreferrer"
-			data-ph-event="github_activity_clicked"
-			data-ph-target-type="profile"
-		>
-			@{GITHUB_USERNAME} →
-		</a>
+<div>
+	<div class="meta text-[13px] text-text-faint mb-2.5">
+		<b class="font-medium text-text">{followers.toLocaleString()}</b> followers · <b class="font-medium text-text">{totalStars.toLocaleString()}</b> stars · <b class="font-medium text-text">{publicRepos.toLocaleString()}</b> repos · <b class="font-medium text-text">{sixMonthContributions.toLocaleString()}</b> contributions in the last 6 months
 	</div>
-
-	<!-- Profile stats -->
-	<div class="flex flex-wrap gap-x-5 gap-y-1 font-[family-name:var(--font-mono)] text-xs text-muted-foreground mb-4">
-		<span><span class="font-semibold text-foreground">{followers.toLocaleString()}</span> followers</span>
-		<span><span class="font-semibold text-foreground">{totalStars.toLocaleString()}</span> stars</span>
-		<span><span class="font-semibold text-foreground">{publicRepos.toLocaleString()}</span> repos</span>
-	</div>
-
-	<!-- Contribution count -->
-	<div class="text-sm text-foreground/80 mb-3">
-		<span class="font-[family-name:var(--font-mono)] font-semibold text-foreground">{sixMonthContributions.toLocaleString()}</span> contributions in the last 6 months
-	</div>
-
-	<!-- Heatmap -->
-	<div class="gh-contrib-grid mb-4" style={`--weeks: ${weeks.length};`}>
+	<div class="gh-contrib-grid mb-1" style={`--weeks: ${weeks.length};`}>
 		{weeks.map((week) => (
 			<div class="gh-contrib-week">
 				{week.contributionDays.map((day) => (
 					<div
-						class:list={[
-							"gh-contrib-day",
-							`l${getContribLevel(day.contributionCount)}`,
-						]}
+						class:list={["gh-contrib-day", `l${levelFor(day.contributionCount)}`]}
 						data-tip={`${day.date}: ${day.contributionCount} contribution${day.contributionCount === 1 ? "" : "s"}`}
 					/>
 				))}
 			</div>
 		))}
 	</div>
-
-	<!-- Activity breakdown -->
-	<div class="flex flex-col gap-4 border-t border-border pt-4">
-		<!-- Commits -->
-		{commitRows.length > 0 && (
-			<div>
-				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
-					{activityTotals.commits.toLocaleString()} commits in {commitRepoCount} {commitRepoCount === 1 ? "repository" : "repositories"}
-				</h3>
-				{commitRows.map((row) => (
-					<a
-						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-						target="_blank"
-						rel="noopener noreferrer"
-						data-ph-event="github_activity_clicked"
-						data-ph-target-type="commit"
-					>
-						<span class="font-medium text-foreground truncate">{row.repo}</span>
-						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
-					</a>
-				))}
-			</div>
-		)}
-
-		<!-- Created repos -->
-		{repoRows.length > 0 && (
-			<div>
-				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
-					{activityTotals.repos} {activityTotals.repos === 1 ? "repository" : "repositories"} created
-				</h3>
-				{repoRows.map((row) => (
-					<a
-						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-						target="_blank"
-						rel="noopener noreferrer"
-						data-ph-event="github_activity_clicked"
-						data-ph-target-type="repository"
-					>
-						<span class="font-medium text-foreground truncate">{row.repo}</span>
-						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
-					</a>
-				))}
-			</div>
-		)}
-
-		<!-- Issues -->
-		{issueRows.length > 0 && (
-			<div>
-				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
-					{activityTotals.issues} {activityTotals.issues === 1 ? "issue" : "issues"} opened
-				</h3>
-				{issueRows.map((row) => (
-					<a
-						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-						target="_blank"
-						rel="noopener noreferrer"
-						data-ph-event="github_activity_clicked"
-						data-ph-target-type="issue"
-					>
-						<span class="font-medium text-foreground truncate">{row.repo}</span>
-						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
-					</a>
-				))}
-			</div>
-		)}
-
-		<!-- Pull requests -->
-		{prRows.length > 0 && (
-			<div>
-				<h3 class="text-sm font-semibold text-foreground mb-2 pb-2 border-b border-border">
-					{activityTotals.prs} pull {activityTotals.prs === 1 ? "request" : "requests"} opened
-				</h3>
-				{prRows.map((row) => (
-					<a
-						href={row.url || "#"}
-						class="flex items-baseline justify-between gap-4 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-						target="_blank"
-						rel="noopener noreferrer"
-						data-ph-event="github_activity_clicked"
-						data-ph-target-type="pull_request"
-					>
-						<span class="font-medium text-foreground truncate">{row.repo}</span>
-						<span class="font-[family-name:var(--font-mono)] text-xs shrink-0">{row.detail}</span>
-					</a>
-				))}
-			</div>
+	<div class="mt-2.5 flex flex-col gap-2.5 border-t border-line pt-2">
+		{sections.map((section) =>
+			section.rows.length > 0 ? (
+				<div>
+					<h3 class="mb-0.5 text-[14px] font-semibold">{section.title}</h3>
+					{section.rows.map((row) => (
+						<a
+							href={row.url || "#"}
+							class="flex items-baseline gap-3 py-0.5 text-[13px] hover:[&>.t]:text-accent"
+							target="_blank"
+							rel="noopener noreferrer"
+							data-ph-event="github_activity_clicked"
+							data-ph-target-type={section.type}
+						>
+							<span class="t min-w-0 shrink-0 truncate font-medium">{row.repo}</span>
+							<span class="meta min-w-0 flex-1 truncate text-right text-text-faint">{row.detail}</span>
+						</a>
+					))}
+				</div>
+			) : null
 		)}
 	</div>
 </div>
 
 <style>
-	/* Contribution heatmap — scoped CSS needed for grid and hover behavior */
+	/* Contribution heatmap — scoped CSS for grid and hover behavior */
 	.gh-contrib-grid {
 		display: grid;
 		grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
@@ -218,8 +125,8 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		width: 100%;
 		aspect-ratio: 1 / 1;
 		border-radius: 2px;
-		border: 1px solid var(--color-border);
-		background: var(--color-background);
+		border: 1px solid var(--color-line);
+		background: var(--color-heat-0);
 		cursor: default;
 		transition:
 			transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -230,58 +137,47 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 	.gh-contrib-day:hover {
 		z-index: 2;
 		transform: translateY(-3px) scale(1.45);
-		border-color: color-mix(in oklab, var(--color-accent) 70%, var(--color-border));
+		border-color: color-mix(in oklab, var(--color-accent) 70%, var(--color-line));
 		box-shadow:
-			0 7px 14px color-mix(in oklab, var(--color-foreground) 15%, transparent),
-			0 0 0 1px color-mix(in oklab, var(--color-background) 80%, transparent);
+			0 7px 14px color-mix(in oklab, var(--color-text) 15%, transparent),
+			0 0 0 1px color-mix(in oklab, var(--color-bg) 80%, transparent);
 	}
 
-	/* Tooltip */
+	/* Tooltip — only laid out on hover, so the offscreen hidden boxes never
+	   contribute to scrollable overflow (horizontal scrolling on mobile) */
 	.gh-contrib-day::after {
-		content: attr(data-tip);
+		content: none;
 		position: absolute;
-		bottom: calc(100% + 8px);
+		bottom: calc(100% + 6px);
 		left: 50%;
 		transform: translateX(-50%) scale(0.9);
 		transform-origin: 50% 100%;
-		padding: 4px 8px;
-		border-radius: 6px;
-		font-size: 11px;
+		padding: 2px 6px;
+		border-radius: 4px;
+		font-size: 10px;
 		font-family: var(--font-mono);
 		white-space: nowrap;
-		color: var(--color-background);
-		background: var(--color-foreground);
+		color: var(--color-bg);
+		background: var(--color-text);
 		pointer-events: none;
-		opacity: 0;
-		transition: opacity 120ms ease, transform 120ms ease;
-		z-index: 10;
+		z-index: 20;
 	}
 	.gh-contrib-day::before {
-		content: "";
+		content: none;
 		position: absolute;
 		bottom: calc(100% + 2px);
 		left: 50%;
 		transform: translateX(-50%);
 		border: 4px solid transparent;
-		border-top-color: var(--color-foreground);
+		border-top-color: var(--color-text);
 		pointer-events: none;
-		opacity: 0;
-		transition: opacity 120ms ease;
 		z-index: 10;
 	}
-	.gh-contrib-day:hover::after,
-	.gh-contrib-day:hover::before {
-		opacity: 1;
-		transform: translateX(-50%) scale(1);
+	.gh-contrib-day:hover::after {
+		content: attr(data-tip);
 	}
 	.gh-contrib-day:hover::before {
-		transform: translateX(-50%);
-	}
-
-	/* While scrubbing the grid, subsequent tooltips appear instantly */
-	.gh-contrib-grid[data-scrubbing] .gh-contrib-day::after,
-	.gh-contrib-grid[data-scrubbing] .gh-contrib-day::before {
-		transition-duration: 0ms;
+		content: "";
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -293,16 +189,11 @@ const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
 		}
 	}
 
-	/* Green contribution levels */
-	.gh-contrib-day.l1 { background: var(--color-emerald-200); border-color: var(--color-emerald-300); }
-	.gh-contrib-day.l2 { background: var(--color-emerald-400); border-color: var(--color-emerald-500); }
-	.gh-contrib-day.l3 { background: var(--color-emerald-600); border-color: var(--color-emerald-700); }
-	.gh-contrib-day.l4 { background: var(--color-emerald-800); border-color: var(--color-emerald-900); }
-
-	:global(.dark) .gh-contrib-day.l1 { background: color-mix(in oklab, var(--color-emerald-500) 40%, transparent); border-color: color-mix(in oklab, var(--color-emerald-500) 50%, transparent); }
-	:global(.dark) .gh-contrib-day.l2 { background: color-mix(in oklab, var(--color-emerald-400) 60%, transparent); border-color: color-mix(in oklab, var(--color-emerald-400) 70%, transparent); }
-	:global(.dark) .gh-contrib-day.l3 { background: var(--color-emerald-500); border-color: var(--color-emerald-400); }
-	:global(.dark) .gh-contrib-day.l4 { background: var(--color-emerald-400); border-color: var(--color-emerald-300); }
+	/* Green contribution levels — the sole accent, green in both themes */
+	.gh-contrib-day.l1 { background: var(--color-heat-1); border-color: transparent; }
+	.gh-contrib-day.l2 { background: var(--color-heat-2); border-color: transparent; }
+	.gh-contrib-day.l3 { background: var(--color-heat-3); border-color: transparent; }
+	.gh-contrib-day.l4 { background: var(--color-heat-4); border-color: transparent; }
 </style>
 
 <script>

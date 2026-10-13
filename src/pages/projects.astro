@@ -1,34 +1,26 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
-import SubscribeBox from "@/components/SubscribeBox.astro";
 import { getProjects } from "@/data/content";
 
 const projects = await getProjects();
 ---
 
 <BaseLayout title="Projects" activePage="/projects">
-	<a href="/" class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Home</a>
-
-	<h1 class="font-[family-name:var(--font-display)] text-[3rem] leading-tight mb-3">Projects</h1>
-	<p class="text-base text-foreground/80 leading-relaxed mb-12">
-		Every project is a live web app you can play with, read the analysis, or explore the source code.
-	</p>
-
-	<div class="project-grid mb-20">
+	<h1 class="mb-6 text-[24px] font-extrabold tracking-[-0.02em]">Projects</h1>
+	<div class="project-grid project-grid-2">
 		{projects.map((project) => (
-			<ProjectCardContent
-				title={project.data.title}
-				hook={project.data.hook}
-				liveUrl={project.data.liveUrl}
-				repoUrl={project.data.repoUrl}
-				videoWebm={project.data.videoWebm}
-				videoMp4={project.data.videoMp4}
-				videoPoster={project.data.videoPoster}
-			/>
+			<div class="panel">
+				<ProjectCardContent
+					title={project.data.title}
+					hook={project.data.hook}
+					liveUrl={project.data.liveUrl}
+					repoUrl={project.data.repoUrl}
+					videoWebm={project.data.videoWebm}
+					videoMp4={project.data.videoMp4}
+					videoPoster={project.data.videoPoster}
+				/>
+			</div>
 		))}
 	</div>
-
-	<!-- Subscribe -->
-	<SubscribeBox />
 </BaseLayout>

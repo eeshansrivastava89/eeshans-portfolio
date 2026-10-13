@@ -1,0 +1,51 @@
+---
+import SubscribeLink from "@/components/SubscribeLink.astro";
+import Icon from "@/components/Icon.astro";
+import { formatDate } from "@/data/content";
+
+interface Props {
+	/** Section label + back href */
+	back: { label: string; href: string };
+	/** Subscribe config per feed */
+	feed: "substack" | "wordpress";
+	/** Post metadata rows */
+	metadata: {
+		date: Date;
+		groups: { name: string; href: string }[];
+	};
+}
+
+const { back, feed, metadata } = Astro.props;
+---
+
+<aside class="sidebar flex flex-col gap-4">
+	<a href={back.href} class="meta text-[13px] text-text-faint transition-colors hover:text-accent">
+		← {back.label}
+	</a>
+
+	<div class="panel">
+		<div class="ph">
+			<h2>Post details</h2>
+		</div>
+		<div class="pb">
+			<div class="meta flex justify-between py-1.5 border-b border-line text-[13px]">
+				<span>published</span>
+				<b class="font-medium text-text">{formatDate(metadata.date)}</b>
+			</div>
+			{metadata.groups.length > 0 && (
+				<div class="pt-1.5">
+					{metadata.groups.map((group) => (
+						<a
+							class="group-row meta block py-1 text-[13px] text-text-soft transition-colors hover:text-accent"
+							href={group.href}
+						>
+							{group.name}
+						</a>
+					))}
+				</div>
+			)}
+		</div>
+	</div>
+
+	<SubscribeLink feed={feed} />
+</aside>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "@/layouts/Base.astro";
+import PostSidebar from "@/components/PostSidebar.astro";
+import { getBlogPosts, formatDate } from "@/data/content";
+
+export async function getStaticPaths() {
+	const posts = await getBlogPosts();
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const wordPressUrl = post.data.externalUrl;
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} activePage="/blog" canonical={wordPressUrl}>
+	<div class="layout">
+		<PostSidebar
+			back={{ label: "Personal Blog", href: "/blog" }}
+			feed="wordpress"
+			metadata={{
+				date: post.data.createdAt,
+				groups: post.data.categories.map((c) => ({
+					name: c.name,
+					href: `/blog/category/${c.slug}`,
+				})),
+			}}
+		/>
+
+		<article class="main min-w-0">
+			<header class="mb-10">
+				<h1 class="mb-3 text-[24px] font-extrabold tracking-[-0.02em] leading-tight">{post.data.title}</h1>
+				<p class="meta text-[13px] text-text-faint">
+					{formatDate(post.data.createdAt)}
+					{" · "}
+					<a
+						href={wordPressUrl}
+						class="text-link transition-colors hover:text-link-2"
+						target="_blank"
+						rel="noopener noreferrer"
+						data-ph-event="wordpress_article_clicked"
+						data-ph-placement="blog_post_header"
+					>Originally published on WordPress ↗</a>
+				</p>
+			</header>
+
+			{post.data.body && (
+				<article class="post-body prose prose-neutral dark:prose-invert max-w-none" set:html={post.data.body} />
+			)}
+		</article>
+	</div>
+</BaseLayout>

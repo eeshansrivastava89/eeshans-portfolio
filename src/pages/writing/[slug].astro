@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
-import SubscribeBox from "@/components/SubscribeBox.astro";
+import PostSidebar from "@/components/PostSidebar.astro";
 import { getVisiblePosts, formatDate } from "@/data/content";
 import { siteConfig } from "@/data/config";
 
@@ -13,22 +13,41 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const substackUrl = post.data.externalUrl ?? siteConfig.subscribe.href;
+const substackUrl = post.data.externalUrl ?? siteConfig.subscribe.find((s) => s.feed === "substack")!.href;
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} activePage="/writing" canonical={substackUrl}>
-	<a href="/writing" class="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 mb-8">← Writing</a>
+	<div class="layout">
+		<PostSidebar
+			back={{ label: "Technical Writing", href: "/writing" }}
+			feed="substack"
+			metadata={{
+				date: post.data.createdAt,
+				groups: post.data.tags.map((t) => ({
+					name: t.name,
+					href: `/writing/tag/${t.slug}`,
+				})),
+			}}
+		/>
 
-	<header class="mb-10">
-		<h1 class="font-[family-name:var(--font-display)] text-[2.5rem] leading-tight mb-3">{post.data.title}</h1>
-		<p class="text-sm text-muted-foreground">
-			{formatDate(post.data.createdAt)}
-			{" · "}
-			<a href={substackUrl} class="text-link hover:text-link-2 transition-colors" target="_blank" rel="noopener noreferrer">Originally published on Asymptotic ↗</a>
-		</p>
-	</header>
+		<article class="main min-w-0">
+			<header class="mb-10">
+				<h1 class="mb-3 text-[24px] font-extrabold tracking-[-0.02em] leading-tight">{post.data.title}</h1>
+				<p class="meta text-[13px] text-text-faint">
+					{formatDate(post.data.createdAt)}
+					{" · "}
+					<a
+						href={substackUrl}
+						class="text-link transition-colors hover:text-link-2"
+						target="_blank"
+						rel="noopener noreferrer"
+						data-ph-event="substack_article_clicked"
+						data-ph-placement="writing_post_header"
+					>Originally published on Asymptotic ↗</a>
+				</p>
+			</header>
 
-	<article class="post-body prose prose-neutral dark:prose-invert max-w-none mb-16" set:html={post.data.body} />
-
-	<SubscribeBox />
+			<article class="post-body prose prose-neutral dark:prose-invert max-w-none" set:html={post.data.body} />
+		</article>
+	</div>
 </BaseLayout>

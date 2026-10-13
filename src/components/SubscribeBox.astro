@@ -2,31 +2,53 @@
 import { siteConfig } from "@/data/config";
 import { brandIcons } from "@/data/icons";
 
-const { kicker, tagline, href } = siteConfig.subscribe;
-const substackIcon = brandIcons.substack;
+interface Props {
+	/** Which feed's subscribe box to render — matches `feed` in siteConfig.subscribe */
+	feed: "substack" | "wordpress";
+}
+
+const { feed } = Astro.props;
+const config = siteConfig.subscribe.find((s) => s.feed === feed);
+if (!config) {
+	throw new Error(`No subscribe config for feed "${feed}" in src/data/config.ts`);
+}
+
+const icon = feed === "substack" ? brandIcons.substack : null;
+const placement = feed === "substack" ? "subscribe_box_substack" : "subscribe_box_wordpress";
 ---
 
 <div class="sub-box">
 	<div class="sub-copy">
-		<span class="sub-kicker">{kicker}</span>
-		<span class="sub-tagline">{tagline}</span>
+		<span class="sub-kicker">{config.kicker}</span>
+		<span class="sub-tagline">{config.tagline}</span>
 	</div>
-	<a href={href} target="_blank" rel="noopener noreferrer" class="sub-button" data-ph-event="subscription_cta_clicked" data-ph-placement="subscribe_box">
-		<svg viewBox={substackIcon.viewBox || "0 0 24 24"} fill="currentColor" aria-hidden="true" width="14" height="14"><path d={substackIcon.path} /></svg>
-		Subscribe
+	<a
+		href={config.href}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="sub-button"
+		data-ph-event="subscription_cta_clicked"
+		data-ph-placement={placement}
+		data-ph-target-type={feed}
+	>
+		{icon && (
+			<svg viewBox={icon.viewBox || "0 0 24 24"} fill="currentColor" aria-hidden="true" width="14" height="14"><path d={icon.path} /></svg>
+		)}
+		Follow
 	</a>
 </div>
 
 <style>
+	/* Quiet restyle: hairline border, inset tint, mono kicker — matches the panel system */
 	.sub-box {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 16px;
-		padding: 18px 20px;
-		border-radius: 16px;
-		border: 1px solid color-mix(in oklab, var(--color-substack, #ff6719) 38%, var(--color-border));
-		background: color-mix(in oklab, var(--color-substack, #ff6719) 8%, var(--color-background));
+		padding: 14px 16px;
+		border-radius: 10px;
+		border: 1px solid var(--color-line);
+		background: var(--color-bg-raised);
 	}
 
 	.sub-copy {
@@ -37,16 +59,18 @@ const substackIcon = brandIcons.substack;
 	}
 
 	.sub-kicker {
-		font-size: 0.85rem;
-		font-weight: 800;
-		letter-spacing: 0.01em;
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
 		white-space: nowrap;
-		color: var(--color-substack, #ff6719);
+		color: var(--color-text-soft);
 	}
 
 	.sub-tagline {
-		font-size: 1.05rem;
-		color: var(--color-foreground);
+		font-size: 14px;
+		color: var(--color-text-soft);
 	}
 
 	.sub-button {
@@ -54,14 +78,15 @@ const substackIcon = brandIcons.substack;
 		align-items: center;
 		gap: 7px;
 		flex-shrink: 0;
-		padding: 8px 13px;
-		border-radius: 999px;
-		background: var(--color-substack, #ff6719);
-		color: #fff;
-		font-size: 0.85rem;
-		font-weight: 800;
+		padding: 6px 13px;
+		border-radius: 3px;
+		border: 1px solid var(--color-line-strong);
+		background: var(--color-bg);
+		color: var(--color-text);
+		font-family: var(--font-mono);
+		font-size: 13px;
 		text-decoration: none;
-		transition: background-color 150ms ease, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+		transition: border-color 150ms ease, color 150ms ease, transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
 	}
 
 	.sub-button:active {
@@ -69,8 +94,8 @@ const substackIcon = brandIcons.substack;
 	}
 
 	.sub-button:hover {
-		background: color-mix(in oklab, var(--color-substack, #ff6719) 85%, #000);
-		color: #fff;
+		border-color: var(--color-accent);
+		color: var(--color-accent);
 		text-decoration: none;
 	}
 

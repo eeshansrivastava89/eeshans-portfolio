@@ -1,6 +1,5 @@
 ---
 import { siteConfig } from "@/data/config";
-import { ModeToggle } from "@/components/ModeToggle";
 import "../styles/globals.css";
 
 interface Props {
@@ -56,7 +55,7 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 			</script>
 		)}
 	</head>
-	<body class="min-h-screen bg-background text-foreground">
+	<body>
 		<script is:inline>
 			const getThemePreference = () => {
 				if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
@@ -80,39 +79,42 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 			}
 		</script>
 
-		<nav class="mx-auto flex max-w-4xl items-baseline justify-between border-b border-border px-6 pb-6 pt-12">
-			<div class="font-[family-name:var(--font-display)] text-lg">
-				<a href="/" class="text-foreground hover:text-foreground/80">
-					Eeshan <em>Srivastava</em>
+		<header class="mx-auto w-full max-w-[1280px] px-8">
+			<div class="flex items-center gap-6 border-b border-line py-10">
+				<a href="/" class="text-[24px] font-extrabold tracking-[-0.02em] leading-none hover:text-accent transition-colors">
+					Eeshan Srivastava
 				</a>
-			</div>
-			<div class="flex items-center gap-6">
-				<ul class="flex gap-6">
+				<nav class="ml-auto flex flex-wrap items-center gap-6" aria-label="Site">
 					{siteConfig.nav.map((item) => (
-						<li>
-							<a
-								href={item.href}
-								class:list={[
-									"text-xs font-medium uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground",
-									activePage === item.href && "text-foreground",
-								]}
-							>
-								{item.label}
-							</a>
-						</li>
+						<a
+							href={item.href}
+							class:list={[
+								"text-[15px] font-medium text-text-soft transition-colors hover:text-accent hover:decoration-none",
+								activePage === item.href && "text-accent",
+							]}
+						>
+							{item.label}
+						</a>
 					))}
-				</ul>
-				<ModeToggle client:load />
+					<button
+						type="button"
+						class="pressable inline-flex h-7 w-7 items-center justify-center rounded-md border border-line-strong text-[13px] text-text-soft transition-colors hover:border-accent hover:text-accent"
+						aria-label="Toggle dark mode"
+						title="Toggle dark mode"
+					>
+						◐
+					</button>
+				</nav>
 			</div>
-		</nav>
+		</header>
 
-		<main class="mx-auto max-w-4xl px-6 pt-10 pb-24">
+		<main class="mx-auto w-full max-w-[1280px] px-8 pt-8 pb-24">
 			<slot />
 		</main>
 
-		<footer class="mx-auto flex max-w-4xl items-center justify-between border-t border-border px-6 py-8 text-xs text-muted-foreground">
-			<span>© {new Date().getFullYear()} Eeshan Srivastava</span>
-			<span>Open source · Non-commercial</span>
+		<footer class="mx-auto flex w-full max-w-[1280px] items-center justify-between border-t border-line px-8 py-8">
+			<span class="meta text-[13px] text-text-faint">© {new Date().getFullYear()} Eeshan Srivastava</span>
+			<span class="meta text-[13px] text-text-faint">Open source · Non-commercial</span>
 		</footer>
 
 		<dialog
@@ -128,6 +130,13 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 				<source type="video/mp4" />
 			</video>
 		</dialog>
+
+		<script is:inline>
+			// Theme toggle: plain class toggle; the bootstrap's MutationObserver persists it
+			document.querySelector("nav button[aria-label='Toggle dark mode']")?.addEventListener("click", () => {
+				document.documentElement.classList.toggle("dark");
+			});
+		</script>
 
 		<script is:inline>
 			// Named event capture: any [data-ph-event] click reports to PostHog

@@ -9,32 +9,25 @@
     "fonts:generate": "node scripts/generate-fonts.mjs",
     "preview": "astro preview",
     "astro": "astro",
+    "refresh:wordpress": "node scripts/refresh-wordpress.mjs",
     "refresh:substack": "node scripts/refresh-substack.mjs",
     "deploy:worker": "cd workers/substack-proxy && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.6",
-    "@astrojs/react": "^6.0.3",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
     "astro": "^7.2.3",
-    "astro-expressive-code": "^0.44.1",
     "cheerio": "^1.2.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "lucide-static": "^1.32.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "sharp": "^0.35.3",
     "simple-icons": "^16.28.0",
-    "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3",
     "wrangler": "^4.124.0"
   },
   "pnpm": {

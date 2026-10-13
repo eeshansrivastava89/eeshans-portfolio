@@ -17,9 +17,10 @@ What you'll find on the site:
 
 - **Projects** — Some of my personal projects & experiments on local AI or data science concepts: Sidequests, How I Prompt, A/B Testing Memory Game, Local LLM Visual Bench
 - **Writing** — Essays on AI and data science, and human-centric approaches to working with tech. Sourced from [The Asymptotic](https://theasymptotic.substack.com) on Substack
+- **Blog** — Personal essays, book reviews, and drawings going back to 2008. Imported from [my WordPress blog](https://eeshan89.wordpress.com)
 - **About** — About me and the things I care about
 
-Built with Astro 6, React, Tailwind CSS v4, and shadcn/ui. Static output, deployed on Fly.io.
+Built with Astro, Tailwind CSS v4, Libre Franklin + IBM Plex Mono. Static output, deployed on Fly.io.
 
 ---
 
