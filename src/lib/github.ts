@@ -203,7 +203,7 @@ function buildActivityFromGraphQL(
 		if (repo?.name && repo.createdAt) {
 			items.push({
 				repo: repo.name,
-				message: `Created repository${repo.primaryLanguage?.name ? ` · ${repo.primaryLanguage.name}` : ""}`,
+				message: repo.primaryLanguage?.name ?? "Created repository",
 				time: repo.createdAt,
 				url: repo.url,
 				category: "repo",
@@ -216,7 +216,7 @@ function buildActivityFromGraphQL(
 		if (issue?.repository?.name && issue.title && issue.createdAt) {
 			items.push({
 				repo: issue.repository.name,
-				message: `Opened issue: ${issue.title}`,
+				message: issue.title,
 				time: issue.createdAt,
 				url: issue.url,
 				category: "issue",
@@ -229,7 +229,7 @@ function buildActivityFromGraphQL(
 		if (pr?.repository?.name && pr.title && pr.createdAt) {
 			items.push({
 				repo: pr.repository.name,
-				message: `Opened PR: ${pr.title}`,
+				message: pr.title,
 				time: pr.createdAt,
 				url: pr.url,
 				category: "pr",
@@ -237,11 +237,11 @@ function buildActivityFromGraphQL(
 		}
 	}
 
-	return items
-		.sort(
-			(a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
-		)
-		.slice(0, 20);
+	// No global cap: the panel shows a few of each category, and a shared cap
+	// would silently starve issues/PRs behind the commit entries.
+	return items.sort(
+		(a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
+	);
 }
 
 function validateGitHubData(data: Partial<GitHubData>): GitHubData {

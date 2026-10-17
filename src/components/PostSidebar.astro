@@ -24,11 +24,11 @@ const { feed, title, metadata, headings } = Astro.props;
 ---
 
 <aside class="sidebar sidebar-stick flex flex-col gap-4">
-	<PostToc title={title} headings={headings} />
-
-	<div style="--order: 10">
+	<div style="--order: 3">
 		<SubscribeLink feed={feed} />
 	</div>
+
+	<PostToc title={title} headings={headings} />
 
 	<div class="panel" style="--order: 90">
 		<div class="ph">

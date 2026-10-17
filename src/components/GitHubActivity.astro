@@ -22,10 +22,43 @@ const sixMonthContributions = weeks
 
 const commitActivity = recentActivity.filter((item) => item.category === "commit");
 const commitRepoCount = new Set(commitActivity.map((item) => item.repo)).size;
-// Top repositories by commits, ranked explicitly — never by API order
-const repoRows = [...commitActivity]
+
+const { repos: repoCap, activity: activityCap } = siteConfig.homepage.github;
+
+// Commits are ranked by count; the other categories arrive newest-first
+const commitRows = [...commitActivity]
 	.sort((a, b) => (b.commits ?? 0) - (a.commits ?? 0))
-	.slice(0, siteConfig.homepage.github.repos);
+	.slice(0, repoCap);
+const byRecency = (category: "repo" | "issue" | "pr") =>
+	recentActivity.filter((item) => item.category === category).slice(0, activityCap);
+
+const sections = [
+	{
+		type: "commit",
+		title: `${activityTotals.commits.toLocaleString()} commits in ${commitRepoCount} ${commitRepoCount === 1 ? "repository" : "repositories"}`,
+		rows: commitRows,
+	},
+	{
+		type: "repository",
+		title: `${activityTotals.repos} ${activityTotals.repos === 1 ? "repository" : "repositories"} created`,
+		rows: byRecency("repo"),
+		/** Long repo names need the full width, so the detail sits beneath */
+		stacked: true,
+	},
+	{
+		type: "issue",
+		title: `${activityTotals.issues} ${activityTotals.issues === 1 ? "issue" : "issues"} opened`,
+		rows: byRecency("issue"),
+		/** Titles are sentences: stack them so they wrap instead of clipping */
+		stacked: true,
+	},
+	{
+		type: "pull_request",
+		title: `${activityTotals.prs} pull ${activityTotals.prs === 1 ? "request" : "requests"} opened`,
+		rows: byRecency("pr"),
+		stacked: true,
+	},
+];
 
 // Use displayed weeks only for threshold calculation so the visible heatmap
 // has meaningful color variation. Using all-time data compresses visible days.
@@ -63,22 +96,27 @@ const levelFor = (count: number): number => {
 			</div>
 		))}
 	</div>
-	<div class="gh-repos">
-		<h3>{activityTotals.commits.toLocaleString()} commits in {commitRepoCount} {commitRepoCount === 1 ? "repository" : "repositories"}</h3>
-		{repoRows.map((row) => (
-			<a
-				href={row.url}
-				class="gh-row"
-				target="_blank"
-				rel="noopener noreferrer"
-				data-ph-event="github_activity_clicked"
-				data-ph-target-type="commit"
-			>
-				<span>{row.repo}</span>
-				<b>{row.message}</b>
-			</a>
-		))}
-	</div>
+	{
+		sections.map((section) => (
+			<div class="gh-section">
+				<h3>{section.title}</h3>
+				{section.rows.map((row) => (
+					<a
+						href={row.url}
+						class:list={["gh-row", section.stacked && "gh-row-stacked"]}
+						title={section.stacked ? row.message : undefined}
+						target="_blank"
+						rel="noopener noreferrer"
+						data-ph-event="github_activity_clicked"
+						data-ph-target-type={section.type}
+					>
+						<span class="gh-repo">{row.repo}</span>
+						<span class="gh-detail">{row.message}</span>
+					</a>
+				))}
+			</div>
+		))
+	}
 </div>
 
 <style>

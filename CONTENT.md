@@ -26,7 +26,7 @@ src/data/                   src/components/  (layout only, no hardcoded content)
 | Nav bar links | `src/data/config.ts` | `nav` array |
 | Subscribe CTAs | `src/data/config.ts` → `subscribe` | Array with one entry per feed (`substack`, `wordpress`) — kicker, tagline, href |
 | Homepage hero | `src/data/config.ts` → `hero` | `headline` (the homepage's H1) and the one `pitch` sentence |
-| Homepage counts | `src/data/config.ts` → `homepage` | `feedItems`, `projectItems`, `github.weeks`, `github.repos` — the only place these numbers live |
+| Homepage counts | `src/data/config.ts` → `homepage` | `feedItems`, `projectItems`, `github.weeks`, `github.repos`, `github.activity` — the only place these numbers live |
 | Goodreads panel counts | `src/data/config.ts` → `goodreads` | `profileUrl`, `handle` and the three shelf sizes — shelves shown in the reading panel |
 
 ### About Page

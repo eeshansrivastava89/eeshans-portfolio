@@ -13,6 +13,15 @@ const posts = await getVisiblePosts();
 const blogPosts = await getBlogPosts();
 
 const topProjects = projects.slice(0, siteConfig.homepage.projectItems);
+
+// Hero links are the nav's own entries, so the words never drift apart.
+// Fail loudly if one of them leaves the nav.
+const HERO_LINKS = ["/writing", "/blog", "/projects"];
+const heroLinks = HERO_LINKS.map((href) => {
+	const item = siteConfig.nav.find((navItem) => navItem.href === href);
+	if (!item) throw new Error(`Hero link ${href} is not in siteConfig.nav`);
+	return item;
+});
 ---
 
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
@@ -22,18 +31,14 @@ const topProjects = projects.slice(0, siteConfig.homepage.projectItems);
 			<h1 class="hero-name">{siteConfig.hero.headline}</h1>
 			<p class="hero-line">{siteConfig.hero.pitch}</p>
 			<div class="hero-links">
-				<a
-					href="/writing"
-					data-ph-event="hero_link_clicked"
-					data-ph-placement="home_hero"
-					data-ph-target-type="writing"
-				>Read the writing →</a>
-				<a
-					href="/projects"
-					data-ph-event="hero_link_clicked"
-					data-ph-placement="home_hero"
-					data-ph-target-type="projects"
-				>See the projects →</a>
+				{heroLinks.map((link) => (
+					<a
+						href={link.href}
+						data-ph-event="hero_link_clicked"
+						data-ph-placement="home_hero"
+						data-ph-target-type={link.href.slice(1)}
+					>{link.label}</a>
+				))}
 			</div>
 		</div>
 	</section>

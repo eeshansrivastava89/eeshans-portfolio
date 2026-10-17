@@ -445,12 +445,12 @@ html {
 }
 
 /* GitHub repo list: the panel's one list — commits per repo, ranked */
-.gh-repos {
+.gh-section {
 	margin-top: 12px;
 	border-top: 1px solid var(--color-line);
 	padding-top: 10px;
 }
-.gh-repos h3 {
+.gh-section h3 {
 	font-size: var(--text-ui);
 	font-weight: 600;
 	margin-bottom: 4px;
@@ -467,17 +467,40 @@ html {
 .gh-row:hover {
 	color: var(--color-accent);
 }
-.gh-row b {
-	font-family: var(--font-mono);
-	font-weight: 500;
-	color: var(--color-text);
-	white-space: nowrap;
-}
-.gh-row span {
+.gh-repo {
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	font-weight: 500;
+	color: var(--color-text);
+}
+.gh-detail {
+	flex: none;
+	max-width: 70%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: right;
+	font-family: var(--font-mono);
+	color: var(--color-text-faint);
+}
+/* Sentence-length details (issue/PR titles) stack under the repo and wrap */
+.gh-row-stacked {
+	display: block;
+	padding: 5px 0;
+}
+.gh-row-stacked .gh-repo {
+	display: block;
+}
+.gh-row-stacked .gh-detail {
+	display: block;
+	max-width: none;
+	margin-top: 1px;
+	white-space: normal;
+	overflow: visible;
+	text-align: left;
+	line-height: 1.45;
 }
 
 /* Goodreads panel: three shelves, cover + title + author + stars */

@@ -14,6 +14,8 @@ export const siteConfig = {
 		github: {
 			weeks: 26,
 			repos: 5,
+			/** Rows shown per activity category (repositories, issues, pull requests) */
+			activity: 3,
 		},
 	},
 	/** Goodreads panel: profile link and shelf sizes */
