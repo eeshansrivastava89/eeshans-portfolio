@@ -2,7 +2,6 @@
 import BaseLayout from "@/layouts/Base.astro";
 import Icon from "@/components/Icon.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
-import StatRows from "@/components/StatRows.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
 import TimelineEntry from "@/components/TimelineEntry.astro";
 import { getCollection, render } from "astro:content";
@@ -41,15 +40,6 @@ const visibleImpact = impact
 			</div>
 
 			<div class="panel" style="--order: 3">
-				<div class="ph">
-					<h2>At a glance</h2>
-				</div>
-				<div class="pb">
-					<StatRows />
-				</div>
-			</div>
-
-			<div class="panel" style="--order: 4">
 				<div class="ph">
 					<h2>Elsewhere</h2>
 				</div>

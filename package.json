@@ -11,6 +11,7 @@
     "astro": "astro",
     "refresh:wordpress": "node scripts/refresh-wordpress.mjs",
     "refresh:substack": "node scripts/refresh-substack.mjs",
+    "refresh:goodreads": "node scripts/refresh-goodreads.mjs",
     "deploy:worker": "cd workers/substack-proxy && wrangler deploy"
   },
   "dependencies": {

@@ -19,6 +19,8 @@ export interface RecentActivity {
 	time: string;
 	url?: string;
 	category: "commit" | "issue" | "pr" | "repo";
+	/** Commit entries only: contributions in that repo, for ranking */
+	commits?: number;
 }
 
 export interface ActivityTotals {
@@ -191,6 +193,7 @@ function buildActivityFromGraphQL(
 				time: aggregateCommitTime,
 				url: repo.url,
 				category: "commit",
+				commits: count,
 			});
 		}
 	}

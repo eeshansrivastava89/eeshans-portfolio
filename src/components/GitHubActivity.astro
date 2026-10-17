@@ -1,5 +1,6 @@
 ---
 import { getGitHubData } from "@/lib/github";
+import { siteConfig } from "@/data/config";
 
 const githubData = await getGitHubData();
 
@@ -12,17 +13,19 @@ const {
 	activityTotals,
 } = githubData;
 
-const WEEKS_TO_SHOW = 26;
-const weeks = allWeeks.slice(-WEEKS_TO_SHOW);
+const weeks = allWeeks.slice(-siteConfig.homepage.github.weeks);
+// 26 weeks ≈ 6 months; derived so changing the window keeps the label honest
+const windowMonths = Math.round(weeks.length / (52 / 12));
 const sixMonthContributions = weeks
 	.flatMap((week) => week.contributionDays)
 	.reduce((sum, day) => sum + day.contributionCount, 0);
 
 const commitActivity = recentActivity.filter((item) => item.category === "commit");
-const repoActivity = recentActivity.filter((item) => item.category === "repo");
-const issueActivity = recentActivity.filter((item) => item.category === "issue");
-const prActivity = recentActivity.filter((item) => item.category === "pr");
 const commitRepoCount = new Set(commitActivity.map((item) => item.repo)).size;
+// Top repositories by commits, ranked explicitly — never by API order
+const repoRows = [...commitActivity]
+	.sort((a, b) => (b.commits ?? 0) - (a.commits ?? 0))
+	.slice(0, siteConfig.homepage.github.repos);
 
 // Use displayed weeks only for threshold calculation so the visible heatmap
 // has meaningful color variation. Using all-time data compresses visible days.
@@ -42,30 +45,11 @@ const levelFor = (count: number): number => {
 	if (count <= p75) return 3;
 	return 4;
 };
-
-const rows = (items: typeof recentActivity, cap: number, prefix: RegExp) =>
-	items.slice(0, cap).map((item) => ({
-		repo: item.repo,
-		detail: item.message.replace(prefix, "").replace(/^·\s*/, "") || item.message,
-		url: item.url,
-	}));
-
-const commitRows = rows(commitActivity, 5, /^$/);
-const repoRows = rows(repoActivity, 3, /^Created repository\s*/i);
-const issueRows = rows(issueActivity, 3, /^Opened issue:\s*/i);
-const prRows = rows(prActivity, 3, /^Opened PR:\s*/i);
-
-const sections = [
-	{ title: `${activityTotals.commits.toLocaleString()} commits in ${commitRepoCount} ${commitRepoCount === 1 ? "repository" : "repositories"}`, rows: commitRows, type: "commit" },
-	{ title: `${activityTotals.repos} ${activityTotals.repos === 1 ? "repository" : "repositories"} created`, rows: repoRows, type: "repository" },
-	{ title: `${activityTotals.issues} ${activityTotals.issues === 1 ? "issue" : "issues"} opened`, rows: issueRows, type: "issue" },
-	{ title: `${activityTotals.prs} pull ${activityTotals.prs === 1 ? "request" : "requests"} opened`, rows: prRows, type: "pull_request" },
-];
 ---
 
 <div>
 	<div class="text-meta text-text-faint mb-2.5">
-		<b class="font-mono font-medium text-text">{followers.toLocaleString()}</b> followers · <b class="font-mono font-medium text-text">{totalStars.toLocaleString()}</b> stars · <b class="font-mono font-medium text-text">{publicRepos.toLocaleString()}</b> repos · <b class="font-mono font-medium text-text">{sixMonthContributions.toLocaleString()}</b> contributions in the last 6 months
+		<b class="font-mono font-medium text-text">{followers.toLocaleString()}</b> followers · <b class="font-mono font-medium text-text">{totalStars.toLocaleString()}</b> stars · <b class="font-mono font-medium text-text">{publicRepos.toLocaleString()}</b> repos · <b class="font-mono font-medium text-text">{sixMonthContributions.toLocaleString()}</b> contributions in the last {windowMonths} months
 	</div>
 	<div class="gh-contrib-grid mb-1" style={`--weeks: ${weeks.length};`}>
 		{weeks.map((week) => (
@@ -79,27 +63,21 @@ const sections = [
 			</div>
 		))}
 	</div>
-	<div class="mt-2.5 flex flex-col gap-2.5 border-t border-line pt-2">
-		{sections.map((section) =>
-			section.rows.length > 0 ? (
-				<div>
-					<h3 class="mb-0.5 text-ui font-semibold">{section.title}</h3>
-					{section.rows.map((row) => (
-						<a
-							href={row.url || "#"}
-							class="flex items-baseline gap-3 py-0.5 text-meta hover:[&>.t]:text-accent"
-							target="_blank"
-							rel="noopener noreferrer"
-							data-ph-event="github_activity_clicked"
-							data-ph-target-type={section.type}
-						>
-							<span class="t min-w-0 shrink-0 truncate font-medium">{row.repo}</span>
-							<span class="min-w-0 flex-1 truncate text-right text-text-faint">{row.detail}</span>
-						</a>
-					))}
-				</div>
-			) : null
-		)}
+	<div class="gh-repos">
+		<h3>{activityTotals.commits.toLocaleString()} commits in {commitRepoCount} {commitRepoCount === 1 ? "repository" : "repositories"}</h3>
+		{repoRows.map((row) => (
+			<a
+				href={row.url}
+				class="gh-row"
+				target="_blank"
+				rel="noopener noreferrer"
+				data-ph-event="github_activity_clicked"
+				data-ph-target-type="commit"
+			>
+				<span>{row.repo}</span>
+				<b>{row.message}</b>
+			</a>
+		))}
 	</div>
 </div>
 

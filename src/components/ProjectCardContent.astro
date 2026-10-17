@@ -1,6 +1,4 @@
 ---
-import Icon from "@/components/Icon.astro";
-
 interface Props {
 	title: string;
 	hook: string;
@@ -25,9 +23,10 @@ const {
 } = Astro.props;
 
 const hasVideo = Boolean(videoWebm || videoMp4);
+const primaryHref = liveUrl ?? repoUrl;
 ---
 
-<article class="flex min-w-0 flex-col p-3.5">
+<article class="project-card">
 	{
 		!compact && hasVideo && videoPoster && (
 			<button
@@ -54,61 +53,43 @@ const hasVideo = Boolean(videoWebm || videoMp4);
 	}
 
 	<h3 class="text-reading font-bold tracking-[-0.01em] leading-snug">
-		<a href={liveUrl ?? repoUrl} class="hover:text-accent transition-colors">{title}</a>
+		<a href={primaryHref} class="hover:text-accent transition-colors">{title}</a>
 	</h3>
 
-	<p class="mt-1 text-ui text-text-soft leading-[1.5] line-clamp-3">
-		{hook}
-	</p>
+	<p class="project-hook">{hook}</p>
 
-	<div class="mt-auto pt-3">
+	<div class="project-actions">
 		{
-			liveUrl && (
+			hasVideo && (
+				<button
+					type="button"
+					class="btn pressable"
+					data-demo
+					data-title={title}
+					data-webm={videoWebm}
+					data-mp4={videoMp4}
+					data-ph-event="project_link_clicked"
+					data-ph-target-type="demo_video"
+					data-ph-placement="project_actions"
+				>
+					▶ Demo
+				</button>
+			)
+		}
+		{
+			repoUrl && (
 				<a
-					href={liveUrl}
-					class="block text-meta text-text-soft transition-colors hover:text-accent"
+					href={repoUrl}
+					class="btn"
 					target="_blank"
 					rel="noopener noreferrer"
 					data-ph-event="project_link_clicked"
-					data-ph-target-type="live_site"
+					data-ph-target-type="github_repo"
 					data-ph-placement="project_actions"
 				>
-					{liveUrl.replace(/^https?:\/\//, "").split("/")[0]}
+					Code
 				</a>
 			)
 		}
-		<div class="mt-2 flex items-center gap-1">
-			{
-				hasVideo && (
-					<button
-						type="button"
-						class="pressable inline-flex h-10 w-10 items-center justify-center rounded-md text-text-soft transition-colors hover:text-accent"
-						data-demo
-						data-title={title}
-						data-webm={videoWebm}
-						data-mp4={videoMp4}
-						aria-label={`Play ${title} demo video`}
-					>
-						<Icon name="play" size={15} />
-					</button>
-				)
-			}
-			{
-				repoUrl && (
-					<a
-						href={repoUrl}
-						class="pressable inline-flex h-10 w-10 items-center justify-center rounded-md text-text-soft transition-colors hover:text-accent"
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label={`${title} GitHub repository`}
-						data-ph-event="project_link_clicked"
-						data-ph-target-type="github_repo"
-						data-ph-placement="project_actions"
-					>
-						<Icon name="github" size={15} />
-					</a>
-				)
-			}
-		</div>
 	</div>
 </article>

@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/Base.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
+import FollowButton from "@/components/FollowButton.astro";
 import { siteConfig } from "@/data/config";
 import { getProjects, getVisiblePosts, getBlogPosts, formatDate } from "@/data/content";
 import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/substack";
@@ -11,13 +12,32 @@ const projects = await getProjects();
 const posts = await getVisiblePosts();
 const blogPosts = await getBlogPosts();
 
-const topProjects = projects.slice(0, 4);
-
-// Homepage feeds show the same number of rows in both panels
-const HOMEPAGE_FEED_COUNT = 5;
+const topProjects = projects.slice(0, siteConfig.homepage.projectItems);
 ---
 
 <BaseLayout title={siteConfig.title} description={siteConfig.description}>
+	<section class="hero-band">
+		<img class="hero-photo" src="/images/art-profile-eeshan.jpeg" alt="Eeshan Srivastava" width="128" height="128" />
+		<div>
+			<h1 class="hero-name">{siteConfig.hero.headline}</h1>
+			<p class="hero-line">{siteConfig.hero.pitch}</p>
+			<div class="hero-links">
+				<a
+					href="/writing"
+					data-ph-event="hero_link_clicked"
+					data-ph-placement="home_hero"
+					data-ph-target-type="writing"
+				>Read the writing →</a>
+				<a
+					href="/projects"
+					data-ph-event="hero_link_clicked"
+					data-ph-placement="home_hero"
+					data-ph-target-type="projects"
+				>See the projects →</a>
+			</div>
+		</div>
+	</section>
+
 	<div class="layout">
 		<Sidebar />
 
@@ -27,27 +47,22 @@ const HOMEPAGE_FEED_COUNT = 5;
 					<h2>Technical Writing</h2>
 					<span class="ph-links">
 						<a href="/writing">all {posts.length} →</a>
-						<a
-							href={SUBSTACK_SUBSCRIBE_URL}
-							target="_blank"
-							rel="noopener noreferrer"
-							data-ph-event="subscription_cta_clicked"
-							data-ph-placement="writing_panel_header"
-							data-ph-target-type="substack"
-						>Subscribe on Substack →</a>
 					</span>
 				</div>
+				<div class="follow-row">
+					<FollowButton feed="substack" href={SUBSTACK_SUBSCRIBE_URL} label="Follow on Substack" />
+				</div>
 				<div class="pb feed">
-					{posts.slice(0, HOMEPAGE_FEED_COUNT).map((post) => (
+					{posts.slice(0, siteConfig.homepage.feedItems).map((post, i) => (
 						<a
-							class="item"
+							class:list={["item", i === 0 && "is-new"]}
 							href={`/writing/${post.id}`}
 							data-ph-event="writing_item_clicked"
 							data-ph-placement="home_writing_feed"
 							data-ph-target-type="writing_item"
 						>
 							<span class="d">{formatDate(post.data.createdAt)}</span>
-							<span class="t">{post.data.title}</span>
+							<span class="t">{post.data.title}{i === 0 && <span class="new-tag">New</span>}</span>
 						</a>
 					))}
 				</div>
@@ -58,27 +73,22 @@ const HOMEPAGE_FEED_COUNT = 5;
 					<h2>Personal Blog</h2>
 					<span class="ph-links">
 						<a href="/blog">all {blogPosts.length} →</a>
-						<a
-							href={WORDPRESS_FOLLOW_URL}
-							target="_blank"
-							rel="noopener noreferrer"
-							data-ph-event="subscription_cta_clicked"
-							data-ph-placement="blog_panel_header"
-							data-ph-target-type="wordpress"
-						>Follow on WordPress →</a>
 					</span>
 				</div>
+				<div class="follow-row">
+					<FollowButton feed="wordpress" href={WORDPRESS_FOLLOW_URL} label="Follow on WordPress" />
+				</div>
 				<div class="pb feed">
-					{blogPosts.slice(0, HOMEPAGE_FEED_COUNT).map((post) => (
+					{blogPosts.slice(0, siteConfig.homepage.feedItems).map((post, i) => (
 						<a
-							class="item"
+							class:list={["item", i === 0 && "is-new"]}
 							href={`/blog/${post.id}`}
 							data-ph-event="blog_item_clicked"
 							data-ph-placement="home_blog_feed"
 							data-ph-target-type="blog_item"
 						>
 							<span class="d">{formatDate(post.data.createdAt)}</span>
-							<span class="t">{post.data.title}</span>
+							<span class="t">{post.data.title}{i === 0 && <span class="new-tag">New</span>}</span>
 						</a>
 					))}
 				</div>
@@ -89,7 +99,7 @@ const HOMEPAGE_FEED_COUNT = 5;
 					<h2>Projects</h2>
 					<span class="ph-links"><a href="/projects">all →</a></span>
 				</div>
-				<div class="project-grid p-3 pb-3.5">
+				<div class="project-grid p-4">
 					{topProjects.map((project) => (
 						<ProjectCardContent
 							title={project.data.title}

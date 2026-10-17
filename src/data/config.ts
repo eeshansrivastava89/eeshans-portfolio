@@ -2,9 +2,27 @@ export const siteConfig = {
 	title: "Eeshan Srivastava",
 	/** SEO meta tag — used in <meta name="description"> */
 	description: "Data science leader, local AI builder, open-source maintainer.",
-	/** One-liner shown at the top of the homepage */
-	intro: {
-		tagline: "I'm passionate about data science, AI, and data privacy. I hope you learn something useful from my projects and writing.",
+	/** Homepage hero — headline and the one pitch sentence */
+	hero: {
+		headline: "Hi, I'm Eeshan.",
+		pitch: "I lead data science at Starbucks — and test new AI tools until the hype wears off. Writing about local AI and experimentation, and building open-source tools you can try.",
+	},
+	/** Homepage display counts — every homepage list and panel reads from here */
+	homepage: {
+		feedItems: 6,
+		projectItems: 6,
+		github: {
+			weeks: 26,
+			repos: 5,
+		},
+	},
+	/** Goodreads panel: profile link and shelf sizes */
+	goodreads: {
+		profileUrl: "https://www.goodreads.com/user/show/7370124",
+		handle: "@eeshan",
+		currentlyReading: 3,
+		recentlyRead: 3,
+		toRead: 3,
 	},
 	url: "https://eeshans.com",
 	author: "Eeshan Srivastava",

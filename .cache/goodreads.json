@@ -1,0 +1,1479 @@
+{
+  "fetchedAt": "2026-10-17T22:46:06.592Z",
+  "profileUrl": "https://www.goodreads.com/user/show/7370124",
+  "shelves": {
+    "currentlyReading": [
+      {
+        "title": "The Neverending Story",
+        "author": "Michael Ende",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538449821l/42114208._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/8147421140?utm_medium=api&utm_source=rss",
+        "bookId": "42114208",
+        "rating": 0,
+        "averageRating": 4.3
+      }
+    ],
+    "recentlyRead": [
+      {
+        "title": "Lolita",
+        "author": "Vladimir Nabokov",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590093359l/9216051._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8928701659?utm_medium=api&utm_source=rss",
+        "bookId": "9216051",
+        "rating": 4,
+        "averageRating": 3.82
+      },
+      {
+        "title": "The Devotion of Suspect X (Detective Galileo, #1)",
+        "author": "Keigo Higashino",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356888979l/10419011._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/8816063563?utm_medium=api&utm_source=rss",
+        "bookId": "10419011",
+        "rating": 5,
+        "averageRating": 4.11
+      },
+      {
+        "title": "The Art of Taking Action: Lessons from Japanese Psychology",
+        "author": "Gregg Krech",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435499728l/23621842._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8503186853?utm_medium=api&utm_source=rss",
+        "bookId": "23621842",
+        "rating": 5,
+        "averageRating": 4.11
+      },
+      {
+        "title": "Inner Excellence: Train Your Mind for Extraordinary Performance and the Best Possible Life",
+        "author": "Jim Murphy",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590856257l/53442382._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/7817875069?utm_medium=api&utm_source=rss",
+        "bookId": "53442382",
+        "rating": 4,
+        "averageRating": 4.22
+      },
+      {
+        "title": "The Manual: A Philosopher's Guide to Life",
+        "author": "Epictetus",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525038557l/34946912._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4124505199?utm_medium=api&utm_source=rss",
+        "bookId": "34946912",
+        "rating": 5,
+        "averageRating": 4.37
+      },
+      {
+        "title": "Fitness Made Simple",
+        "author": "John Basedow",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389231203l/19680728._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185317531?utm_medium=api&utm_source=rss",
+        "bookId": "19680728",
+        "rating": 4,
+        "averageRating": 2.67
+      },
+      {
+        "title": "DataStory: Explain Data and Inspire Action Through Story",
+        "author": "Nancy Duarte",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576372582l/49241665._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/5863145128?utm_medium=api&utm_source=rss",
+        "bookId": "49241665",
+        "rating": 4,
+        "averageRating": 3.91
+      },
+      {
+        "title": "Don't Sweat the Small Stuff ... and It's All Small Stuff: Simple Ways to Keep the Little Things From Taking Over Your Life",
+        "author": "Richard Carlson",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1172378911l/170548._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/5011276008?utm_medium=api&utm_source=rss",
+        "bookId": "170548",
+        "rating": 4,
+        "averageRating": 3.99
+      },
+      {
+        "title": "How to Stop Worrying and Start Living",
+        "author": "Dale Carnegie",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601726053l/55544581._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506839071?utm_medium=api&utm_source=rss",
+        "bookId": "55544581",
+        "rating": 0,
+        "averageRating": 4.26
+      },
+      {
+        "title": "Ikigai: The Japanese Secret to a Long and Happy Life",
+        "author": "Héctor García",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485980135l/34097767._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/5101241439?utm_medium=api&utm_source=rss",
+        "bookId": "34097767",
+        "rating": 4,
+        "averageRating": 4.06
+      },
+      {
+        "title": "The Subtle Art of Not Giving a F*ck: A Counterintuitive Approach to Living a Good Life",
+        "author": "Mark Manson",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480903131l/29965800._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5154912715?utm_medium=api&utm_source=rss",
+        "bookId": "29965800",
+        "rating": 5,
+        "averageRating": 4.11
+      },
+      {
+        "title": "How to Stop Worrying and Start Living: Time-Tested Methods for Conquering Worry",
+        "author": "Dale Carnegie",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442129098l/4866._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5011276693?utm_medium=api&utm_source=rss",
+        "bookId": "4866",
+        "rating": 5,
+        "averageRating": 4.16
+      },
+      {
+        "title": "The Urban Sketching Handbook Sketch Now, Think Later: Jump into Urban Sketching with Limited Time, Tools, and Techniques (Urban Sketching Handbooks)",
+        "author": "Mike Yoshiaki Daikubara",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541441646l/42635636._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5143663848?utm_medium=api&utm_source=rss",
+        "bookId": "42635636",
+        "rating": 4,
+        "averageRating": 4.18
+      },
+      {
+        "title": "Ready Player One (Ready Player One, #1)",
+        "author": "Ernest Cline",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500930947l/9969571._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4969346218?utm_medium=api&utm_source=rss",
+        "bookId": "9969571",
+        "rating": 5,
+        "averageRating": 4.21
+      },
+      {
+        "title": "Emma",
+        "author": "Jane Austen",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373627931l/6969._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4969344633?utm_medium=api&utm_source=rss",
+        "bookId": "6969",
+        "rating": 5,
+        "averageRating": 4.05
+      },
+      {
+        "title": "Napoleon Hill's Golden Rules: The Lost Writings",
+        "author": "Napoleon Hill",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347577946l/4747044._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4855171815?utm_medium=api&utm_source=rss",
+        "bookId": "4747044",
+        "rating": 3,
+        "averageRating": 4.08
+      },
+      {
+        "title": "The Art of Exceptional Living",
+        "author": "Jim Rohn",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348965344l/957355._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4792061559?utm_medium=api&utm_source=rss",
+        "bookId": "957355",
+        "rating": 5,
+        "averageRating": 4.27
+      },
+      {
+        "title": "Unfu*k Yourself: Get Out of Your Head and into Your Life",
+        "author": "Gary John Bishop",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543862789l/35209167._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010400?utm_medium=api&utm_source=rss",
+        "bookId": "35209167",
+        "rating": 5,
+        "averageRating": 3.98
+      },
+      {
+        "title": "The Power of Vulnerability: Teachings of Authenticity, Connections and Courage",
+        "author": "Brené Brown",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417188663l/23500254._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4230619380?utm_medium=api&utm_source=rss",
+        "bookId": "23500254",
+        "rating": 5,
+        "averageRating": 4.6
+      },
+      {
+        "title": "Napoleon Hill's Keys to Positive Thinking: 10 Steps to Health, Wealth, and Success",
+        "author": "Napoleon Hill",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1182787954l/1328855._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4792051631?utm_medium=api&utm_source=rss",
+        "bookId": "1328855",
+        "rating": 4,
+        "averageRating": 4.06
+      },
+      {
+        "title": "Personality Development",
+        "author": "Vivekananda",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433920659l/23565833._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1297551678?utm_medium=api&utm_source=rss",
+        "bookId": "23565833",
+        "rating": 5,
+        "averageRating": 4.44
+      },
+      {
+        "title": "The Magic of Thinking Big",
+        "author": "David J. Schwartz",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404632064l/759945._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4717729138?utm_medium=api&utm_source=rss",
+        "bookId": "759945",
+        "rating": 5,
+        "averageRating": 4.26
+      },
+      {
+        "title": "Project Hail Mary",
+        "author": "Andy Weir",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655684120l/54906250._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506837690?utm_medium=api&utm_source=rss",
+        "bookId": "54906250",
+        "rating": 5,
+        "averageRating": 4.57
+      },
+      {
+        "title": "The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers―Straight Talk on the Challenges of Entrepreneurship",
+        "author": "Ben Horowitz",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386609333l/18176747._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1477917687?utm_medium=api&utm_source=rss",
+        "bookId": "18176747",
+        "rating": 1,
+        "averageRating": 4.18
+      },
+      {
+        "title": "The Way of the Bow",
+        "author": "Paulo Coelho",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330693712l/6333213._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/370785772?utm_medium=api&utm_source=rss",
+        "bookId": "6333213",
+        "rating": 2,
+        "averageRating": 3.67
+      },
+      {
+        "title": "Negative Self-Talk and How to Change It",
+        "author": "Shad Helmstetter",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557955566l/45839193._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3777364947?utm_medium=api&utm_source=rss",
+        "bookId": "45839193",
+        "rating": 4,
+        "averageRating": 4.06
+      },
+      {
+        "title": "Scaramouche (Scaramouche, #1)",
+        "author": "Rafael Sabatini",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387767649l/938105._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/360411507?utm_medium=api&utm_source=rss",
+        "bookId": "938105",
+        "rating": 5,
+        "averageRating": 4.09
+      },
+      {
+        "title": "You Can Win: A Step-by-Step Tool for Top Achievers",
+        "author": "Shiv Khera",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390491433l/20622531._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3115998832?utm_medium=api&utm_source=rss",
+        "bookId": "20622531",
+        "rating": 5,
+        "averageRating": 4.33
+      },
+      {
+        "title": "My Gita",
+        "author": "Devdutt Pattanaik",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446024007l/27318490._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3126900611?utm_medium=api&utm_source=rss",
+        "bookId": "27318490",
+        "rating": 5,
+        "averageRating": 3.92
+      },
+      {
+        "title": "Harry Potter and the Cursed Child, Parts 1 & 2",
+        "author": "John Tiffany",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470734340l/29069989._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1724395380?utm_medium=api&utm_source=rss",
+        "bookId": "29069989",
+        "rating": 5,
+        "averageRating": 3.63
+      },
+      {
+        "title": "The Practitioner's Guide to Product Management",
+        "author": "Jock Busuttil",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415578488l/17182396._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1402307586?utm_medium=api&utm_source=rss",
+        "bookId": "17182396",
+        "rating": 5,
+        "averageRating": 3.96
+      },
+      {
+        "title": "Antony and Cleopatra",
+        "author": "William Shakespeare",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347795799l/104837._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1351256309?utm_medium=api&utm_source=rss",
+        "bookId": "104837",
+        "rating": 5,
+        "averageRating": 3.7
+      },
+      {
+        "title": "Jane Eyre",
+        "author": "Charlotte Brontë",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383748681l/18626853._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185318113?utm_medium=api&utm_source=rss",
+        "bookId": "18626853",
+        "rating": 5,
+        "averageRating": 4.42
+      },
+      {
+        "title": "Managerial Economics: A Problem Solving Approach",
+        "author": "Luke M. Froeb",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360568209l/16250246._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185317054?utm_medium=api&utm_source=rss",
+        "bookId": "16250246",
+        "rating": 4,
+        "averageRating": 3.5
+      },
+      {
+        "title": "Becoming a Resonant Leader: Develop Your Emotional Intelligence, Renew Your Relationships, Sustain Your Effectiveness",
+        "author": "Annie McKee",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397635651l/2398761._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185316722?utm_medium=api&utm_source=rss",
+        "bookId": "2398761",
+        "rating": 3,
+        "averageRating": 3.77
+      },
+      {
+        "title": "How to Live on 24 Hours a Day",
+        "author": "Arnold Bennett",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351266654l/4855._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1154775973?utm_medium=api&utm_source=rss",
+        "bookId": "4855",
+        "rating": 5,
+        "averageRating": 3.6
+      },
+      {
+        "title": "The Queen of Spades",
+        "author": "Alexander Pushkin",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348182203l/279614._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/500743066?utm_medium=api&utm_source=rss",
+        "bookId": "279614",
+        "rating": 5,
+        "averageRating": 3.96
+      },
+      {
+        "title": "Treasure Island",
+        "author": "Robert Louis Stevenson",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485248909l/295._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/977085143?utm_medium=api&utm_source=rss",
+        "bookId": "295",
+        "rating": 5,
+        "averageRating": 3.84
+      },
+      {
+        "title": "Common Sense",
+        "author": "Thomas Paine",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309209451l/161744._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/922607992?utm_medium=api&utm_source=rss",
+        "bookId": "161744",
+        "rating": 5,
+        "averageRating": 3.97
+      },
+      {
+        "title": "Harry Potter and the Half-Blood Prince (Harry Potter, #6)",
+        "author": "J.K. Rowling",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587697303l/1._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/258412111?utm_medium=api&utm_source=rss",
+        "bookId": "1",
+        "rating": 5,
+        "averageRating": 4.57
+      },
+      {
+        "title": "The Lord of the Rings (The Lord of the Rings, #1-3)",
+        "author": "J.R.R. Tolkien",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566425108l/33._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/775155597?utm_medium=api&utm_source=rss",
+        "bookId": "33",
+        "rating": 5,
+        "averageRating": 4.53
+      },
+      {
+        "title": "As a Man Thinketh",
+        "author": "James Allen",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632020500l/81959._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/625808490?utm_medium=api&utm_source=rss",
+        "bookId": "81959",
+        "rating": 5,
+        "averageRating": 4.22
+      },
+      {
+        "title": "Convict Conditioning: How to Bust Free of All Weakness Using the Lost Secrets of Supreme Survival Strength",
+        "author": "Paul Wade",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390689480l/7305111._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/555299185?utm_medium=api&utm_source=rss",
+        "bookId": "7305111",
+        "rating": 4,
+        "averageRating": 4.17
+      },
+      {
+        "title": "Julius Caesar",
+        "author": "William Shakespeare",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631505382l/13006._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/445517852?utm_medium=api&utm_source=rss",
+        "bookId": "13006",
+        "rating": 4,
+        "averageRating": 3.7
+      },
+      {
+        "title": "A Midsummer Night’s Dream",
+        "author": "William Shakespeare",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327874534l/1622._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/278642157?utm_medium=api&utm_source=rss",
+        "bookId": "1622",
+        "rating": 5,
+        "averageRating": 3.95
+      },
+      {
+        "title": "The Count of Monte Cristo",
+        "author": "Alexandre Dumas",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724863997l/7126._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258408457?utm_medium=api&utm_source=rss",
+        "bookId": "7126",
+        "rating": 5,
+        "averageRating": 4.31
+      },
+      {
+        "title": "A Mathematician's Apology",
+        "author": "G.H. Hardy",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348629338l/154060._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258412625?utm_medium=api&utm_source=rss",
+        "bookId": "154060",
+        "rating": 4,
+        "averageRating": 3.92
+      },
+      {
+        "title": "Tao Te Ching",
+        "author": "Lao Tzu",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520551258l/57854._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258412219?utm_medium=api&utm_source=rss",
+        "bookId": "57854",
+        "rating": 5,
+        "averageRating": 4.33
+      },
+      {
+        "title": "Harry Potter and the Chamber of Secrets (Harry Potter, #2)",
+        "author": "J.K. Rowling",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474169725l/15881._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258410346?utm_medium=api&utm_source=rss",
+        "bookId": "15881",
+        "rating": 5,
+        "averageRating": 4.42
+      },
+      {
+        "title": "Harry Potter and the Deathly Hallows (Harry Potter, #7)",
+        "author": "J.K. Rowling",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663805647l/136251._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258409661?utm_medium=api&utm_source=rss",
+        "bookId": "136251",
+        "rating": 5,
+        "averageRating": 4.61
+      },
+      {
+        "title": "1984",
+        "author": "George Orwell",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348990566l/5470._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258409400?utm_medium=api&utm_source=rss",
+        "bookId": "5470",
+        "rating": 5,
+        "averageRating": 4.15
+      },
+      {
+        "title": "The Hobbit, or There and Back Again",
+        "author": "J.R.R. Tolkien",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546071216l/5907._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258409553?utm_medium=api&utm_source=rss",
+        "bookId": "5907",
+        "rating": 5,
+        "averageRating": 4.3
+      },
+      {
+        "title": "Animal Farm",
+        "author": "George Orwell",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424037542l/7613._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258409445?utm_medium=api&utm_source=rss",
+        "bookId": "7613",
+        "rating": 5,
+        "averageRating": 3.9
+      },
+      {
+        "title": "The Alchemist",
+        "author": "Paulo Coelho",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483412266l/865._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258406832?utm_medium=api&utm_source=rss",
+        "bookId": "865",
+        "rating": 5,
+        "averageRating": 3.85
+      },
+      {
+        "title": "A Study in Scarlet (Sherlock Holmes, #1)",
+        "author": "Arthur Conan Doyle",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519031842l/102868._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/258406331?utm_medium=api&utm_source=rss",
+        "bookId": "102868",
+        "rating": 5,
+        "averageRating": 4.16
+      },
+      {
+        "title": "The Hound of the Baskervilles (Sherlock Holmes, #5)",
+        "author": "Arthur Conan Doyle",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355929358l/8921._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/258406505?utm_medium=api&utm_source=rss",
+        "bookId": "8921",
+        "rating": 5,
+        "averageRating": 4.16
+      },
+      {
+        "title": "Carry On, Jeeves (Jeeves, #3)",
+        "author": "P.G. Wodehouse",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358970388l/16387._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258406064?utm_medium=api&utm_source=rss",
+        "bookId": "16387",
+        "rating": 4,
+        "averageRating": 4.26
+      },
+      {
+        "title": "Ben-Hur: A Tale of the Christ",
+        "author": "Lew Wallace",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631079466l/387749._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/258405577?utm_medium=api&utm_source=rss",
+        "bookId": "387749",
+        "rating": 5,
+        "averageRating": 4.03
+      },
+      {
+        "title": "Cosmopolis",
+        "author": "Don DeLillo",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328389098l/28703._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258405171?utm_medium=api&utm_source=rss",
+        "bookId": "28703",
+        "rating": 5,
+        "averageRating": 3.29
+      },
+      {
+        "title": "Siddhartha",
+        "author": "Hermann Hesse",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629378189l/52036._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258404005?utm_medium=api&utm_source=rss",
+        "bookId": "52036",
+        "rating": 4,
+        "averageRating": 4.08
+      },
+      {
+        "title": "Candide",
+        "author": "Voltaire",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345060082l/19380._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258403810?utm_medium=api&utm_source=rss",
+        "bookId": "19380",
+        "rating": 5,
+        "averageRating": 3.76
+      },
+      {
+        "title": "Romeo and Juliet",
+        "author": "William Shakespeare",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629680008l/18135._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/258403521?utm_medium=api&utm_source=rss",
+        "bookId": "18135",
+        "rating": 5,
+        "averageRating": 3.74
+      }
+    ],
+    "toRead": [
+      {
+        "title": "In Search of Lost Time",
+        "author": "Marcel Proust",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657567516l/18796._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/8995752010?utm_medium=api&utm_source=rss",
+        "bookId": "18796",
+        "rating": 0,
+        "averageRating": 4.34
+      },
+      {
+        "title": "Swann’s Way (In Search of Lost Time, #1)",
+        "author": "Marcel Proust",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735845760l/12749._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/8995751767?utm_medium=api&utm_source=rss",
+        "bookId": "12749",
+        "rating": 0,
+        "averageRating": 4.13
+      },
+      {
+        "title": "Stoner",
+        "author": "John Williams",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742326950l/166997._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8940423858?utm_medium=api&utm_source=rss",
+        "bookId": "166997",
+        "rating": 0,
+        "averageRating": 4.36
+      },
+      {
+        "title": "The Remains of the Day",
+        "author": "Kazuo Ishiguro",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327128714l/28921._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8940422991?utm_medium=api&utm_source=rss",
+        "bookId": "28921",
+        "rating": 0,
+        "averageRating": 4.15
+      },
+      {
+        "title": "A Gentleman in Moscow",
+        "author": "Amor Towles",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718915012l/34066798._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8940419851?utm_medium=api&utm_source=rss",
+        "bookId": "34066798",
+        "rating": 0,
+        "averageRating": 4.27
+      },
+      {
+        "title": "How to Know a Person: The Art of Seeing Others Deeply and Being Deeply Seen",
+        "author": "David Brooks",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684815605l/112974860._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8939179233?utm_medium=api&utm_source=rss",
+        "bookId": "112974860",
+        "rating": 0,
+        "averageRating": 4.02
+      },
+      {
+        "title": "The Silmarillion",
+        "author": "J.R.R. Tolkien",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736249886l/223339744._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8760349790?utm_medium=api&utm_source=rss",
+        "bookId": "223339744",
+        "rating": 0,
+        "averageRating": 4.43
+      },
+      {
+        "title": "The Complete Works of Shakespeare",
+        "author": "William Shakespeare",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360684088l/12995406._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185317991?utm_medium=api&utm_source=rss",
+        "bookId": "12995406",
+        "rating": 0,
+        "averageRating": 4.57
+      },
+      {
+        "title": "Persepolis: The Story of a Childhood (Persepolis, #1)",
+        "author": "Marjane Satrapi",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425871473l/9516._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/8832133567?utm_medium=api&utm_source=rss",
+        "bookId": "9516",
+        "rating": 0,
+        "averageRating": 4.28
+      },
+      {
+        "title": "Journey Under the Midnight Sun",
+        "author": "Keigo Higashino",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386409101l/19256975._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8832151044?utm_medium=api&utm_source=rss",
+        "bookId": "19256975",
+        "rating": 0,
+        "averageRating": 4.3
+      },
+      {
+        "title": "The Giver (Giver, #1)",
+        "author": "Lois Lowry",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342493368l/3636._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8832133027?utm_medium=api&utm_source=rss",
+        "bookId": "3636",
+        "rating": 0,
+        "averageRating": 4.12
+      },
+      {
+        "title": "Buddha in Blue Jeans: An Extremely Short Simple Zen Guide to Sitting Quietly and Being Buddha",
+        "author": "Tai Sheridan",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328034118l/13139782._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185317711?utm_medium=api&utm_source=rss",
+        "bookId": "13139782",
+        "rating": 0,
+        "averageRating": 3.93
+      },
+      {
+        "title": "Cicero's Brutus or History of Famous Orators; also His Orator, or Accomplished Speaker.",
+        "author": "Marcus Tullius Cicero",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385883597l/19078760._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185318059?utm_medium=api&utm_source=rss",
+        "bookId": "19078760",
+        "rating": 0,
+        "averageRating": 4.18
+      },
+      {
+        "title": "The Gifts of Imperfection: Let Go of Who You Think You're Supposed to Be and Embrace Who You Are",
+        "author": "Brené Brown",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676318692l/114564955._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/2444990423?utm_medium=api&utm_source=rss",
+        "bookId": "114564955",
+        "rating": 0,
+        "averageRating": 4.28
+      },
+      {
+        "title": "Notes from Underground, Illustrated (Vintage Classics)",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671748531l/74982776._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5657578127?utm_medium=api&utm_source=rss",
+        "bookId": "74982776",
+        "rating": 0,
+        "averageRating": 4.08
+      },
+      {
+        "title": "The Making of a Manager: What to Do When Everyone Looks to You",
+        "author": "Julie Zhuo",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542183307l/42776244._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/5863144853?utm_medium=api&utm_source=rss",
+        "bookId": "42776244",
+        "rating": 0,
+        "averageRating": 4.32
+      },
+      {
+        "title": "Nicomachean Ethics",
+        "author": "Aristotle",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664729391l/62848151._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/7353345548?utm_medium=api&utm_source=rss",
+        "bookId": "62848151",
+        "rating": 0,
+        "averageRating": 4.21
+      },
+      {
+        "title": "Four Thousand Weeks: Time Management for Mortals",
+        "author": "Oliver Burkeman",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603166953l/55742688._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8044139158?utm_medium=api&utm_source=rss",
+        "bookId": "55742688",
+        "rating": 0,
+        "averageRating": 4.3
+      },
+      {
+        "title": "The Inner Game of Tennis: The Classic Guide to the Mental Side of Peak Performance",
+        "author": "W. Timothy Gallwey",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385014849l/18875853._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8626747117?utm_medium=api&utm_source=rss",
+        "bookId": "18875853",
+        "rating": 0,
+        "averageRating": 4.4
+      },
+      {
+        "title": "The Complete Harvard Classics",
+        "author": "Charles William Eliot",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564593636l/49969341._SX50_SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506838782?utm_medium=api&utm_source=rss",
+        "bookId": "49969341",
+        "rating": 0,
+        "averageRating": 4.23
+      },
+      {
+        "title": "The Death of Ivan Ilych",
+        "author": "Leo Tolstoy",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663546974l/18386._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8161370713?utm_medium=api&utm_source=rss",
+        "bookId": "18386",
+        "rating": 0,
+        "averageRating": 4.13
+      },
+      {
+        "title": "White Nights",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450699039l/1772910._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/8161365041?utm_medium=api&utm_source=rss",
+        "bookId": "1772910",
+        "rating": 0,
+        "averageRating": 4.11
+      },
+      {
+        "title": "Demons",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524586008l/5695._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/8161357417?utm_medium=api&utm_source=rss",
+        "bookId": "5695",
+        "rating": 0,
+        "averageRating": 4.32
+      },
+      {
+        "title": "The New One Minute Manager: A Timeless Guide to Effective Leadership, Stress Reduction, and Success in a Rapidly Changing Workplace",
+        "author": "Kenneth H. Blanchard",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431032166l/24365527._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/2324169165?utm_medium=api&utm_source=rss",
+        "bookId": "24365527",
+        "rating": 0,
+        "averageRating": 4.2
+      },
+      {
+        "title": "The Master and Margarita",
+        "author": "Mikhail Bulgakov",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549949519l/43969296._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1316441624?utm_medium=api&utm_source=rss",
+        "bookId": "43969296",
+        "rating": 0,
+        "averageRating": 4.01
+      },
+      {
+        "title": "Crime and Punishment",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382846449l/7144._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4661271699?utm_medium=api&utm_source=rss",
+        "bookId": "7144",
+        "rating": 0,
+        "averageRating": 4.27
+      },
+      {
+        "title": "Full Catastrophe Living: Using the Wisdom of Your Body and Mind to Face Stress, Pain, and Illness",
+        "author": "Jon Kabat-Zinn",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533075280l/41016873._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/7817870408?utm_medium=api&utm_source=rss",
+        "bookId": "41016873",
+        "rating": 0,
+        "averageRating": 4.06
+      },
+      {
+        "title": "Wherever You Go, There You Are",
+        "author": "Jon Kabat-Zinn",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522355213l/39680002._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/5863144962?utm_medium=api&utm_source=rss",
+        "bookId": "39680002",
+        "rating": 0,
+        "averageRating": 4.27
+      },
+      {
+        "title": "Don't Believe Everything You Think",
+        "author": "Joseph Nguyen",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648738209l/60726415._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/6850601397?utm_medium=api&utm_source=rss",
+        "bookId": "60726415",
+        "rating": 0,
+        "averageRating": 3.81
+      },
+      {
+        "title": "Easier Than You Think ...because life doesn't have to be so hard: The Small Changes That Add Up to a World of Difference",
+        "author": "Richard Carlson",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390186107l/5476538._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/7060792482?utm_medium=api&utm_source=rss",
+        "bookId": "5476538",
+        "rating": 0,
+        "averageRating": 4.42
+      },
+      {
+        "title": "You Can Just Do Things: The Power of Permissionless Action (Permissionless Approach Books Book 1)",
+        "author": "Jay Yang",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745886420l/232294916._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/7817866252?utm_medium=api&utm_source=rss",
+        "bookId": "232294916",
+        "rating": 0,
+        "averageRating": 4.2
+      },
+      {
+        "title": "Faust; a Tragedy",
+        "author": "Johann Wolfgang von Goethe",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436945597l/18881439._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185317879?utm_medium=api&utm_source=rss",
+        "bookId": "18881439",
+        "rating": 0,
+        "averageRating": 4.02
+      },
+      {
+        "title": "The Book of Life: Daily Meditations with Krishnamurti",
+        "author": "J. Krishnamurti",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368426674l/143880._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/6633661577?utm_medium=api&utm_source=rss",
+        "bookId": "143880",
+        "rating": 0,
+        "averageRating": 4.33
+      },
+      {
+        "title": "The Awakening of Intelligence",
+        "author": "J. Krishnamurti",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410140241l/74456._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/6633661520?utm_medium=api&utm_source=rss",
+        "bookId": "74456",
+        "rating": 0,
+        "averageRating": 4.4
+      },
+      {
+        "title": "Think on These Things",
+        "author": "J. Krishnamurti",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388431035l/13470._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/6633661335?utm_medium=api&utm_source=rss",
+        "bookId": "13470",
+        "rating": 0,
+        "averageRating": 4.22
+      },
+      {
+        "title": "The Mountain Is You: Transforming Self-Sabotage Into Self-Mastery",
+        "author": "Brianna Wiest",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677348896l/53934413._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5863145058?utm_medium=api&utm_source=rss",
+        "bookId": "53934413",
+        "rating": 0,
+        "averageRating": 4.08
+      },
+      {
+        "title": "The Godfather (The Godfather #1)",
+        "author": "Mario Puzo",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586544475l/51876297._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506838714?utm_medium=api&utm_source=rss",
+        "bookId": "51876297",
+        "rating": 0,
+        "averageRating": 4.63
+      },
+      {
+        "title": "Tiny Habits: The Small Changes That Change Everything",
+        "author": "B.J. Fogg",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584555361l/43305818._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/6077123865?utm_medium=api&utm_source=rss",
+        "bookId": "43305818",
+        "rating": 0,
+        "averageRating": 4.19
+      },
+      {
+        "title": "The Idiot",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657539107l/12505._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/6315782315?utm_medium=api&utm_source=rss",
+        "bookId": "12505",
+        "rating": 0,
+        "averageRating": 4.22
+      },
+      {
+        "title": "The Brothers Karamazov",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427728126l/4934._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/6315782070?utm_medium=api&utm_source=rss",
+        "bookId": "4934",
+        "rating": 0,
+        "averageRating": 4.38
+      },
+      {
+        "title": "The House of the Dead",
+        "author": "Fyodor Dostoevsky",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327908745l/17877._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/6063826401?utm_medium=api&utm_source=rss",
+        "bookId": "17877",
+        "rating": 0,
+        "averageRating": 4.07
+      },
+      {
+        "title": "The Art of Communicating",
+        "author": "Thich Nhat Hanh",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364845277l/17331360._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5973162061?utm_medium=api&utm_source=rss",
+        "bookId": "17331360",
+        "rating": 0,
+        "averageRating": 4.07
+      },
+      {
+        "title": "The Midnight Library (The Midnight World, #1)",
+        "author": "Matt Haig",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602190253l/52578297._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5863147586?utm_medium=api&utm_source=rss",
+        "bookId": "52578297",
+        "rating": 0,
+        "averageRating": 3.95
+      },
+      {
+        "title": "Lieh-tzu: A Taoist Guide to Practical Living (Shambhala Dragon Editions)",
+        "author": "Liezi",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320547316l/575602._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5710777805?utm_medium=api&utm_source=rss",
+        "bookId": "575602",
+        "rating": 0,
+        "averageRating": 4.28
+      },
+      {
+        "title": "Light on Yoga",
+        "author": "B.K.S. Iyengar",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732758499l/56301._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5491209433?utm_medium=api&utm_source=rss",
+        "bookId": "56301",
+        "rating": 0,
+        "averageRating": 4.29
+      },
+      {
+        "title": "The Complete Sherlock Holmes ebook: All 56 Stories and 4 Novels (Global Classics)",
+        "author": "Arthur Conan Doyle",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439585615l/25523721._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/2043021649?utm_medium=api&utm_source=rss",
+        "bookId": "25523721",
+        "rating": 0,
+        "averageRating": 4.57
+      },
+      {
+        "title": "Hercule Poirot: The Complete Short Stories",
+        "author": "Agatha Christie",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450301107l/538605._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5102673566?utm_medium=api&utm_source=rss",
+        "bookId": "538605",
+        "rating": 0,
+        "averageRating": 4.31
+      },
+      {
+        "title": "The Divine Comedy: Inferno - Purgatorio - Paradiso",
+        "author": "Dante Alighieri",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657540227l/6656._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5011275680?utm_medium=api&utm_source=rss",
+        "bookId": "6656",
+        "rating": 0,
+        "averageRating": 4.09
+      },
+      {
+        "title": "The Loyalty Effect: The Hidden Force Behind Growth, Profits, and Lasting Value",
+        "author": "Frederick F. Reichheld",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671938366l/75277781._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5340924118?utm_medium=api&utm_source=rss",
+        "bookId": "75277781",
+        "rating": 0,
+        "averageRating": 0
+      },
+      {
+        "title": "On the Shortness of Life",
+        "author": "Seneca",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506788540l/36330113._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4792050383?utm_medium=api&utm_source=rss",
+        "bookId": "36330113",
+        "rating": 0,
+        "averageRating": 4.22
+      },
+      {
+        "title": "Eugene Onegin",
+        "author": "Alexander Pushkin",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5271622956?utm_medium=api&utm_source=rss",
+        "bookId": "27822",
+        "rating": 0,
+        "averageRating": 4.12
+      },
+      {
+        "title": "Look at That!: Discover the Joy of Seeing by Sketching",
+        "author": "Bobbie Herron",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605861680l/55959725._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5168089105?utm_medium=api&utm_source=rss",
+        "bookId": "55959725",
+        "rating": 0,
+        "averageRating": 4.29
+      },
+      {
+        "title": "The Analects",
+        "author": "Confucius",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721635193l/27297._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5168083922?utm_medium=api&utm_source=rss",
+        "bookId": "27297",
+        "rating": 0,
+        "averageRating": 3.83
+      },
+      {
+        "title": "Dracula",
+        "author": "Bram Stoker",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387151694l/17245._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/5011275270?utm_medium=api&utm_source=rss",
+        "bookId": "17245",
+        "rating": 0,
+        "averageRating": 4.03
+      },
+      {
+        "title": "Complete Works of Swami Vivekananda",
+        "author": "Vivekananda",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328317985l/10630031._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/550745540?utm_medium=api&utm_source=rss",
+        "bookId": "10630031",
+        "rating": 0,
+        "averageRating": 4.67
+      },
+      {
+        "title": "Out of the Silent Planet (The Space Trilogy, #1)",
+        "author": "C.S. Lewis",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310984018l/25350._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4792055967?utm_medium=api&utm_source=rss",
+        "bookId": "25350",
+        "rating": 0,
+        "averageRating": 3.93
+      },
+      {
+        "title": "Karma Yoga: the Yoga of Action",
+        "author": "Vivekananda",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387665601l/827031._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4855173864?utm_medium=api&utm_source=rss",
+        "bookId": "827031",
+        "rating": 0,
+        "averageRating": 4.52
+      },
+      {
+        "title": "O Alienista",
+        "author": "Machado de Assis",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1171102216l/87263._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4830969103?utm_medium=api&utm_source=rss",
+        "bookId": "87263",
+        "rating": 0,
+        "averageRating": 4.13
+      },
+      {
+        "title": "The Way We Live Now",
+        "author": "Anthony Trollope",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387182005l/19496644._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4792050408?utm_medium=api&utm_source=rss",
+        "bookId": "19496644",
+        "rating": 0,
+        "averageRating": 4.5
+      },
+      {
+        "title": "Edgar Allan Poe: Complete Tales & Poems",
+        "author": "Edgar Allan Poe",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584716170l/18627971._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4792050355?utm_medium=api&utm_source=rss",
+        "bookId": "18627971",
+        "rating": 0,
+        "averageRating": 4.52
+      },
+      {
+        "title": "The Soul of a Butterfly: Reflections on Life's Journey",
+        "author": "Muhammad Ali",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348386336l/536955._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4751714477?utm_medium=api&utm_source=rss",
+        "bookId": "536955",
+        "rating": 0,
+        "averageRating": 4.24
+      },
+      {
+        "title": "The Diamond Maker",
+        "author": "H.G. Wells",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677796708l/4689508._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/1729744166?utm_medium=api&utm_source=rss",
+        "bookId": "4689508",
+        "rating": 3,
+        "averageRating": 3.21
+      },
+      {
+        "title": "The Great Passage",
+        "author": "Shion Miura",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493013302l/34945597._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/2380408620?utm_medium=api&utm_source=rss",
+        "bookId": "34945597",
+        "rating": 0,
+        "averageRating": 3.85
+      },
+      {
+        "title": "Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing",
+        "author": "Ron Kohavi",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580699783l/50926257._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4677453078?utm_medium=api&utm_source=rss",
+        "bookId": "50926257",
+        "rating": 0,
+        "averageRating": 4.48
+      },
+      {
+        "title": "Man's Search for Meaning",
+        "author": "Viktor E. Frankl",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535419394l/4069._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506840492?utm_medium=api&utm_source=rss",
+        "bookId": "4069",
+        "rating": 0,
+        "averageRating": 4.38
+      },
+      {
+        "title": "Daring Greatly: How the Courage to Be Vulnerable Transforms the Way We Live, Love, Parent, and Lead",
+        "author": "Brené Brown",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337110319l/13588356._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4230619047?utm_medium=api&utm_source=rss",
+        "bookId": "13588356",
+        "rating": 0,
+        "averageRating": 4.29
+      },
+      {
+        "title": "The Children of Húrin",
+        "author": "J.R.R. Tolkien",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648491537l/17448060._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1829209100?utm_medium=api&utm_source=rss",
+        "bookId": "17448060",
+        "rating": 0,
+        "averageRating": 4.11
+      },
+      {
+        "title": "A River in Darkness: One Man's Escape from North Korea",
+        "author": "Masaji Ishikawa",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511377677l/35404398._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506839100?utm_medium=api&utm_source=rss",
+        "bookId": "35404398",
+        "rating": 0,
+        "averageRating": 4.34
+      },
+      {
+        "title": "A Mind for Numbers: How to Excel at Math and Science (Even If You Flunked Algebra)",
+        "author": "Barbara Oakley",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575009552l/18693655._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506839045?utm_medium=api&utm_source=rss",
+        "bookId": "18693655",
+        "rating": 0,
+        "averageRating": 4.17
+      },
+      {
+        "title": "The Leader You Want to Be: Five Essential Principles for Bringing Out Your Best Self--Every Day",
+        "author": "Amy Jen Su",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556858915l/45443017._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506838965?utm_medium=api&utm_source=rss",
+        "bookId": "45443017",
+        "rating": 0,
+        "averageRating": 4.21
+      },
+      {
+        "title": "Naked Statistics: Stripping the Dread from the Data",
+        "author": "Charles Wheelan",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395613778l/17986418._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506839002?utm_medium=api&utm_source=rss",
+        "bookId": "17986418",
+        "rating": 0,
+        "averageRating": 3.95
+      },
+      {
+        "title": "Astrophysics for People in a Hurry (Astrophysics for People in a Hurry Series)",
+        "author": "Neil deGrasse Tyson",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481859848l/33395538._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4506838818?utm_medium=api&utm_source=rss",
+        "bookId": "33395538",
+        "rating": 0,
+        "averageRating": 4.28
+      },
+      {
+        "title": "Collected Poems",
+        "author": "Emily Dickinson",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577657942l/50097326._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4187215935?utm_medium=api&utm_source=rss",
+        "bookId": "50097326",
+        "rating": 0,
+        "averageRating": 3.89
+      },
+      {
+        "title": "Paradise Lost",
+        "author": "John Milton",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503667874l/35522842._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3986124898?utm_medium=api&utm_source=rss",
+        "bookId": "35522842",
+        "rating": 0,
+        "averageRating": 3.95
+      },
+      {
+        "title": "Apology",
+        "author": "Plato",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1212606317l/73945._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3902711728?utm_medium=api&utm_source=rss",
+        "bookId": "73945",
+        "rating": 0,
+        "averageRating": 4.22
+      },
+      {
+        "title": "On Anger",
+        "author": "Seneca",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595680660l/54669924._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3808562884?utm_medium=api&utm_source=rss",
+        "bookId": "54669924",
+        "rating": 0,
+        "averageRating": 4.39
+      },
+      {
+        "title": "Rising Strong: The Reckoning. The Rumble. The Revolution",
+        "author": "Brené Brown",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641983383l/23317538._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4230619989?utm_medium=api&utm_source=rss",
+        "bookId": "23317538",
+        "rating": 0,
+        "averageRating": 4.24
+      },
+      {
+        "title": "Dare to Lead",
+        "author": "Brené Brown",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541026732l/40109367._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/4230619808?utm_medium=api&utm_source=rss",
+        "bookId": "40109367",
+        "rating": 0,
+        "averageRating": 4.16
+      },
+      {
+        "title": "The Stoic Philosophy of Seneca: Essays and Letters",
+        "author": "Seneca",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348218886l/97413._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/4115796495?utm_medium=api&utm_source=rss",
+        "bookId": "97413",
+        "rating": 0,
+        "averageRating": 4.17
+      },
+      {
+        "title": "The divine comedy of Dante Alighieri Volume 3",
+        "author": "Dante Alighieri",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348905167l/9986453._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/287645595?utm_medium=api&utm_source=rss",
+        "bookId": "9986453",
+        "rating": 0,
+        "averageRating": 4.19
+      },
+      {
+        "title": "Still Waters (Sandhamn Murders, #1)",
+        "author": "Viveca Sten",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429118155l/25365325._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/2848641854?utm_medium=api&utm_source=rss",
+        "bookId": "25365325",
+        "rating": 5,
+        "averageRating": 3.82
+      },
+      {
+        "title": "The Divine Comedy",
+        "author": "Dante Alighieri",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328338622l/11419666._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116011101?utm_medium=api&utm_source=rss",
+        "bookId": "11419666",
+        "rating": 0,
+        "averageRating": 4.16
+      },
+      {
+        "title": "The Adventures of Tom Sawyer",
+        "author": "Mark Twain",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436494864l/25123858._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010705?utm_medium=api&utm_source=rss",
+        "bookId": "25123858",
+        "rating": 0,
+        "averageRating": 4.16
+      },
+      {
+        "title": "The Golden Son",
+        "author": "Shilpi Somaya Gowda",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482743042l/33586211._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010655?utm_medium=api&utm_source=rss",
+        "bookId": "33586211",
+        "rating": 0,
+        "averageRating": 4.15
+      },
+      {
+        "title": "The Visual Display of Quantitative Information",
+        "author": "Edward R. Tufte",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714588269l/17744._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010657?utm_medium=api&utm_source=rss",
+        "bookId": "17744",
+        "rating": 0,
+        "averageRating": 4.38
+      },
+      {
+        "title": "The Metamorphosis",
+        "author": "Franz Kafka",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558040742l/18190743._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010646?utm_medium=api&utm_source=rss",
+        "bookId": "18190743",
+        "rating": 0,
+        "averageRating": 3.79
+      },
+      {
+        "title": "All the Light We Cannot See",
+        "author": "Anthony Doerr",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440903901l/19398490._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010635?utm_medium=api&utm_source=rss",
+        "bookId": "19398490",
+        "rating": 0,
+        "averageRating": 4.37
+      },
+      {
+        "title": "Rejection Proof: How I Beat Fear and Became Invincible Through 100 Days of Rejection",
+        "author": "Jia Jiang",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1428547113l/25324990._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010600?utm_medium=api&utm_source=rss",
+        "bookId": "25324990",
+        "rating": 0,
+        "averageRating": 4.35
+      },
+      {
+        "title": "Presentation Zen Design: Simple Design Principles and Techniques to Enhance Your Presentations (Voices That Matter)",
+        "author": "Garr Reynolds",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400884998l/19305150._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010612?utm_medium=api&utm_source=rss",
+        "bookId": "19305150",
+        "rating": 0,
+        "averageRating": 4.43
+      },
+      {
+        "title": "The House by the River",
+        "author": "Lena Manta",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501140529l/35836148._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010564?utm_medium=api&utm_source=rss",
+        "bookId": "35836148",
+        "rating": 0,
+        "averageRating": 3.92
+      },
+      {
+        "title": "The Light of the Fireflies",
+        "author": "Paul Pen",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454106732l/28802599._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010525?utm_medium=api&utm_source=rss",
+        "bookId": "28802599",
+        "rating": 0,
+        "averageRating": 3.7
+      },
+      {
+        "title": "The Gray House",
+        "author": "Mariam Petrosyan",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476844394l/32703696._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010537?utm_medium=api&utm_source=rss",
+        "bookId": "32703696",
+        "rating": 0,
+        "averageRating": 3.88
+      },
+      {
+        "title": "Inner Engineering: A Yogi's Guide to Joy",
+        "author": "Sadhguru",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471280206l/28686961._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010501?utm_medium=api&utm_source=rss",
+        "bookId": "28686961",
+        "rating": 0,
+        "averageRating": 4.24
+      },
+      {
+        "title": "Villette",
+        "author": "Charlotte Brontë",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384802879l/18619526._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010486?utm_medium=api&utm_source=rss",
+        "bookId": "18619526",
+        "rating": 0,
+        "averageRating": 3.75
+      },
+      {
+        "title": "An Introduction to Statistical Learning: with Applications in R (Springer Texts in Statistics)",
+        "author": "Gareth James",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385132472l/17397466._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/3116010436?utm_medium=api&utm_source=rss",
+        "bookId": "17397466",
+        "rating": 0,
+        "averageRating": 4.58
+      },
+      {
+        "title": "The Education of Cyrus",
+        "author": "Xenophon",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348696432l/168492._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/2043027174?utm_medium=api&utm_source=rss",
+        "bookId": "168492",
+        "rating": 0,
+        "averageRating": 4.1
+      },
+      {
+        "title": "Madness and Melancholy: An anthology of experimental poetry wrapped in philosophical stances and delirium",
+        "author": "Gargee Baruah",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501422518l/35855239._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/2076637275?utm_medium=api&utm_source=rss",
+        "bookId": "35855239",
+        "rating": 0,
+        "averageRating": 4.89
+      },
+      {
+        "title": "The Three-Body Problem (Remembrance of Earth’s Past, #1)",
+        "author": "Liu Cixin",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396560452l/18245960._SX50_.jpg",
+        "url": "https://www.goodreads.com/review/show/2162670791?utm_medium=api&utm_source=rss",
+        "bookId": "18245960",
+        "rating": 0,
+        "averageRating": 4.14
+      },
+      {
+        "title": "Stoic Six Pack (Illustrated): Meditations of Marcus Aurelius, Golden Sayings, Fragments and Discourses of Epictetus, Letters from a Stoic and The Enchiridion",
+        "author": "Marcus Aurelius",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419019062l/23690483._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/2222860639?utm_medium=api&utm_source=rss",
+        "bookId": "23690483",
+        "rating": 0,
+        "averageRating": 4.41
+      },
+      {
+        "title": "How to Win Friends and Influence People",
+        "author": "Dale Carnegie",
+        "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416592793l/11803016._SY75_.jpg",
+        "url": "https://www.goodreads.com/review/show/1185317277?utm_medium=api&utm_source=rss",
+        "bookId": "11803016",
+        "rating": 0,
+        "averageRating": 4.25
+      }
+    ]
+  }
+}

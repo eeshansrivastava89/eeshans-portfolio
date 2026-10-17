@@ -1,0 +1,43 @@
+---
+import { siteConfig } from "@/data/config";
+import { getGoodreadsData, type GoodreadsShelfKey } from "@/lib/goodreads";
+
+const { shelves } = getGoodreadsData();
+
+const SECTIONS: { key: GoodreadsShelfKey; label: string; count: number }[] = [
+	{ key: "currentlyReading", label: "Reading now", count: siteConfig.goodreads.currentlyReading },
+	{ key: "recentlyRead", label: "Recently read", count: siteConfig.goodreads.recentlyRead },
+	{ key: "toRead", label: "Want to read", count: siteConfig.goodreads.toRead },
+];
+
+const stars = (rating: number) => "★".repeat(rating) + "☆".repeat(5 - rating);
+---
+
+<div>
+	{
+		SECTIONS.map(({ key, label, count }, index) => (
+			<div class:list={[index > 0 && "gr-section"]}>
+				<div class="gr-label">{label}</div>
+				{shelves[key].slice(0, count).map((book) => (
+					<a
+						class="gr-row"
+						href={book.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						data-ph-event="goodreads_book_clicked"
+						data-ph-target-type={key}
+					>
+						<img class="gr-cover" src={book.cover} alt="" loading="lazy" decoding="async" width="34" height="50" />
+						<span class="gr-meta">
+							<span class="gr-title">{book.title}</span>
+							<span class="gr-author">{book.author}</span>
+							{book.rating > 0 && (
+								<span class="gr-stars" aria-label={`Rated ${book.rating} out of 5`}>{stars(book.rating)}</span>
+							)}
+						</span>
+					</a>
+				))}
+			</div>
+		))
+	}
+</div>

@@ -12,19 +12,17 @@ const projects = await getProjects();
 	activePage="/projects"
 >
 	<h1 class="page-title mb-6">Projects</h1>
-	<div class="project-grid project-grid-2">
+	<div class="project-grid">
 		{projects.map((project) => (
-			<div class="panel">
-				<ProjectCardContent
-					title={project.data.title}
-					hook={project.data.hook}
-					liveUrl={project.data.liveUrl}
-					repoUrl={project.data.repoUrl}
-					videoWebm={project.data.videoWebm}
-					videoMp4={project.data.videoMp4}
-					videoPoster={project.data.videoPoster}
-				/>
-			</div>
+			<ProjectCardContent
+				title={project.data.title}
+				hook={project.data.hook}
+				liveUrl={project.data.liveUrl}
+				repoUrl={project.data.repoUrl}
+				videoWebm={project.data.videoWebm}
+				videoMp4={project.data.videoMp4}
+				videoPoster={project.data.videoPoster}
+			/>
 		))}
 	</div>
 </BaseLayout>

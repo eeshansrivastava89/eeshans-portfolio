@@ -25,6 +25,9 @@ src/data/                   src/components/  (layout only, no hardcoded content)
 | Social links | `src/data/config.ts` → `socials` | URL, label, icon key per entry |
 | Nav bar links | `src/data/config.ts` | `nav` array |
 | Subscribe CTAs | `src/data/config.ts` → `subscribe` | Array with one entry per feed (`substack`, `wordpress`) — kicker, tagline, href |
+| Homepage hero | `src/data/config.ts` → `hero` | `headline` (the homepage's H1) and the one `pitch` sentence |
+| Homepage counts | `src/data/config.ts` → `homepage` | `feedItems`, `projectItems`, `github.weeks`, `github.repos` — the only place these numbers live |
+| Goodreads panel counts | `src/data/config.ts` → `goodreads` | `profileUrl`, `handle` and the three shelf sizes — shelves shown in the reading panel |
 
 ### About Page
 
@@ -41,11 +44,11 @@ src/data/                   src/components/  (layout only, no hardcoded content)
 
 | What | File | Notes |
 |------|------|-------|
-| About sidebar panel | `src/components/Sidebar.astro` | Bio paragraphs + stat rows; counts come from the collections live |
-| GitHub Activity panel | `src/components/GitHubActivity.astro` | Heatmap + breakdown; data from the GitHub API (see below) |
-| Writing feed | Substack feed (via `pnpm refresh:substack`) | Latest `homepagePostCount` posts (default 3) |
-| Blog feed | WordPress feed (via `pnpm refresh:wordpress`) | Latest 10 posts |
-| Which projects appear | `src/content/projects/*.mdx` → `date` | Newest 4 shown as compact cards |
+| Hero headline + pitch | `src/data/config.ts` → `hero` | The hero is the only H1 on the page |
+| GitHub Activity panel | `src/components/GitHubActivity.astro` | Heatmap + breakdown; window and repo rows come from `siteConfig.homepage.github`; data from the GitHub API (see below) |
+| Writing feed | Substack feed (via `pnpm refresh:substack`) | Latest `siteConfig.homepage.feedItems` posts (6) |
+| Blog feed | WordPress feed (via `pnpm refresh:wordpress`) | Latest `siteConfig.homepage.feedItems` posts (6) |
+| Which projects appear | `src/content/projects/*.mdx` → `date` | Newest `siteConfig.homepage.projectItems` shown as compact cards (6) |
 
 ### Projects Page
 
@@ -162,6 +165,15 @@ Fetched by running `pnpm refresh:wordpress` (or automatically in CI on schedule)
 - Refresh script: `scripts/refresh-wordpress.mjs` (public WordPress.com REST API, no proxy)
 - Data source: `src/lib/wordpress.ts`
 - Posts are sourced entirely from WordPress — no local MDX files.
+
+### Goodreads Shelf (homepage sidebar)
+
+Fetched by running `pnpm refresh:goodreads`, in the same 4-hour CI run as the other snapshots.
+- Cache file: `.cache/goodreads.json` (committed)
+- Refresh script: `scripts/refresh-goodreads.mjs` — per-shelf RSS (`currently-reading`, `read`, `to-read`); the public API was retired in 2020, the RSS still works
+- Data source: `src/lib/goodreads.ts`
+- Shelf sizes and the profile link: `src/data/config.ts` → `goodreads`
+- A missing or malformed snapshot stops the build — the panel never renders half-empty
 
 ---
 
