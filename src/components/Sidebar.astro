@@ -48,24 +48,6 @@ const { grouping } = Astro.props;
 
 	<div class="panel" style="--order: 5">
 		<div class="ph">
-			<h2>GitHub Activity</h2>
-			<span class="ph-links">
-				<a
-					href={siteConfig.socials.find((s) => s.key === "github")?.href}
-					target="_blank"
-					rel="noopener noreferrer"
-					data-ph-event="github_activity_clicked"
-					data-ph-target-type="profile"
-				>@eeshansrivastava89 →</a>
-			</span>
-		</div>
-		<div class="pb">
-			<GitHubActivity />
-		</div>
-	</div>
-
-	<div class="panel" style="--order: 6">
-		<div class="ph">
 			<h2>Goodreads</h2>
 			<span class="ph-links">
 				<a
@@ -79,6 +61,24 @@ const { grouping } = Astro.props;
 		</div>
 		<div class="pb">
 			<GoodreadsActivity />
+		</div>
+	</div>
+
+	<div class="panel" style="--order: 6">
+		<div class="ph">
+			<h2>GitHub Activity</h2>
+			<span class="ph-links">
+				<a
+					href={siteConfig.socials.find((s) => s.key === "github")?.href}
+					target="_blank"
+					rel="noopener noreferrer"
+					data-ph-event="github_activity_clicked"
+					data-ph-target-type="profile"
+				>@eeshansrivastava89 →</a>
+			</span>
+		</div>
+		<div class="pb">
+			<GitHubActivity />
 		</div>
 	</div>
 </aside>
