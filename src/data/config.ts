@@ -30,8 +30,8 @@ export const siteConfig = {
 		},
 	] as const,
 	nav: [
-		{ label: "Technical Writing", href: "/writing" },
-		{ label: "Personal Blog", href: "/blog" },
+		{ label: "Writing", href: "/writing" },
+		{ label: "Blog", href: "/blog" },
 		{ label: "Projects", href: "/projects" },
 		{ label: "About", href: "/about" },
 	],

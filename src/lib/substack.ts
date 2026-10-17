@@ -47,6 +47,17 @@ export function renderPostHtml(html: string): string {
 	// Third-party embed scripts (e.g. Datawrapper auto-resize) — never run
 	// inline scripts from feed HTML; the iframe keeps its fixed dimensions
 	$("script").remove();
+	// Heading ids for the floating TOC (stable slugs, no position suffixes —
+	// import runs are idempotent so the same post always gets the same ids)
+	$("h2, h3, h4").each((i, el) => {
+		const slug = $(el)
+			.text()
+			.toLowerCase()
+			.replace(/[^a-z0-9\s-]/g, "")
+			.trim()
+			.replace(/\s+/g, "-");
+		if (slug) $(el).attr("id", slug || `section-${i}`);
+	});
 
 	// Unwrap Substack's image containers down to plain figure/img/figcaption,
 	// keeping the full-res link around the image

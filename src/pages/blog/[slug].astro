@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "@/layouts/Base.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import PostSidebar from "@/components/PostSidebar.astro";
-import { getBlogPosts, formatDate } from "@/data/content";
+import { getBlogPosts, formatDate, getPostHeadings } from "@/data/content";
 
 export async function getStaticPaths() {
 	const posts = await getBlogPosts();
@@ -13,13 +14,14 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const wordPressUrl = post.data.externalUrl;
+const tocHeadings = getPostHeadings(post.data.body ?? "");
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} activePage="/blog" canonical={wordPressUrl}>
+<BaseLayout title={post.data.title} description={post.data.description} activePage="/blog" canonical={wordPressUrl} image={post.data.coverImage}>
 	<div class="layout">
 		<PostSidebar
-			back={{ label: "Personal Blog", href: "/blog" }}
 			feed="wordpress"
+			title={post.data.title}
 			metadata={{
 				date: post.data.createdAt,
 				groups: post.data.categories.map((c) => ({
@@ -27,17 +29,24 @@ const wordPressUrl = post.data.externalUrl;
 					href: `/blog/category/${c.slug}`,
 				})),
 			}}
+			headings={tocHeadings}
 		/>
 
 		<article class="main min-w-0">
-			<header class="mb-10">
-				<h1 class="mb-3 text-[24px] font-extrabold tracking-[-0.02em] leading-tight">{post.data.title}</h1>
-				<p class="meta text-[13px] text-text-faint">
-					{formatDate(post.data.createdAt)}
+			<Breadcrumb
+				crumbs={[
+					{ label: "Personal Blog", href: "/blog" },
+					{ label: String(post.data.createdAt.getUTCFullYear()), href: `/blog/${post.data.createdAt.getUTCFullYear()}` },
+				]}
+			/>
+			<header class="mb-10" style="--order: 2">
+				<h1 id="top" class="page-title mb-3">{post.data.title}</h1>
+				<p class="text-meta text-text-faint">
+					<span class="font-mono">{formatDate(post.data.createdAt)}</span>
 					{" · "}
 					<a
 						href={wordPressUrl}
-						class="text-link transition-colors hover:text-link-2"
+						class="text-accent transition-colors hover:text-accent-2"
 						target="_blank"
 						rel="noopener noreferrer"
 						data-ph-event="wordpress_article_clicked"
@@ -47,7 +56,7 @@ const wordPressUrl = post.data.externalUrl;
 			</header>
 
 			{post.data.body && (
-				<article class="post-body prose prose-neutral dark:prose-invert max-w-none" set:html={post.data.body} />
+				<article class="post-body prose prose-neutral dark:prose-invert" style="--order: 4" set:html={post.data.body} />
 			)}
 		</article>
 	</div>

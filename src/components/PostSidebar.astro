@@ -1,42 +1,49 @@
 ---
 import SubscribeLink from "@/components/SubscribeLink.astro";
-import Icon from "@/components/Icon.astro";
+import PostToc from "@/components/PostToc.astro";
+import type { PostHeading } from "@/data/content";
 import { formatDate } from "@/data/content";
 
 interface Props {
-	/** Section label + back href */
-	back: { label: string; href: string };
 	/** Subscribe config per feed */
 	feed: "substack" | "wordpress";
+	/** Post title for the TOC root entry */
+	title: string;
 	/** Post metadata rows */
 	metadata: {
 		date: Date;
 		groups: { name: string; href: string }[];
 	};
+	/** Post headings for the floating TOC */
+	headings: PostHeading[];
 }
 
-const { back, feed, metadata } = Astro.props;
+const { feed, title, metadata, headings } = Astro.props;
+
+
 ---
 
-<aside class="sidebar flex flex-col gap-4">
-	<a href={back.href} class="meta text-[13px] text-text-faint transition-colors hover:text-accent">
-		← {back.label}
-	</a>
+<aside class="sidebar sidebar-stick flex flex-col gap-4">
+	<PostToc title={title} headings={headings} />
 
-	<div class="panel">
+	<div style="--order: 10">
+		<SubscribeLink feed={feed} />
+	</div>
+
+	<div class="panel" style="--order: 90">
 		<div class="ph">
 			<h2>Post details</h2>
 		</div>
 		<div class="pb">
-			<div class="meta flex justify-between py-1.5 border-b border-line text-[13px]">
-				<span>published</span>
-				<b class="font-medium text-text">{formatDate(metadata.date)}</b>
+			<div class="flex justify-between py-1.5 border-b border-line text-meta">
+				<span class="text-text-soft">published</span>
+				<b class="font-mono font-medium text-text">{formatDate(metadata.date)}</b>
 			</div>
 			{metadata.groups.length > 0 && (
 				<div class="pt-1.5">
 					{metadata.groups.map((group) => (
 						<a
-							class="group-row meta block py-1 text-[13px] text-text-soft transition-colors hover:text-accent"
+							class="group-row block py-1 text-ui text-text-soft transition-colors hover:text-accent"
 							href={group.href}
 						>
 							{group.name}
@@ -46,6 +53,4 @@ const { back, feed, metadata } = Astro.props;
 			)}
 		</div>
 	</div>
-
-	<SubscribeLink feed={feed} />
 </aside>

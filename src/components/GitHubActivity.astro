@@ -64,8 +64,8 @@ const sections = [
 ---
 
 <div>
-	<div class="meta text-[13px] text-text-faint mb-2.5">
-		<b class="font-medium text-text">{followers.toLocaleString()}</b> followers · <b class="font-medium text-text">{totalStars.toLocaleString()}</b> stars · <b class="font-medium text-text">{publicRepos.toLocaleString()}</b> repos · <b class="font-medium text-text">{sixMonthContributions.toLocaleString()}</b> contributions in the last 6 months
+	<div class="text-meta text-text-faint mb-2.5">
+		<b class="font-mono font-medium text-text">{followers.toLocaleString()}</b> followers · <b class="font-mono font-medium text-text">{totalStars.toLocaleString()}</b> stars · <b class="font-mono font-medium text-text">{publicRepos.toLocaleString()}</b> repos · <b class="font-mono font-medium text-text">{sixMonthContributions.toLocaleString()}</b> contributions in the last 6 months
 	</div>
 	<div class="gh-contrib-grid mb-1" style={`--weeks: ${weeks.length};`}>
 		{weeks.map((week) => (
@@ -83,18 +83,18 @@ const sections = [
 		{sections.map((section) =>
 			section.rows.length > 0 ? (
 				<div>
-					<h3 class="mb-0.5 text-[14px] font-semibold">{section.title}</h3>
+					<h3 class="mb-0.5 text-ui font-semibold">{section.title}</h3>
 					{section.rows.map((row) => (
 						<a
 							href={row.url || "#"}
-							class="flex items-baseline gap-3 py-0.5 text-[13px] hover:[&>.t]:text-accent"
+							class="flex items-baseline gap-3 py-0.5 text-meta hover:[&>.t]:text-accent"
 							target="_blank"
 							rel="noopener noreferrer"
 							data-ph-event="github_activity_clicked"
 							data-ph-target-type={section.type}
 						>
 							<span class="t min-w-0 shrink-0 truncate font-medium">{row.repo}</span>
-							<span class="meta min-w-0 flex-1 truncate text-right text-text-faint">{row.detail}</span>
+							<span class="min-w-0 flex-1 truncate text-right text-text-faint">{row.detail}</span>
 						</a>
 					))}
 				</div>
@@ -154,7 +154,7 @@ const sections = [
 		transform-origin: 50% 100%;
 		padding: 2px 6px;
 		border-radius: 4px;
-		font-size: 10px;
+		font-size: 13px;
 		font-family: var(--font-mono);
 		white-space: nowrap;
 		color: var(--color-bg);

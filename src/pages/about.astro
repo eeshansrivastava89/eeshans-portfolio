@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/Base.astro";
 import Icon from "@/components/Icon.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
+import StatRows from "@/components/StatRows.astro";
 import SubscribeBox from "@/components/SubscribeBox.astro";
 import TimelineEntry from "@/components/TimelineEntry.astro";
 import { getCollection, render } from "astro:content";
@@ -22,92 +23,118 @@ const visibleImpact = impact
 	.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="About" activePage="/about">
-	<!-- Profile photo + bio -->
-	<div class="mb-14 after:clear-both after:block">
-		<img
-			src="/images/art-profile-eeshan.jpeg"
-			alt="Eeshan Srivastava"
-			class="mr-7 mb-4 h-auto w-[min(240px,45vw)] float-left rounded-xl border border-line"
-		/>
-		{
-			aboutRendered && (
-				<div class="text-[16px] text-text-soft leading-relaxed [&>p]:mb-5 [&>p>a]:text-link [&>p>a]:transition-colors hover:[&>p>a]:text-link-2 [&>strong]:font-semibold [&>strong]:text-text">
-					<aboutRendered.Content />
+<BaseLayout
+	title="About"
+	description="Eeshan Srivastava leads a data science team at Starbucks focused on AI/ML, personalization, and experimentation. Background, experience, and recognition."
+	activePage="/about"
+>
+	<h1 class="page-title mb-6">About</h1>
+
+	<div class="layout">
+		<aside class="sidebar sidebar-stick flex flex-col gap-4">
+			<div class="panel overflow-hidden" style="--order: 2">
+				<img
+					src="/images/art-profile-eeshan.jpeg"
+					alt="Eeshan Srivastava"
+					class="block h-auto w-full"
+				/>
+			</div>
+
+			<div class="panel" style="--order: 3">
+				<div class="ph">
+					<h2>At a glance</h2>
 				</div>
-			)
-		}
-	</div>
+				<div class="pb">
+					<StatRows />
+				</div>
+			</div>
 
-	<!-- Social links -->
-	<SocialLinks class="mb-6" />
+			<div class="panel" style="--order: 4">
+				<div class="ph">
+					<h2>Elsewhere</h2>
+				</div>
+				<div class="pb">
+					<SocialLinks vertical />
+				</div>
+			</div>
+		</aside>
 
-	<!-- Recognition & Leadership -->
-	<section class="mt-16">
-		<h2 class="kicker mb-6 border-b border-line pb-2">Recognition & Leadership</h2>
-		<div class="flex flex-col">
-			{visibleImpact.map((cat) => (
-				<div class="border-b border-line py-5 last:border-b-0">
-					<h3 class="mb-2.5 flex items-center gap-2 font-semibold">
-						<Icon name={cat.data.icon} size={15} className="text-accent" />
-						{cat.data.title}
-					</h3>
-					<ul class="space-y-1.5">
-						{cat.data.items.map((item: { text: string; meta?: string; link?: string; linkType?: string }) => (
-							<li class="text-text-soft">
-								{item.link ? (
-									<a href={item.link} class="inline-flex items-center gap-1.5 text-text transition-colors hover:text-link-2" target="_blank" rel="noopener noreferrer">
-										{item.text}
-									<Icon name={linkTypeIcons[item.linkType ?? "externalLink"] || "externalLink"} size={14} className="shrink-0" />
-									</a>
-								) : (
-									<span class="text-text">{item.text}</span>
-								)}
-								{item.meta && (
-									<span class="meta ml-2 text-[13px] text-text-faint">{item.meta}</span>
-								)}
-							</li>
+		<div class="main min-w-0">
+			<article style="--order: 5">
+				<!-- Bio -->
+				<div class="text-reading text-text-soft leading-[1.65] [&>p]:mb-5 [&>p>a]:text-accent [&>p>a]:transition-colors hover:[&>p>a]:text-accent-2 [&>strong]:font-semibold [&>strong]:text-text">
+					{aboutRendered && <aboutRendered.Content />}
+				</div>
+
+				<!-- Recognition & Leadership -->
+				<section class="mt-16">
+					<h2 class="mb-6 border-b border-line pb-2 text-subhead font-bold tracking-[-0.01em]">Recognition & Leadership</h2>
+					<div class="flex flex-col">
+						{visibleImpact.map((cat) => (
+							<div class="border-b border-line py-5 last:border-b-0">
+								<h3 class="mb-2.5 flex items-center gap-2 text-reading font-semibold">
+									<Icon name={cat.data.icon} size={15} className="text-text-faint" />
+									{cat.data.title}
+								</h3>
+								<ul class="space-y-1.5 text-reading">
+									{cat.data.items.map((item: { text: string; meta?: string; link?: string; linkType?: string }) => (
+										<li class="text-text-soft">
+											{item.link ? (
+												<a href={item.link} class="inline-flex items-center gap-1.5 text-text transition-colors hover:text-accent" target="_blank" rel="noopener noreferrer">
+													{item.text}
+												<Icon name={linkTypeIcons[item.linkType ?? "externalLink"] || "externalLink"} size={14} className="shrink-0" />
+												</a>
+											) : (
+												<span class="text-text">{item.text}</span>
+											)}
+											{item.meta && (
+												<span class="ml-2 text-meta text-text-faint">{item.meta}</span>
+											)}
+										</li>
+									))}
+								</ul>
+							</div>
 						))}
-					</ul>
+					</div>
+				</section>
+
+				<!-- Experience -->
+				<section class="mt-16">
+					<h2 class="mb-6 border-b border-line pb-2 text-subhead font-bold tracking-[-0.01em]">Experience</h2>
+					<div class="flex flex-col">
+						{work.map((entry) => (
+							<TimelineEntry
+								timespan={entry.data.timespan}
+								title={entry.data.title}
+								organization={entry.data.company}
+								detail={entry.data.description}
+								logo={entry.data.logo}
+							/>
+						))}
+					</div>
+				</section>
+
+				<!-- Education -->
+				<section class="mt-16">
+					<h2 class="mb-6 border-b border-line pb-2 text-subhead font-bold tracking-[-0.01em]">Education</h2>
+					<div class="flex flex-col">
+						{education.map((entry) => (
+							<TimelineEntry
+								timespan={entry.data.timespan}
+								title={entry.data.title}
+								organization={entry.data.company}
+								detail={entry.data.description}
+								logo={entry.data.logo}
+							/>
+						))}
+					</div>
+				</section>
+
+				<!-- Subscribe -->
+				<div class="mt-16">
+					<SubscribeBox feed="substack" />
 				</div>
-			))}
+			</article>
 		</div>
-	</section>
-
-	<!-- Experience -->
-	<section class="mt-16">
-		<h2 class="kicker mb-6 border-b border-line pb-2">Experience</h2>
-		<div class="flex flex-col">
-			{work.map((entry) => (
-				<TimelineEntry
-					timespan={entry.data.timespan}
-					title={entry.data.title}
-					organization={entry.data.company}
-					detail={entry.data.description}
-					logo={entry.data.logo}
-				/>
-			))}
-		</div>
-	</section>
-
-	<!-- Education -->
-	<section class="mt-16">
-		<h2 class="kicker mb-6 border-b border-line pb-2">Education</h2>
-		<div class="flex flex-col">
-			{education.map((entry) => (
-				<TimelineEntry
-					timespan={entry.data.timespan}
-					title={entry.data.title}
-					organization={entry.data.company}
-					detail={entry.data.description}
-					logo={entry.data.logo}
-				/>
-			))}
-		</div>
-	</section>
-
-	<!-- Subscribe -->
-	<div class="mt-16">
-		<SubscribeBox feed="substack" />
 	</div>
 </BaseLayout>

@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/Base.astro";
 import FeedLayout from "@/components/FeedLayout.astro";
 import { getBlogPosts } from "@/data/content";
 
-const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getUTCFullYear();
 
 export async function getStaticPaths() {
 	const allPosts = await getBlogPosts();
@@ -25,7 +25,7 @@ if (!catName) {
 
 const byYear = new Map<string, number>();
 for (const post of allPosts) {
-	const y = post.data.createdAt.getFullYear().toString();
+	const y = post.data.createdAt.getUTCFullYear().toString();
 	byYear.set(y, (byYear.get(y) ?? 0) + 1);
 }
 const yearLinks = [...byYear.entries()]
@@ -55,7 +55,11 @@ const posts = allPosts
 	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/blog/${p.id}` }));
 ---
 
-<BaseLayout title={`Personal Blog — ${catName}`} activePage="/blog">
+<BaseLayout
+	title={`Personal Blog — ${catName}`}
+	description={`${posts.length} personal blog posts by Eeshan Srivastava in “${catName}”.`}
+	activePage="/blog"
+>
 	<FeedLayout
 		title="Personal Blog"
 		feed="wordpress"

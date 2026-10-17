@@ -1,0 +1,66 @@
+---
+interface Crumb {
+	label: string;
+	href?: string;
+}
+
+interface Props {
+	/** Ordered path from section root to current page; last crumb is the current page */
+	crumbs: Crumb[];
+}
+
+const { crumbs } = Astro.props;
+---
+
+<nav class="breadcrumb panel" style="--order: 1" aria-label="Breadcrumb">
+	<div class="crumb-row">
+		{
+			crumbs.map((crumb, i) =>
+				i < crumbs.length - 1 ? (
+					<a href={crumb.href} class="crumb-link">
+						{crumb.label}
+					</a>
+				) : (
+					<span class="crumb-current" aria-current="page">
+						{crumb.label}
+					</span>
+				),
+			)
+		}
+	</div>
+</nav>
+
+<style>
+	/* Card layout matches the sidebar panels: .panel chrome from globals,
+	   breadcrumb-specific typography here */
+	.breadcrumb {
+		padding: 12px 16px;
+		margin-bottom: 16px;
+	}
+	.crumb-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 10px;
+		font-family: var(--font-sans);
+		font-size: var(--text-ui);
+	}
+	.crumb-row > * + *::before {
+		content: "/";
+		margin-right: 10px;
+		color: var(--color-text-faint);
+	}
+	.crumb-link {
+		color: var(--color-text-soft);
+		font-weight: 500;
+		text-decoration: none;
+		transition: color 150ms ease;
+	}
+	.crumb-link:hover {
+		color: var(--color-accent);
+	}
+	.crumb-current {
+		color: var(--color-text);
+		font-weight: 600;
+	}
+</style>

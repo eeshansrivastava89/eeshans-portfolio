@@ -3,11 +3,11 @@ import BaseLayout from "@/layouts/Base.astro";
 import FeedLayout from "@/components/FeedLayout.astro";
 import { getBlogPosts } from "@/data/content";
 
-const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getUTCFullYear();
 
 export async function getStaticPaths() {
 	const allPosts = await getBlogPosts();
-	const years = [...new Set(allPosts.map((p) => p.data.createdAt.getFullYear()))].sort((a, b) => b - a);
+	const years = [...new Set(allPosts.map((p) => p.data.createdAt.getUTCFullYear()))].sort((a, b) => b - a);
 	return years.map((year) => ({ params: { year: year.toString() } }));
 }
 
@@ -17,7 +17,7 @@ const year = Number(requestedYear);
 
 const byYear = new Map<string, number>();
 for (const post of allPosts) {
-	const y = post.data.createdAt.getFullYear().toString();
+	const y = post.data.createdAt.getUTCFullYear().toString();
 	byYear.set(y, (byYear.get(y) ?? 0) + 1);
 }
 const yearLinks = [...byYear.entries()]
@@ -42,11 +42,15 @@ const categoryLinks = [...catCounts.entries()]
 	.map(([slug, { name, count }]) => ({ label: name, href: `/blog/category/${slug}`, count, active: false }));
 
 const posts = allPosts
-	.filter((p) => p.data.createdAt.getFullYear() === year)
+	.filter((p) => p.data.createdAt.getUTCFullYear() === year)
 	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/blog/${p.id}` }));
 ---
 
-<BaseLayout title={`Personal Blog — ${requestedYear}`} activePage="/blog">
+<BaseLayout
+	title={`Personal Blog — ${requestedYear}`}
+	description={`${posts.length} personal blog posts by Eeshan Srivastava from ${requestedYear}.`}
+	activePage="/blog"
+>
 	<FeedLayout
 		title="Personal Blog"
 		feed="wordpress"

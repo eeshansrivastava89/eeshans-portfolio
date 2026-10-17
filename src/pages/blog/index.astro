@@ -8,11 +8,11 @@ import { getBlogPosts } from "@/data/content";
 // Category URLs use WP category slugs.
 
 const allPosts = await getBlogPosts();
-const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getUTCFullYear();
 
 const byYear = new Map<string, number>();
 for (const post of allPosts) {
-	const year = post.data.createdAt.getFullYear().toString();
+	const year = post.data.createdAt.getUTCFullYear().toString();
 	byYear.set(year, (byYear.get(year) ?? 0) + 1);
 }
 const yearLinks = [...byYear.entries()]
@@ -37,11 +37,15 @@ const categoryLinks = [...catCounts.entries()]
 	.map(([slug, { name, count }]) => ({ label: name, href: `/blog/category/${slug}`, count, active: false }));
 
 const posts = allPosts
-	.filter((p) => p.data.createdAt.getFullYear() === CURRENT_YEAR)
+	.filter((p) => p.data.createdAt.getUTCFullYear() === CURRENT_YEAR)
 	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/blog/${p.id}` }));
 ---
 
-<BaseLayout title="Personal Blog" activePage="/blog">
+<BaseLayout
+	title="Personal Blog"
+	description={`Eeshan Srivastava's personal blog: ${allPosts.length} posts of essays, poems, book reviews, and drawings since ${yearLinks.at(-1)!.label}.`}
+	activePage="/blog"
+>
 	<FeedLayout
 		title="Personal Blog"
 		feed="wordpress"

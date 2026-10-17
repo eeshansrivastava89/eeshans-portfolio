@@ -48,6 +48,9 @@ export const lucideIcons: Record<string, IconData> = {
 	newspaper: parseSvg(lucideStatic.Newspaper),
 	externalLink: parseSvg(lucideStatic.ExternalLink),
 	globe: parseSvg(lucideStatic.Globe),
+	play: parseSvg(lucideStatic.Play),
+	sun: parseSvg(lucideStatic.Sun),
+	moon: parseSvg(lucideStatic.Moon),
 };
 
 /** Mapping from impact item linkType to the icon key */

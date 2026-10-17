@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
-import { execFileSync } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
+import * as cheerio from "cheerio";
+import { MEDIA_SELECTOR, repairMediaUrl } from "../src/lib/hotlinked-media.mjs";
 
 // Public WordPress.com REST API — no proxy needed (unlike Substack, this API
 // is reachable from CI). The link field points at wpcomstaging.com, which is
@@ -12,6 +15,7 @@ const POSTS_API_URL =
 const SNAPSHOT_PATH = path.join(process.cwd(), ".cache", "wordpress-posts.json");
 const MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
 const PER_PAGE = 100;
+const PROBE_CONCURRENCY = 12;
 
 // Decode WP-encoded HTML entities to real characters (curly quotes,
 // ellipses, dashes) for plain-text fields (title, excerpt)
@@ -40,8 +44,13 @@ function requireString(value, label, postLabel) {
   return value;
 }
 
+// `date` is the site-local wall time WordPress displays, with no offset (the
+// site's timezone changed over the years: IST, then Pacific). Store that wall
+// time as UTC — never parse it in the machine's zone — so the snapshot is
+// identical wherever the refresh runs, and formatDate (UTC) shows exactly the
+// day WordPress shows. The instant may be off by hours; only the day is used.
 function normalizeDate(value, postLabel) {
-  const date = new Date(requireString(value, "date", postLabel));
+  const date = new Date(`${requireString(value, "date", postLabel)}Z`);
   if (Number.isNaN(date.getTime())) {
     throw new Error(
       `WordPress API post ${postLabel} has invalid date: ${value}`
@@ -107,7 +116,78 @@ function normalizePost(post) {
     content,
     coverImage,
     categories,
+    deadMedia: [],
   };
+}
+
+// Old posts hotlink third-party media (IMDb, Goodreads, a lapsed personal
+// domain) that has since disappeared. Probe each body image and video as the
+// browser will request it — repaired URL, eeshans.com referer — and record
+// the ones that are definitively gone, so the render step can drop them:
+// - host no longer resolves (curl exit 6, after retries)
+// - origin refuses it (4xx other than 408/429)
+// - origin answers with a page, not media (parked domain, soft 404)
+// Timeouts, 5xx and 429 count as live: a flaky host must not delete media.
+const execFileAsync = promisify(execFile);
+async function probeMedia(url) {
+  const result = await execFileAsync(
+    "curl",
+    [
+      "--silent",
+      "--location",
+      "--retry",
+      "2",
+      "--retry-all-errors",
+      "--max-time",
+      "30",
+      // First bytes only — enough for status and type, not a whole video
+      "--range",
+      "0-1023",
+      "--output",
+      "/dev/null",
+      "--write-out",
+      "%{http_code} %{content_type}",
+      "--user-agent",
+      "Mozilla/5.0 (compatible; eeshans.com media check)",
+      "--referer",
+      "https://eeshans.com/",
+      url,
+    ],
+    { encoding: "utf-8" }
+  ).then(
+    ({ stdout }) => ({ code: 0, stdout }),
+    (error) => ({ code: error.code, stdout: error.stdout ?? "" })
+  );
+  const [status, type = ""] = result.stdout.split(" ");
+  const httpStatus = Number(status);
+  const dead =
+    result.code === 6 ||
+    (httpStatus >= 400 && httpStatus < 500 && httpStatus !== 408 && httpStatus !== 429) ||
+    (httpStatus >= 200 && httpStatus < 300 && !/^(image|video)\//.test(type));
+  if (dead) {
+    console.log(`Dead media (${result.code === 6 ? "unresolvable host" : `${status} ${type}`}): ${url}`);
+  } else if (httpStatus < 200 || httpStatus >= 300) {
+    console.log(`Media probe inconclusive (curl ${result.code}, ${status}), keeping: ${url}`);
+  }
+  return !dead;
+}
+
+async function findDeadMedia(posts) {
+  const mediaByPost = posts.map((post) => {
+    const $ = cheerio.load(post.content, null, false);
+    return [...new Set($(MEDIA_SELECTOR).toArray().map((el) => repairMediaUrl($(el).attr("src"))))];
+  });
+  const urls = [...new Set(mediaByPost.flat())];
+  const live = new Map();
+  for (let i = 0; i < urls.length; i += PROBE_CONCURRENCY) {
+    const batch = urls.slice(i, i + PROBE_CONCURRENCY);
+    const results = await Promise.all(batch.map(probeMedia));
+    batch.forEach((url, j) => live.set(url, results[j]));
+  }
+  posts.forEach((post, i) => {
+    post.deadMedia = mediaByPost[i].filter((url) => !live.get(url)).sort();
+  });
+  return { probed: urls.length, dead: [...live.values()].filter((ok) => !ok).length };
 }
 
 function fetchPage(page) {
@@ -213,6 +293,13 @@ posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 if (posts.length === 0) {
   throw new Error(`WordPress API returned zero posts: ${POSTS_API_URL}`);
+}
+
+const { probed, dead } = await findDeadMedia(posts);
+console.log(`Probed ${probed} media URLs: ${dead} dead.`);
+// Most media dead at once means the network is broken, not the web
+if (dead > probed / 2) {
+  throw new Error(`${dead} of ${probed} media URLs probed dead — refusing to write a snapshot that strips them`);
 }
 
 fs.mkdirSync(path.dirname(SNAPSHOT_PATH), { recursive: true });

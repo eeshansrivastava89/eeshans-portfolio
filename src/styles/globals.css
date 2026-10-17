@@ -10,32 +10,40 @@
 	--font-sans: "Libre Franklin", system-ui, -apple-system, sans-serif;
 	--font-mono: "IBM Plex Mono", "Fira Code", monospace;
 
+	/* Type scale — the only sizes the UI may use (T1).
+	   13 meta · 14 UI/lists · 16 reading · 19 subheads · 24 titles · 32 hero */
+	--text-meta: 13px;
+	--text-meta--line-height: 1.4;
+	--text-ui: 14px;
+	--text-ui--line-height: 1.5;
+	--text-reading: 16px;
+	--text-reading--line-height: 1.65;
+	--text-subhead: 19px;
+	--text-subhead--line-height: 1.3;
+	--text-title: 24px;
+	--text-title--line-height: 1.15;
+	--text-hero: 32px;
+	--text-hero--line-height: 1.05;
+
 	/* Warm paper palette — light */
 	--color-bg: #faf9f7;
 	--color-bg-raised: #ffffff;
 	--color-bg-inset: #f1efeb;
 	--color-text: #1c1a17;
 	--color-text-soft: #5d574d;
-	--color-text-faint: #98917f;
+	--color-text-faint: #786f61;
 	--color-line: #e5e1d8;
 	--color-line-strong: #c9c2b2;
+	/* One interactive accent (T5); green below is data only */
 	--color-accent: #c2410c;
+	--color-accent-2: #e35a1f;
 	--color-accent-soft: #fdeee2;
-	--color-tech: #0e7490;
-	--color-tech-soft: #e0f2f7;
-	--color-human: #9d3fb8;
-	--color-human-soft: #f5ebfa;
 	/* Green heatmap — the sole accent that stays green in both themes */
 	--color-heat-0: #f1efeb;
 	--color-heat-1: #b7e2b1;
 	--color-heat-2: #7ec97c;
 	--color-heat-3: #4a9f52;
 	--color-heat-4: #2c7a3f;
-	/* Accent-2 (accent hover) and link/link-2 (content links) are first-class
-	   tokens — not compat aliases */
-	--color-accent-2: #e35a1f;
-	--color-link: #0e7490;
-	--color-link-2: #0f5f7a;
 }
 
 /* Dark theme overrides (class on <html>) */
@@ -45,23 +53,17 @@
 	--color-bg-inset: #22201a;
 	--color-text: #ece7dd;
 	--color-text-soft: #a8a091;
-	--color-text-faint: #6e685c;
+	--color-text-faint: #948c7b;
 	--color-line: #2e2b23;
 	--color-line-strong: #443f33;
 	--color-accent: #f0965a;
 	--color-accent-soft: #332017;
-	--color-tech: #67c3dc;
-	--color-tech-soft: #12262c;
-	--color-human: #c08ad4;
-	--color-human-soft: #251a2a;
 	--color-heat-0: #22201a;
 	--color-heat-1: #1d3a24;
 	--color-heat-2: #2c5a33;
 	--color-heat-3: #3f7f43;
 	--color-heat-4: #5cb961;
 	--color-accent-2: #f5ab74;
-	--color-link: #67c3dc;
-	--color-link-2: #8fd6e8;
 }
 
 @layer base {
@@ -72,7 +74,7 @@
 		color-scheme: dark;
 	}
 	html {
-		font-size: 14px;
+		font-size: 16px;
 	}
 	body {
 		background: var(--color-bg);
@@ -81,18 +83,27 @@
 		line-height: 1.6;
 		-webkit-font-smoothing: antialiased;
 	}
-	/* Type scale: 13 / 14 / 16 / 18 (+24px/800 name). Nothing below 12px. */
+	/* Type scale lives in @theme. Mono is reserved for dates, counts, stats
+	   and code (T3) — never for labels or navigation. */
 	.meta {
 		font-family: var(--font-mono);
-		font-size: 13px;
-		letter-spacing: 0.02em;
+		font-size: var(--text-meta);
+		letter-spacing: 0;
 	}
 	.kicker {
-		font-family: var(--font-mono);
-		font-size: 13px;
-		letter-spacing: 0.12em;
+		font-family: var(--font-sans);
+		font-size: var(--text-meta);
+		font-weight: 600;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--color-text-faint);
+	}
+	/* Page title step (T1): every page-level H1 uses it */
+	.page-title {
+		font-size: var(--text-title);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		line-height: 1.15;
 	}
 	* {
 		border-color: var(--color-line);
@@ -114,12 +125,91 @@
 .layout {
 	display: grid;
 	grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-	gap: 16px;
+	gap: 40px;
 	align-items: start;
 }
 @media (max-width: 960px) {
 	.layout {
 		grid-template-columns: minmax(0, 1fr);
+		gap: 0; /* children provide their own spacing via margin */
+	}
+	/* Single column: flatten both columns and order panels explicitly,
+	   so mobile reads top-to-bottom in content-priority order */
+	.layout > .sidebar,
+	.layout > .main {
+		display: contents;
+	}
+	.layout > .sidebar > *,
+	.layout > .main > * {
+		order: var(--order, 100);
+		margin-bottom: 16px; /* same rhythm as the desktop grid gap; last-child
+		                      reset removed — flattened children stack, so every
+		                      panel needs the margin regardless of origin column */
+	}
+}
+
+/* Header: name + nav on one row (desktop); stacked name-above-nav (mobile).
+   Border + padding live here, not on inner wrappers, so the stacked variant
+   keeps the same rhythm as the desktop row. */
+.site-header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	border-bottom: 1px solid var(--color-line);
+	padding-block: 32px 28px; /* horizontal padding comes from the px-8 utility —
+	                          never write a padding shorthand here; unlayered CSS
+	                          would clobber the layered utility */
+}
+@media (max-width: 480px) {
+	header.site-header,
+	main,
+	footer {
+		padding-inline: 20px;
+	}
+}
+@media (max-width: 960px) {
+	.site-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+		padding-block: 20px 15px;
+	}
+	.site-nav {
+		margin-left: 0; /* nav text edge must sit exactly on the name's edge */
+		column-gap: 16px;
+		row-gap: 6px;
+		width: 100%;
+	}
+	/* 40px control keeps the whole header inside 110px at 390px (T7) */
+	.site-nav button {
+		width: 40px;
+		height: 40px;
+		margin-left: auto;
+	}
+}
+
+/* Floating post sidebar: only post pages (tall articles, short rails) stick
+   and scroll internally. Home/section sidebars are normal flow — a sticky
+   cap there truncated panels behind an inner scrollbar. */
+.layout > .sidebar-stick {
+	position: sticky;
+	top: 24px;
+	max-height: calc(100vh - 48px);
+	overflow-y: auto;
+}
+/* TOC links jump smoothly; headings clear the viewport top */
+html {
+	scroll-behavior: smooth;
+}
+.post-body :is(h2, h3, h4) {
+	scroll-margin-top: 24px;
+}
+@media (max-width: 960px) {
+	/* Four labels + a 48px control can't share one 334px row; the toggle
+	   anchors to the trailing end of the wrapped nav instead of wrapping
+	   alone below it */
+	.site-nav button {
+		margin-left: auto;
 	}
 }
 
@@ -134,26 +224,39 @@
 	display: flex;
 	align-items: baseline;
 	flex-wrap: wrap;
-	padding: 12px 16px;
+	padding: 14px 16px;
 	border-bottom: 1px solid var(--color-line);
-	gap: 8px;
+	gap: 8px 16px;
 	min-width: 0;
 }
-.panel .ph h2 {
-	font-family: var(--font-mono);
-	font-size: 13px;
-	font-weight: 500;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: var(--color-text-soft);
+/* Panel titles carry the section step: Franklin 17/700, sentence case (T4) */
+.panel .ph :is(h1, h2),
+.panel .ph .toc-title {
+	font-family: var(--font-sans);
+	font-size: var(--text-reading);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	text-transform: none;
+	color: var(--color-text);
 	white-space: nowrap;
 }
-.panel .ph .more {
+/* Trailing links live in the header row (T6) — one rule per panel */
+.panel .ph .ph-links {
 	margin-left: auto;
-	font-size: 13px;
-	font-family: var(--font-mono);
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+}
+.panel .ph .ph-links a {
+	font-family: var(--font-sans);
+	font-size: var(--text-meta);
 	color: var(--color-text-faint);
 	white-space: nowrap;
+	transition: color 150ms ease;
+}
+.panel .ph .ph-links a:hover {
+	color: var(--color-accent);
 }
 .panel .pb {
 	padding: 12px 16px 14px;
@@ -164,9 +267,9 @@
 	display: flex;
 	align-items: baseline;
 	gap: 12px;
-	padding: 6px 0;
+	padding: 7px 0;
 	border-bottom: 1px solid var(--color-line);
-	font-size: 14px;
+	font-size: var(--text-ui);
 	min-width: 0;
 }
 .feed .item:last-child {
@@ -174,38 +277,33 @@
 }
 .feed .d {
 	font-family: var(--font-mono);
-	font-size: 13px;
+	font-size: var(--text-meta);
 	color: var(--color-text-faint);
 	width: 92px;
 	flex: none;
 	white-space: nowrap;
 }
+/* Titles wrap rather than truncate: the title is the hook, and any column
+   narrower than the longest title would otherwise cut it off */
 .feed .t {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 	font-weight: 500;
+	min-width: 0;
 }
 .feed .t:hover {
 	color: var(--color-accent);
 	text-decoration: none;
 }
-
-/* Source pill in panel headers (subscribe CTA doubles as source note) */
-.pill {
-	font-family: var(--font-mono);
-	font-size: 13px;
-	padding: 1px 7px;
-	border-radius: 3px;
-	letter-spacing: 0.04em;
-}
-.pill.tech {
-	background: var(--color-tech-soft);
-	color: var(--color-tech);
-}
-.pill.human {
-	background: var(--color-human-soft);
-	color: var(--color-human);
+/* Narrow columns: date stacks above the title so the title gets the full
+   width instead of wrapping into a ~25-character strip beside the date */
+@media (max-width: 720px) {
+	.feed .item {
+		flex-direction: column;
+		gap: 2px;
+		padding: 9px 0;
+	}
+	.feed .d {
+		width: auto;
+	}
 }
 
 /* Projects grid: single row of 4 (2 under 1100px, 1 under 720px) */
@@ -231,6 +329,9 @@
 	}
 }
 
+/* Long-form prose fills its layout column (post main column, About main
+   column). One rule, no per-page measure. */
+
 /* GitHub heatmap */
 .heatmap {
 	display: grid;
@@ -250,19 +351,62 @@
 	background: var(--color-heat-0);
 	border: 1px solid var(--color-line);
 }
-.heatmap .day.l1 { background: var(--color-heat-1); border-color: transparent; }
-/* Substack/WP post body: display font headings, site link color */
-.post-body :is(h1, h2, h3, h4) {
+/* Imported post content (Substack/WP) carries fixed-width embeds (iframes,
+   WP galleries, oversized images/tables). The post column is the size
+   authority: media clamps to it, never expands it. */
+.post-body :is(iframe, video, img, table) {
+	max-width: 100%;
+}
+.post-body iframe {
+	width: 100%;
+}
+/* WP tiled-gallery rows and captioned figures carry inline fixed widths;
+   the post column stays authoritative */
+.post-body :is(figure, .gallery-row, .gallery-group, .tiled-gallery-item) {
+	max-width: 100%;
+}
+/* Post body fills the main column. Imported bodies contain raw unbroken URLs
+   in prose; allow breaking. */
+.post-body {
+	width: 100%;
+	max-width: none; /* prose's 65ch default off — the layout column is the width */
+	font-size: var(--text-reading);
+	line-height: 1.65;
+	overflow-wrap: break-word;
+}
+/* Substack/WP post body: display font headings on the scale (T1).
+   Imported headings start at h2 (normalized at ingest) and stay below the
+   26px page title. */
+.post-body :is(h2, h3, h4) {
 	font-family: var(--font-display);
 }
+.post-body h2 {
+	font-size: var(--text-subhead);
+	line-height: 1.25;
+}
+.post-body h3 {
+	font-size: var(--text-reading);
+	line-height: 1.35;
+}
+.post-body h4 {
+	font-size: var(--text-ui);
+	line-height: 1.4;
+}
+/* Code stays on the scale: inline at the UI step, blocks at the meta step */
+.post-body :not(pre) > code {
+	font-size: var(--text-ui);
+}
+.post-body pre {
+	font-size: var(--text-meta);
+}
 .post-body a {
-	color: var(--color-link);
+	color: var(--color-accent);
 }
 .post-body a:hover {
-	color: var(--color-link-2);
+	color: var(--color-accent-2);
 }
 .post-body a.footnote-anchor {
-	font-size: 0.75em;
+	font-size: var(--text-meta);
 	line-height: 0;
 	vertical-align: super;
 	text-decoration: none;
@@ -273,7 +417,7 @@
 .post-body .footnote {
 	display: flex;
 	gap: 0.5rem;
-	font-size: 0.875em;
+	font-size: var(--text-meta);
 	color: var(--color-text-soft);
 }
 .post-body .footnote p {

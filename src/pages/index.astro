@@ -22,19 +22,20 @@ const HOMEPAGE_FEED_COUNT = 5;
 		<Sidebar />
 
 		<div class="main flex min-w-0 flex-col gap-4">
-			<div class="panel">
+			<div class="panel" style="--order: 2">
 				<div class="ph">
-					<h2 class="!text-tech">Technical Writing</h2>
-					<a
-						class="pill tech"
-						href={SUBSTACK_SUBSCRIBE_URL}
-						target="_blank"
-						rel="noopener noreferrer"
-						data-ph-event="subscription_cta_clicked"
-						data-ph-placement="writing_panel_header"
-						data-ph-target-type="substack"
-					>SUBSTACK</a>
-					<span class="more"><a href="/writing">all {posts.length} essays →</a></span>
+					<h2>Technical Writing</h2>
+					<span class="ph-links">
+						<a href="/writing">all {posts.length} →</a>
+						<a
+							href={SUBSTACK_SUBSCRIBE_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							data-ph-event="subscription_cta_clicked"
+							data-ph-placement="writing_panel_header"
+							data-ph-target-type="substack"
+						>Subscribe on Substack →</a>
+					</span>
 				</div>
 				<div class="pb feed">
 					{posts.slice(0, HOMEPAGE_FEED_COUNT).map((post) => (
@@ -52,19 +53,20 @@ const HOMEPAGE_FEED_COUNT = 5;
 				</div>
 			</div>
 
-			<div class="panel">
+			<div class="panel" style="--order: 3">
 				<div class="ph">
-					<h2 class="!text-human">Personal Blog</h2>
-					<a
-						class="pill human"
-						href={WORDPRESS_FOLLOW_URL}
-						target="_blank"
-						rel="noopener noreferrer"
-						data-ph-event="subscription_cta_clicked"
-						data-ph-placement="blog_panel_header"
-						data-ph-target-type="wordpress"
-					>WORDPRESS</a>
-					<span class="more"><a href="/blog">all {blogPosts.length} posts →</a></span>
+					<h2>Personal Blog</h2>
+					<span class="ph-links">
+						<a href="/blog">all {blogPosts.length} →</a>
+						<a
+							href={WORDPRESS_FOLLOW_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							data-ph-event="subscription_cta_clicked"
+							data-ph-placement="blog_panel_header"
+							data-ph-target-type="wordpress"
+						>Follow on WordPress →</a>
+					</span>
 				</div>
 				<div class="pb feed">
 					{blogPosts.slice(0, HOMEPAGE_FEED_COUNT).map((post) => (
@@ -82,10 +84,10 @@ const HOMEPAGE_FEED_COUNT = 5;
 				</div>
 			</div>
 
-			<div class="panel">
+			<div class="panel" style="--order: 4">
 				<div class="ph">
-					<h2 class="!text-accent">Projects</h2>
-					<span class="more"><a href="/projects">all →</a></span>
+					<h2>Projects</h2>
+					<span class="ph-links"><a href="/projects">all →</a></span>
 				</div>
 				<div class="project-grid p-3 pb-3.5">
 					{topProjects.map((project) => (

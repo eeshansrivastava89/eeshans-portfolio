@@ -44,7 +44,7 @@ const posts = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		createdAt: z.coerce.date(),
-		description: z.string(),
+		description: z.string().min(1),
 		coverImage: z.string().url().optional(),
 		source: z.enum(["substack", "manual"]).default("substack"),
 			externalUrl: z.string().url().optional(),
@@ -64,10 +64,14 @@ const blog = defineCollection({
 				{
 					title: post.title,
 					createdAt: post.date,
-					description: post.excerpt,
+					// Image-only posts (drawings) have no excerpt; share cards and
+					// search snippets still need a sentence
+					description:
+						post.excerpt ||
+						`${post.title}, from Eeshan's Blog (${new Date(post.date).getUTCFullYear()}).`,
 					coverImage: post.coverImage,
 					categories: post.categories,
-					body: renderWordPressHtml(post.content),
+					body: renderWordPressHtml(post.content, post.deadMedia),
 					source: "wordpress" as const,
 					externalUrl: post.link,
 					draft: false,
@@ -78,7 +82,7 @@ const blog = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		createdAt: z.coerce.date(),
-		description: z.string(),
+		description: z.string().min(1),
 		coverImage: z.string().url().optional(),
 		categories: z.array(z.object({ name: z.string(), slug: z.string() })).default([]),
 		source: z.enum(["wordpress", "manual"]).default("wordpress"),

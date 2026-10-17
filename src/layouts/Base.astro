@@ -1,4 +1,5 @@
 ---
+import Icon from "@/components/Icon.astro";
 import { siteConfig } from "@/data/config";
 import "../styles/globals.css";
 
@@ -7,6 +8,8 @@ interface Props {
 	description?: string;
 	activePage?: string;
 	canonical?: string;
+	/** Share-card image (absolute URL or site path); posts pass their cover */
+	image?: string;
 }
 
 const {
@@ -14,9 +17,13 @@ const {
 	description = siteConfig.description,
 	activePage = "",
 	canonical,
+	image = "/images/og-default.png",
 } = Astro.props;
 
 const fullTitle = title === siteConfig.title ? title : `${title} — ${siteConfig.title}`;
+// Share cards need absolute URLs; relative paths resolve against the site origin
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
 
 const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY ?? '';
 const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST ?? '';
@@ -32,6 +39,13 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 		<meta name="description" content={description} />
 		{canonical && <link rel="canonical" href={canonical} />}
 		<title>{fullTitle}</title>
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={siteConfig.title} />
+		<meta property="og:title" content={fullTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={pageUrl} />
+		<meta property="og:image" content={imageUrl} />
+		<meta name="twitter:card" content="summary_large_image" />
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -79,42 +93,39 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 			}
 		</script>
 
-		<header class="mx-auto w-full max-w-[1280px] px-8">
-			<div class="flex items-center gap-6 border-b border-line py-10">
-				<a href="/" class="text-[24px] font-extrabold tracking-[-0.02em] leading-none hover:text-accent transition-colors">
-					Eeshan Srivastava
+	<header class="site-header mx-auto w-full max-w-[1280px] px-8">
+		<a href="/" class="site-name text-title font-extrabold tracking-[-0.02em] leading-none hover:text-accent transition-colors">
+			Eeshan Srivastava
+		</a>
+		<nav class="site-nav ml-auto flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Site">
+			{siteConfig.nav.map((item) => (
+				<a
+					href={item.href}
+					aria-current={activePage === item.href ? "page" : undefined}
+					class="-my-3 rounded-sm py-3 text-ui font-medium text-text-soft transition-colors hover:text-accent hover:decoration-none aria-[current=page]:text-accent"
+				>
+					{item.label}
 				</a>
-				<nav class="ml-auto flex flex-wrap items-center gap-6" aria-label="Site">
-					{siteConfig.nav.map((item) => (
-						<a
-							href={item.href}
-							class:list={[
-								"text-[15px] font-medium text-text-soft transition-colors hover:text-accent hover:decoration-none",
-								activePage === item.href && "text-accent",
-							]}
-						>
-							{item.label}
-						</a>
-					))}
-					<button
-						type="button"
-						class="pressable inline-flex h-7 w-7 items-center justify-center rounded-md border border-line-strong text-[13px] text-text-soft transition-colors hover:border-accent hover:text-accent"
-						aria-label="Toggle dark mode"
-						title="Toggle dark mode"
-					>
-						◐
-					</button>
-				</nav>
-			</div>
-		</header>
+			))}
+			<button
+				type="button"
+				class="pressable -ml-3 inline-flex h-12 w-12 items-center justify-center rounded-md text-text-soft transition-colors hover:text-accent"
+				aria-label="Toggle dark mode"
+				title="Toggle dark mode"
+			>
+				<Icon name="sun" size={16} className="hidden dark:inline" />
+				<Icon name="moon" size={16} className="inline dark:hidden" />
+			</button>
+		</nav>
+	</header>
 
 		<main class="mx-auto w-full max-w-[1280px] px-8 pt-8 pb-24">
 			<slot />
 		</main>
 
 		<footer class="mx-auto flex w-full max-w-[1280px] items-center justify-between border-t border-line px-8 py-8">
-			<span class="meta text-[13px] text-text-faint">© {new Date().getFullYear()} Eeshan Srivastava</span>
-			<span class="meta text-[13px] text-text-faint">Open source · Non-commercial</span>
+			<span class="text-meta text-text-faint">© {new Date().getFullYear()} Eeshan Srivastava</span>
+			<span class="text-meta text-text-faint">Open source · Non-commercial</span>
 		</footer>
 
 		<dialog

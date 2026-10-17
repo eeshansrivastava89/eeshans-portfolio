@@ -9,16 +9,18 @@ import Icon from "@/components/Icon.astro";
  */
 interface Props {
 	class?: string;
+	/** Narrow sidebar variant: one link per row */
+	vertical?: boolean;
 }
 
-const { class: className = "" } = Astro.props;
+const { class: className = "", vertical = false } = Astro.props;
 
 const socials = siteConfig.socials;
 ---
 
-<div class:list={["flex flex-wrap items-center gap-5", className]}>
+<div class:list={[vertical ? "flex flex-col items-start gap-2.5" : "flex flex-wrap items-center gap-5", className]}>
 	{socials.map((social) => (
-		<a href={social.href} class="meta text-[13px] text-text-soft transition-colors hover:text-text inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer" data-ph-event="social_link_clicked" data-ph-target-type={social.key} data-ph-placement="social_links">
+		<a href={social.href} class="text-ui text-text-soft transition-colors hover:text-text inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer" data-ph-event="social_link_clicked" data-ph-target-type={social.key} data-ph-placement="social_links">
 			<Icon name={social.key} className="w-4 h-4" />
 			{social.label}
 		</a>

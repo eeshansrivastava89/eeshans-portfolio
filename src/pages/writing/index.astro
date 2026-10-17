@@ -8,11 +8,11 @@ import { getVisiblePosts } from "@/data/content";
 // Tag URLs use tag slugs (a/b testing → ab-testing).
 
 const allPosts = await getVisiblePosts();
-const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getUTCFullYear();
 
 const byYear = new Map<string, number>();
 for (const post of allPosts) {
-	const year = post.data.createdAt.getFullYear().toString();
+	const year = post.data.createdAt.getUTCFullYear().toString();
 	byYear.set(year, (byYear.get(year) ?? 0) + 1);
 }
 const yearLinks = [...byYear.entries()]
@@ -37,11 +37,15 @@ const tagLinks = [...tagCounts.entries()]
 	.map(([slug, { name, count }]) => ({ label: name, href: `/writing/tag/${slug}`, count, active: false }));
 
 const posts = allPosts
-	.filter((p) => p.data.createdAt.getFullYear() === CURRENT_YEAR)
+	.filter((p) => p.data.createdAt.getUTCFullYear() === CURRENT_YEAR)
 	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/writing/${p.id}` }));
 ---
 
-<BaseLayout title="Technical Writing" activePage="/writing">
+<BaseLayout
+	title="Technical Writing"
+	description={`Technical writing by Eeshan Srivastava: ${allPosts.length} essays on local AI, data science, and experimentation.`}
+	activePage="/writing"
+>
 	<FeedLayout
 		title="Technical Writing"
 		feed="substack"

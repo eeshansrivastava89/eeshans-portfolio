@@ -4,6 +4,16 @@
 
 Never sprint through multiple phases in one go. Work in discrete chunks — one logical unit of work at a time. After each chunk, pause and tell the user what was done, what's next, and whether anything needs a decision before continuing. The user decides when to proceed.
 
+## Phase workflow (agreed with Eeshan, 2026-10-17)
+
+The design/product audit runs phase by phase, tracked in `internal-docs/active/2026-10-17-design-product-audit.html`.
+
+- Work through every task inside the **current phase**, chunk by chunk; never start the next phase on your own.
+- Verify every visual change yourself: build, serve, then measure the DOM and take Playwright screenshots (390/640/960/1280/1920, light and dark). Never report a visual result you have not measured or seen.
+- At the end of a phase run the full sweep (overflow, console errors, headings, type inventory, screenshots), update the tracker's checkboxes and done-notes, then **stop and wait for Eeshan's validation**.
+- Only Eeshan's explicit approval starts the next phase.
+- Keep `.pi/context.md` current at the end of each phase so a fresh session can resume.
+
 ## Maximize DRY, reusability, and composability
 
 Every piece of logic should exist in exactly one place. If two components share behavior, extract it into a shared component, utility, or config. If a pattern appears more than once, generalize it. Reusable > repeated.

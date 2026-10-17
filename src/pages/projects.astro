@@ -6,8 +6,12 @@ import { getProjects } from "@/data/content";
 const projects = await getProjects();
 ---
 
-<BaseLayout title="Projects" activePage="/projects">
-	<h1 class="mb-6 text-[24px] font-extrabold tracking-[-0.02em]">Projects</h1>
+<BaseLayout
+	title="Projects"
+	description={`Open-source projects by Eeshan Srivastava: ${projects.map((p) => p.data.title).join(", ")}.`}
+	activePage="/projects"
+>
+	<h1 class="page-title mb-6">Projects</h1>
 	<div class="project-grid project-grid-2">
 		{projects.map((project) => (
 			<div class="panel">

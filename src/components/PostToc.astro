@@ -1,0 +1,92 @@
+---
+import type { PostHeading } from "@/data/content";
+
+interface Props {
+	title: string;
+	/** Post headings extracted from the rendered body */
+	headings: PostHeading[];
+}
+
+const { title, headings } = Astro.props;
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+	<details class="toc panel" style="--order: 3" open>
+		<summary class="ph toc-summary">
+			<span class="toc-title">Contents</span>
+		</summary>
+		<div class="pb">
+			<a class="toc-root block py-1 text-ui font-semibold text-text transition-colors hover:text-accent" href="#top">
+				{title}
+			</a>
+			<ul class="toc-list">
+				{tocHeadings.map((h) => (
+					<li class:list={["toc-item", `toc-item-d${h.depth}`]}>
+						<a class="block py-1 text-ui text-text-soft transition-colors hover:text-accent" href={`#${h.slug}`}>
+							{h.text}
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	</details>
+)}
+
+<script is:inline>
+	// B1: on phones the contents panel starts collapsed between the title and
+	// the body; on desktop it is always open and its header is inert.
+	(() => {
+		const tocs = document.querySelectorAll("details.toc");
+		if (!tocs.length) return;
+		const desktop = window.matchMedia("(min-width: 961px)");
+		tocs.forEach((toc) => {
+			toc.open = desktop.matches;
+		});
+		desktop.addEventListener("change", () => {
+			if (desktop.matches) tocs.forEach((toc) => (toc.open = true));
+		});
+	})();
+</script>
+
+<style>
+	/* Collapsed-by-default disclosure on mobile; the header keeps panel chrome */
+	.toc-summary {
+		cursor: pointer;
+		list-style: none;
+	}
+	.toc-summary::-webkit-details-marker {
+		display: none;
+	}
+	.toc-summary::after {
+		content: "▾";
+		margin-left: auto;
+		color: var(--color-text-faint);
+		transition: transform 150ms ease;
+	}
+	.toc[open] > .toc-summary::after {
+		transform: rotate(180deg);
+	}
+	@media (min-width: 961px) {
+		.toc-summary {
+			cursor: default;
+			pointer-events: none;
+		}
+		.toc-summary::after {
+			content: none;
+		}
+	}
+	/* Nested bullets: h2 children under the root title, h3 nested one level deeper */
+	.toc-list {
+		list-style: disc;
+		padding-left: 18px;
+		margin: 0;
+	}
+	.toc-item-d2 {
+		list-style-type: disc;
+	}
+	.toc-item-d3 {
+		list-style-type: circle;
+		padding-left: 16px;
+	}
+</style>

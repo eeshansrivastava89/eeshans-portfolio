@@ -16,9 +16,9 @@ const isSvg = logo?.endsWith(".svg");
 		<img src={`/logos/${logo}`} alt="" class:list={["logo-img", { "logo-img--svg": isSvg }]} />
 	)}
 	<div class="min-w-0">
-		<div class="meta mb-0.5 text-[13px] tracking-wide text-accent">{timespan}</div>
-		<div class="text-text">{title} <span class="font-semibold text-accent">· {organization}</span></div>
-		{detail && <div class="mt-0.5 text-[14px] text-text-soft">{detail}</div>}
+		<div class="font-mono mb-0.5 text-meta text-text-faint">{timespan}</div>
+		<div class="text-reading text-text">{title} <span class="font-semibold text-text-soft">· {organization}</span></div>
+		{detail && <div class="mt-0.5 text-reading text-text-soft">{detail}</div>}
 	</div>
 </div>
 
