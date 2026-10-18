@@ -34,6 +34,16 @@ When fixing bugs or adding features, don't solve problems by adding `if/else` br
 
 Every feature should have exactly one implementation path. No silent fallbacks, no "try X, then Y, then Z" chains that mask which path actually ran. If something fails, it should fail with a clear error — not fall through to a default that hides the problem. Implicit behavior is a bug waiting to happen. Make the happy path explicit and the error path visible.
 
+## MCPs are the only path to their services (2026-10-17)
+
+When an MCP server exists for a service, **every read and write goes through that server**. Never call the service's REST/GraphQL API directly — not with `curl`, not from a script, not by reading the credential out of `cordis.patch.yml` or any other config.
+
+That includes the case where the MCP **refuses** an operation. A refusal is the answer, not an obstacle to route around. If the MCP cannot do what is needed, say so and stop.
+
+- **Only exception:** explicit, per-call approval from Eeshan for a named operation. State the exact call, get a yes, then report the result.
+- **Why:** MCP write-toggles are policy on that server, while the stored token is usually a broader credential. A direct API call silently bypasses the guard the user configured. Proven on WordPress: `posts.delete` was refused by MCP, and the same token force-deleted a post via `/rest/v1`.
+- **Diagnostics are not an exception.** Probing an API to check scope must go through the MCP, or be approved first.
+
 ## MCP servers — environment contract (2026-10-17)
 
 Goal: Substack, WordPress, PostHog, Supabase and Cloudflare available to agents on this machine, with **no ability to mutate data by accident**. Protection must be deterministic — enforced by a credential, a server-side filter, or a server we own — never by the model choosing not to call something.
