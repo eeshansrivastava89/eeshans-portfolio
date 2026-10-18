@@ -15,6 +15,7 @@ const projects = await getProjects();
 	<div class="project-grid">
 		{projects.map((project) => (
 			<ProjectCardContent
+				placement="projects_card"
 				title={project.data.title}
 				hook={project.data.hook}
 				liveUrl={project.data.liveUrl}

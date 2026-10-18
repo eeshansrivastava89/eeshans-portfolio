@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 interface Props {
 	title: string;
 	hook: string;
@@ -9,6 +10,8 @@ interface Props {
 	videoPoster?: string;
 	/** Dashboard grid: compact card without poster, per locked design */
 	compact?: boolean;
+	/** Where this card renders, for analytics */
+	placement?: "home_card" | "projects_card";
 }
 
 const {
@@ -20,6 +23,7 @@ const {
 	videoMp4,
 	videoPoster,
 	compact = false,
+	placement = "home_card",
 } = Astro.props;
 
 const hasVideo = Boolean(videoWebm || videoMp4);
@@ -53,7 +57,7 @@ const primaryHref = liveUrl ?? repoUrl;
 	}
 
 	<h3 class="text-reading font-bold tracking-[-0.01em] leading-snug">
-		<a href={primaryHref} class="hover:text-accent transition-colors">{title}</a>
+		<a href={primaryHref} class="hover:text-accent transition-colors" {...tracked("project_clicked", { project: title, link_type: liveUrl ? "live" : "source", placement })}>{title}</a>
 	</h3>
 
 	<p class="project-hook">{hook}</p>
@@ -68,9 +72,6 @@ const primaryHref = liveUrl ?? repoUrl;
 					data-title={title}
 					data-webm={videoWebm}
 					data-mp4={videoMp4}
-					data-ph-event="project_link_clicked"
-					data-ph-target-type="demo_video"
-					data-ph-placement="project_actions"
 				>
 					▶ Demo
 				</button>
@@ -83,9 +84,7 @@ const primaryHref = liveUrl ?? repoUrl;
 					class="btn"
 					target="_blank"
 					rel="noopener noreferrer"
-					data-ph-event="project_link_clicked"
-					data-ph-target-type="github_repo"
-					data-ph-placement="project_actions"
+					{...tracked("project_clicked", { project: title, link_type: "source", placement })}
 				>
 					Code
 				</a>

@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import GitHubActivity from "@/components/GitHubActivity.astro";
 import GoodreadsActivity from "@/components/GoodreadsActivity.astro";
 import { siteConfig } from "@/data/config";
@@ -54,8 +55,7 @@ const { grouping } = Astro.props;
 					href={siteConfig.goodreads.profileUrl}
 					target="_blank"
 					rel="noopener noreferrer"
-					data-ph-event="goodreads_profile_clicked"
-					data-ph-target-type="profile"
+					{...tracked("goodreads_clicked", { target: "profile" })}
 				>{siteConfig.goodreads.handle} →</a>
 			</span>
 		</div>
@@ -72,8 +72,7 @@ const { grouping } = Astro.props;
 					href={siteConfig.socials.find((s) => s.key === "github")?.href}
 					target="_blank"
 					rel="noopener noreferrer"
-					data-ph-event="github_activity_clicked"
-					data-ph-target-type="profile"
+					{...tracked("github_clicked", { target: "profile" })}
 				>@eeshansrivastava89 →</a>
 			</span>
 		</div>

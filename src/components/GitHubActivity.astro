@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import { getGitHubData } from "@/lib/github";
 import { siteConfig } from "@/data/config";
 
@@ -107,8 +108,10 @@ const levelFor = (count: number): number => {
 						title={section.stacked ? row.message : undefined}
 						target="_blank"
 						rel="noopener noreferrer"
-						data-ph-event="github_activity_clicked"
-						data-ph-target-type={section.type}
+						{...tracked("github_clicked", {
+							target: section.type === "pull_request" ? "pr" : section.type === "issue" ? "issue" : "repo",
+							repo: row.repo,
+						})}
 					>
 						<span class="gh-repo">{row.repo}</span>
 						<span class="gh-detail">{row.message}</span>

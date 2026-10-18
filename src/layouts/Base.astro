@@ -150,16 +150,18 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 		</script>
 
 		<script is:inline>
-			// Named event capture: any [data-ph-event] click reports to PostHog
+			// Named event capture: any [data-ph-event] click reports to PostHog.
+			// send_instantly flushes the event before a same-tab navigation can cancel it.
 			document.addEventListener("click", (event) => {
 				if (!(event.target instanceof Element)) return;
-				const analyticsTarget = event.target.closest("[data-ph-event]");
-				if (!analyticsTarget || !window.posthog) return;
-				window.posthog.capture(analyticsTarget.dataset.phEvent, {
-					placement: analyticsTarget.dataset.phPlacement,
-					target_type: analyticsTarget.dataset.phTargetType,
-					source_path: window.location.pathname,
-				});
+				const target = event.target.closest("[data-ph-event]");
+				if (!target || !window.posthog) return;
+				const props = { source_path: window.location.pathname };
+				for (const [key, value] of Object.entries(target.dataset)) {
+					if (!key.startsWith("ph") || key === "phEvent" || value === undefined) continue;
+					props[key.slice(2).replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`).replace(/^_/, "")] = value;
+				}
+				window.posthog.capture(target.dataset.phEvent, props, { send_instantly: true });
 			});
 		</script>
 
@@ -180,10 +182,15 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 				modalTitle.textContent = trigger.dataset.title;
 				video.load();
 				dialog.showModal();
-				window.posthog?.capture("project_demo_opened", {
-					placement: trigger.classList.contains("group/poster") ? "project_poster" : "project_actions",
-					source_path: window.location.pathname,
-				});
+				window.posthog?.capture(
+					"demo_opened",
+					{
+						project: trigger.dataset.title,
+						placement: trigger.classList.contains("group/poster") ? "poster" : "card",
+						source_path: window.location.pathname,
+					},
+					{ send_instantly: true },
+				);
 				video.play().catch(() => {});
 			});
 

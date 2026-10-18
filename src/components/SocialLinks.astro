@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import { siteConfig } from "@/data/config";
 import Icon from "@/components/Icon.astro";
 
@@ -11,16 +12,18 @@ interface Props {
 	class?: string;
 	/** Narrow sidebar variant: one link per row */
 	vertical?: boolean;
+	/** Where the row renders, for analytics */
+	placement?: "footer" | "about";
 }
 
-const { class: className = "", vertical = false } = Astro.props;
+const { class: className = "", vertical = false, placement = "footer" } = Astro.props;
 
 const socials = siteConfig.socials;
 ---
 
 <div class:list={[vertical ? "flex flex-col items-start gap-2.5" : "flex flex-wrap items-center gap-5", className]}>
 	{socials.map((social) => (
-		<a href={social.href} class="text-ui text-text-soft transition-colors hover:text-text inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer" data-ph-event="social_link_clicked" data-ph-target-type={social.key} data-ph-placement="social_links">
+		<a href={social.href} class="text-ui text-text-soft transition-colors hover:text-text inline-flex items-center gap-1.5" target="_blank" rel="noopener noreferrer" {...tracked("social_clicked", { network: social.key, placement })}>
 			<Icon name={social.key} className="w-4 h-4" />
 			{social.label}
 		</a>

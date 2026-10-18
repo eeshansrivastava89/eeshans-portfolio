@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import BaseLayout from "@/layouts/Base.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import ProjectCardContent from "@/components/ProjectCardContent.astro";
@@ -34,9 +35,7 @@ const heroLinks = HERO_LINKS.map((href) => {
 				{heroLinks.map((link) => (
 					<a
 						href={link.href}
-						data-ph-event="hero_link_clicked"
-						data-ph-placement="home_hero"
-						data-ph-target-type={link.href.slice(1)}
+						{...tracked("nav_clicked", { target: link.href.replace("/", ""), placement: "hero" })}
 					>{link.label}</a>
 				))}
 			</div>
@@ -62,9 +61,7 @@ const heroLinks = HERO_LINKS.map((href) => {
 						<a
 							class:list={["item", i === 0 && "is-new"]}
 							href={`/writing/${post.id}`}
-							data-ph-event="writing_item_clicked"
-							data-ph-placement="home_writing_feed"
-							data-ph-target-type="writing_item"
+							{...tracked("content_clicked", { content_type: "writing", placement: "home_feed", slug: post.id })}
 						>
 							<span class="d">{formatDate(post.data.createdAt)}</span>
 							<span class="t">{post.data.title}{i === 0 && <span class="new-tag">New</span>}</span>
@@ -88,9 +85,7 @@ const heroLinks = HERO_LINKS.map((href) => {
 						<a
 							class:list={["item", i === 0 && "is-new"]}
 							href={`/blog/${post.id}`}
-							data-ph-event="blog_item_clicked"
-							data-ph-placement="home_blog_feed"
-							data-ph-target-type="blog_item"
+							{...tracked("content_clicked", { content_type: "blog", placement: "home_feed", slug: post.id })}
 						>
 							<span class="d">{formatDate(post.data.createdAt)}</span>
 							<span class="t">{post.data.title}{i === 0 && <span class="new-tag">New</span>}</span>

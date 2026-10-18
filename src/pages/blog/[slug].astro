@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import BaseLayout from "@/layouts/Base.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import PostSidebar from "@/components/PostSidebar.astro";
@@ -49,8 +50,7 @@ const tocHeadings = getPostHeadings(post.data.body ?? "");
 						class="text-accent transition-colors hover:text-accent-2"
 						target="_blank"
 						rel="noopener noreferrer"
-						data-ph-event="wordpress_article_clicked"
-						data-ph-placement="blog_post_header"
+						{...tracked("content_clicked", { content_type: "blog", placement: "post_footer", slug: post.id })}
 					>Originally published on WordPress ↗</a>
 				</p>
 			</header>

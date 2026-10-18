@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import Icon from "@/components/Icon.astro";
 
 interface Props {
@@ -16,9 +17,7 @@ const { feed, label, href } = Astro.props;
 	target="_blank"
 	rel="noopener noreferrer"
 	class="btn pressable"
-	data-ph-event="subscription_cta_clicked"
-	data-ph-placement={`${feed}_panel_follow`}
-	data-ph-target-type={feed}
+	{...tracked("subscribe_clicked", { channel: feed, placement: "follow" })}
 >
 	<Icon name={feed} size={13} />
 	{label}

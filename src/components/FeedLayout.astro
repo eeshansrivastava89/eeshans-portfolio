@@ -1,4 +1,5 @@
 ---
+import { tracked } from "@/lib/analytics";
 import SubscribeLink from "@/components/SubscribeLink.astro";
 import { formatDate } from "@/data/content";
 import type { FeedGroup, GroupLink } from "@/data/feed-groups";
@@ -86,7 +87,7 @@ const {
 					<section class="feed-year">
 						<h2 class="feed-year-label">{group.year}</h2>
 						{group.posts.map((post) => (
-							<a class="item" href={post.href} data-ph-event={feed === "substack" ? "writing_item_clicked" : "blog_item_clicked"} data-ph-placement={`${feed}_feed`} data-ph-target-type={feed === "substack" ? "writing_item" : "blog_item"}>
+							<a class="item" href={post.href} {...tracked("content_clicked", { content_type: feed === "substack" ? "writing" : "blog", placement: "feed", slug: post.href.split("/").pop() })}>
 								<span class="d">{formatDate(post.date)}</span>
 								<span class="t">{post.title}</span>
 							</a>
