@@ -28,3 +28,6 @@ Thumbs.db
 .claude/
 .codex/
 internal-docs/
+
+# local plugin tarballs
+*.tgz
