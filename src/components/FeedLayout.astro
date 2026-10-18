@@ -1,6 +1,8 @@
 ---
 import { tracked } from "@/lib/analytics";
-import SubscribeLink from "@/components/SubscribeLink.astro";
+import FollowButton from "@/components/FollowButton.astro";
+import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/substack";
+import { WORDPRESS_FOLLOW_URL } from "@/lib/wordpress";
 import { formatDate } from "@/data/content";
 import type { FeedGroup, GroupLink } from "@/data/feed-groups";
 
@@ -32,8 +34,8 @@ const {
 ---
 
 <div class="layout">
-	<aside class="sidebar flex flex-col gap-4">
-		<div class="panel" style="--order: 90">
+	<aside class="sidebar sidebar--divided flex flex-col gap-4">
+		<div class="panel sidebar-section" style="--order: 90">
 			<div class="ph">
 				<h2>Years</h2>
 			</div>
@@ -41,19 +43,18 @@ const {
 				{yearLinks.map((link) => (
 					<a
 						class:list={[
-							"group-row flex items-baseline justify-between py-1 text-ui transition-colors hover:text-accent",
+							"group-row flex items-baseline py-1 text-ui transition-colors hover:text-accent",
 							link.active && "text-accent",
 						]}
 						href={link.href}
 					>
-						<span class="truncate">{link.label}</span>
-						<span class="shrink-0 font-mono text-meta text-text-faint">{link.count}</span>
+						<span class="truncate">{link.label} <span class="font-mono text-meta text-text-faint">({link.count})</span></span>
 					</a>
 				))}
 			</div>
 		</div>
 
-		<div class="panel" style="--order: 91">
+		<div class="panel sidebar-section" style="--order: 91">
 			<div class="ph">
 				<h2>{secondTitle}</h2>
 			</div>
@@ -61,19 +62,24 @@ const {
 				{secondLinks.map((link) => (
 					<a
 						class:list={[
-							"group-row flex items-baseline justify-between py-1 text-ui transition-colors hover:text-accent",
+							"group-row flex items-baseline py-1 text-ui transition-colors hover:text-accent",
 							link.active && "text-accent",
 						]}
 						href={link.href}
 					>
-						<span class="truncate">{link.label}</span>
-						<span class="shrink-0 font-mono text-meta text-text-faint">{link.count}</span>
+						<span class="truncate">{link.label} <span class="font-mono text-meta text-text-faint">({link.count})</span></span>
 					</a>
 				))}
 			</div>
 		</div>
 
-		<SubscribeLink feed={feed} />
+		<div class="follow-row sidebar-section" style="--order: 92">
+			{feed === "substack" ? (
+				<FollowButton feed="substack" href={SUBSTACK_SUBSCRIBE_URL} label="Follow on Substack" />
+			) : (
+				<FollowButton feed="wordpress" href={WORDPRESS_FOLLOW_URL} label="Follow on WordPress" />
+			)}
+		</div>
 	</aside>
 
 	<div class="main flex min-w-0 flex-col gap-4">

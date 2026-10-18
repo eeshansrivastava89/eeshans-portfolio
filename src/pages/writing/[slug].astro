@@ -41,7 +41,7 @@ const tocHeadings = getPostHeadings(post.data.body ?? "");
 					{ label: String(post.data.createdAt.getUTCFullYear()), href: `/writing/${post.data.createdAt.getUTCFullYear()}` },
 				]}
 			/>
-			<header class="mb-10" style="--order: 2">
+			<header class="post-header mb-10" style="--order: 2">
 				<h1 id="top" class="page-title mb-3">{post.data.title}</h1>
 				<p class="text-meta text-text-faint">
 					<span class="font-mono">{formatDate(post.data.createdAt)}</span>

@@ -125,7 +125,7 @@
 .layout {
 	display: grid;
 	grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-	gap: 40px;
+	gap: 56px;
 	align-items: start;
 }
 @media (max-width: 960px) {
@@ -605,6 +605,13 @@ html {
 .post-body :is(figure, .gallery-row, .gallery-group, .tiled-gallery-item) {
 	max-width: 100%;
 }
+/* Post header + body share the panel inset so the title lines up with the
+   breadcrumb's text and every panel on the site */
+.post-header,
+.post-body {
+	padding-inline: 16px;
+}
+
 /* Post body fills the main column. Imported bodies contain raw unbroken URLs
    in prose; allow breaking. */
 .post-body {
@@ -714,4 +721,58 @@ html {
 			transform: none;
 		}
 	}
+}
+
+/* ============================================================
+   Editorial layout (2026-10-18)
+   No card chrome: hierarchy comes from type, hairlines and space.
+   Sections inside a column are separated by a rule only where the
+   sidebar needs it; the main column uses margin alone.
+   ============================================================ */
+
+.panel {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+}
+.panel .ph {
+	border-bottom: 0;
+	padding: 0 0 10px;
+}
+.panel .ph .ph-links {
+	margin-left: 10px;
+}
+.panel .pb {
+	padding: 0;
+}
+.layout > .sidebar > .panel,
+.layout > .main > .panel {
+	border: 0;
+	padding: 0;
+}
+.layout > .sidebar > .panel + .panel,
+.layout > .main > .panel + .panel {
+	margin-top: 40px;
+}
+.sidebar--divided > .sidebar-section + .sidebar-section {
+	border-top: 1px solid var(--color-line);
+	padding-top: 22px;
+	margin-top: 0;
+}
+.follow-row {
+	padding: 0 0 10px;
+}
+.main > .breadcrumb {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	margin: 0 0 18px;
+}
+.post-header {
+	padding: 0 0 24px;
+}
+.post-body {
+	padding: 0;
+	max-width: 72ch;
 }

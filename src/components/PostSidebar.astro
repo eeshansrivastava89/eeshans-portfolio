@@ -1,5 +1,7 @@
 ---
-import SubscribeLink from "@/components/SubscribeLink.astro";
+import FollowButton from "@/components/FollowButton.astro";
+import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/substack";
+import { WORDPRESS_FOLLOW_URL } from "@/lib/wordpress";
 import PostToc from "@/components/PostToc.astro";
 import type { PostHeading } from "@/data/content";
 import { formatDate } from "@/data/content";
@@ -23,14 +25,12 @@ const { feed, title, metadata, headings } = Astro.props;
 
 ---
 
-<aside class="sidebar sidebar-stick flex flex-col gap-4">
-	<div style="--order: 3">
-		<SubscribeLink feed={feed} />
+<aside class="sidebar sidebar--divided sidebar-stick flex flex-col gap-4">
+	<div class="sidebar-section" style="--order: 4">
+		<PostToc title={title} headings={headings} />
 	</div>
 
-	<PostToc title={title} headings={headings} />
-
-	<div class="panel" style="--order: 90">
+	<div class="panel sidebar-section" style="--order: 90">
 		<div class="ph">
 			<h2>Post details</h2>
 		</div>
@@ -52,5 +52,13 @@ const { feed, title, metadata, headings } = Astro.props;
 				</div>
 			)}
 		</div>
+	</div>
+
+	<div class="follow-row sidebar-section" style="--order: 95">
+		{feed === "substack" ? (
+			<FollowButton feed="substack" href={SUBSTACK_SUBSCRIBE_URL} label="Follow on Substack" />
+		) : (
+			<FollowButton feed="wordpress" href={WORDPRESS_FOLLOW_URL} label="Follow on WordPress" />
+		)}
 	</div>
 </aside>
