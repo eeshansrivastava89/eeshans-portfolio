@@ -8,8 +8,12 @@
  */
 
 import { createUserMessage } from "@deepseek-ai/dsh-llm";
+import { writeFileSync } from "node:fs";
 
 export const name = "pinned-api-rule";
+
+/** Pre-step lives on the agents service; wait for it before registering. */
+export const inject = ["agents"];
 
 const EVERY_STEPS = 3;
 
@@ -21,6 +25,8 @@ const TEXT = [
 ].join(" ");
 
 export function apply(ctx) {
+	// Temporary load marker: lets us tell "loaded" from "firing" without app logs.
+	try { writeFileSync("/tmp/pinned-api-rule.loaded", String(Date.now())); } catch {}
 	ctx.on("agent/pre-step", async (event, next) => {
 		const decision = await next();
 		if (decision.kind !== "enter" || event.signal.aborted) return decision;

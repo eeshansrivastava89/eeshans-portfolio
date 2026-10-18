@@ -1,0 +1,3 @@
+- insert:
+    - id: pinned-api-rule
+      name: '@deepseek-ai/dsh-pinned-api-rule'
