@@ -5,20 +5,20 @@ export const siteConfig = {
 	/** Homepage hero — headline and the one pitch sentence */
 	hero: {
 		headline: "Hi, I'm Eeshan.",
-		pitch: "I lead data science at Starbucks — and test new AI tools until the hype wears off. Writing about local AI and experimentation, and building open-source tools you can try.",
+		pitch: "Human, artist, technologist. I lead data science at Starbucks. In my free time, I experiment with the latest in AI & data science, while also making time for my passions in art, poetry and writing. Hope you enjoy exploring my site.",
 		/** Search/social description — the pitch is too long for a snippet */
 		metaDescription:
 			"Eeshan Srivastava leads data science at Starbucks, tests local AI tools, and writes about experimentation, local models, and what survives the hype cycle.",
 	},
 	/** Homepage display counts — every homepage list and panel reads from here */
 	homepage: {
-		feedItems: 6,
+		feedItems: 8,
 		projectItems: 6,
 		github: {
 			weeks: 26,
 			repos: 5,
 			/** Rows shown per activity category (repositories, issues, pull requests) */
-			activity: 3,
+			activity: 2,
 		},
 	},
 	/** Goodreads panel: profile link and shelf sizes */
@@ -26,7 +26,7 @@ export const siteConfig = {
 		profileUrl: "https://www.goodreads.com/user/show/7370124",
 		handle: "@eeshan",
 		currentlyReading: 3,
-		recentlyRead: 3,
+		recentlyRead: 5,
 		toRead: 3,
 	},
 	url: "https://eeshans.com",
