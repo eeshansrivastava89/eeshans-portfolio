@@ -24,10 +24,10 @@ WordPress.com issues one OAuth token with the account's full role authority and 
 
 `tools/dsh-plugins/pinned-api-rule` re-injects the MCP/write rule every 3rd step, because AGENTS.md is loaded once per session and can compact away.
 
-- Installed at `~/.dsh/profiles/desktop/plugins/pinned-api-rule`, with `@deepseek-ai/dsh-llm@0.2.1-rc.2` (the version bundled in `app.asar`) local to it.
-- Loader entry must be an `insert:` block with an **absolute** path — top-level `- id:` entries only override existing bundle plugins.
+- Installed through the DSH **Plugins** page as a bundle (`dsh.bundle.patch` → `cordis.patch.yml`), from the packed tarball. The profile's `package.json` lists it; no hand-written patch entry.
+- `@deepseek-ai/dsh-llm@0.2.1-rc.2` is declared as a dependency so pnpm installs it with the package.
 - The plugin must declare `inject = ["agents"]`, or it registers before the pre-step service exists.
-- Verified 2026-10-17: load marker written, reminder observed in context at step 3.
+- Verified 2026-10-17: load marker written, 4 `pinned-api-rule` messages in the session log, reminder observed in context.
 
 ## Open work
 

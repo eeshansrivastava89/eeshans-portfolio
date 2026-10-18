@@ -8,24 +8,13 @@ Modelled on the shipped `@deepseek-ai/dsh-time-context` plugin: an
 `agent/pre-step` listener appends one sourced user message to the entering
 batch. `EVERY_STEPS` and `TEXT` are constants in `index.js`.
 
-## Status: installed (2026-10-17)
+## Status: installed as a bundle (2026-10-17)
 
-Installed into `~/.dsh/profiles/desktop/plugins/pinned-api-rule`, with
-`@deepseek-ai/dsh-llm@0.2.1-rc.2` (the version bundled in `app.asar`) installed
-beside it so the import resolves. The loader entry uses a path specifier:
+Installed through the DSH Plugins page from `deepseek-ai-dsh-pinned-api-rule-0.0.2.tgz`.
+The package is a bundle: `dsh.bundle.patch` points at `cordis.patch.yml`, which
+inserts the plugin row. `@deepseek-ai/dsh-llm@0.2.1-rc.2` is a declared
+dependency, so pnpm installs it alongside.
 
-```yaml
-- id: pinned-api-rule
-  name: "./plugins/pinned-api-rule/index.js"
-```
-
-Note: the profile's `node_modules/@deepseek-ai/*` are dangling `npx` symlinks —
-the app resolves its own plugins from `app.asar`, and only a profile-local
-plugin needs real packages. Installing the dependency inside the plugin folder
-keeps that local and avoids the shared profile tree.
-
-Rollback: restore the profile backup and restart.
-
-```bash
-cp ~/.dsh/profiles/desktop/cordis.patch.yml.bak-1792292862 ~/.dsh/profiles/desktop/cordis.patch.yml
-```
+Managed from the UI from now on: switch the bundle on/off, or uninstall it from
+the Plugins page. To change the text or frequency, edit `index.js`, bump the
+version, repack, and reinstall.
