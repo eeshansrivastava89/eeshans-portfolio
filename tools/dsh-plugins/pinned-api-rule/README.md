@@ -8,24 +8,24 @@ Modelled on the shipped `@deepseek-ai/dsh-time-context` plugin: an
 `agent/pre-step` listener appends one sourced user message to the entering
 batch. `EVERY_STEPS` and `TEXT` are constants in `index.js`.
 
-## Status: not installable in the packaged app
+## Status: installed (2026-10-17)
 
-The plugin imports `createUserMessage` from `@deepseek-ai/dsh-llm`. In the
-installed DeepSeek Harness, the profile's `node_modules/@deepseek-ai/*` are
-symlinks into `~/.npm/_npx/1e7f6d9597241db0/…`, and that cache no longer exists,
-so a plugin loaded from `~/.dsh/profiles/**` cannot resolve any DSH package:
+Installed into `~/.dsh/profiles/desktop/plugins/pinned-api-rule`, with
+`@deepseek-ai/dsh-llm@0.2.1-rc.2` (the version bundled in `app.asar`) installed
+beside it so the import resolves. The loader entry uses a path specifier:
 
+```yaml
+- id: pinned-api-rule
+  name: "./plugins/pinned-api-rule/index.js"
 ```
-Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@deepseek-ai/dsh-llm'
+
+Note: the profile's `node_modules/@deepseek-ai/*` are dangling `npx` symlinks —
+the app resolves its own plugins from `app.asar`, and only a profile-local
+plugin needs real packages. Installing the dependency inside the plugin folder
+keeps that local and avoids the shared profile tree.
+
+Rollback: restore the profile backup and restart.
+
+```bash
+cp ~/.dsh/profiles/desktop/cordis.patch.yml.bak-1792292862 ~/.dsh/profiles/desktop/cordis.patch.yml
 ```
-
-The app resolves its own plugins from inside `app.asar`, not from the profile.
-So this file is a ready-made plugin that needs a DSH build that can resolve the
-package — either a source build that vendors it, or an upstream option for
-pinned instructions.
-
-## Alternatives until then
-
-1. Keep `AGENTS.md` small (done) and restate the rule at phase/service boundaries.
-2. Ask upstream for a config on `dsh-agent-instructions` — e.g. a pinned line
-   re-injected every N steps — instead of a separate plugin.
