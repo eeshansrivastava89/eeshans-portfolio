@@ -49,7 +49,7 @@ Status at the last review:
 | Service | Server | Endpoint | Guard | Status |
 |---|---|---|---|---|
 | PostHog | official remote | `mcp.posthog.com/mcp` | read-only personal key: every `*:write` scope missing | **connected**; gap: `data-quality-check-{create,update,delete}` are not scope-gated |
-| WordPress | wpcom MCP | `public-api.wordpress.com/wpcom/v2/mcp/v1` | none — broad Bearer token, write tools exposed | **connected, unprotected** |
+| WordPress | wpcom MCP | `public-api.wordpress.com/wpcom/v2/mcp/v1` | MCP per-tool toggles (wordpress.com/me/mcp) — but the admin REST token can bypass them | **connected — two pathways** 2026-10-17: MCP refuses `posts.delete`; the same token creates + force-deletes posts via `/rest/v1` |
 | Substack | none official | — | — | **not connected** |
 | Supabase | official remote | `mcp.supabase.com/mcp` | `?project_ref=nazioidbiydxduonenmb&read_only=true&features=database,debugging,docs` | **connected & verified** 2026-10-17: `transaction_read_only=on`, 7 read tools, no write tools |
 | Cloudflare | official remote (Code Mode) | `mcp.cloudflare.com/mcp` | "Read all resources" API token (read-only by construction) | **connected & verified** 2026-10-17: writes denied, reads 200 |
@@ -65,6 +65,7 @@ Rules:
 Verified tool surfaces (re-check these when a server reconnects; drift means a new guard is needed):
 
 - **Supabase:** `execute_sql`, `list_tables`, `list_extensions`, `list_migrations`, `get_advisors`, `query_logs`, `search_docs`. No `apply_migration`, `deploy_edge_function`, `create_project`, `create_branch`, storage-config or account tools. Session reports `transaction_read_only = on`.
+- **WordPress (dual pathway, verified 2026-10-17):** MCP reports `posts.delete`/`pages.delete` as "disabled in your MCP settings" and refuses them. But the stored OAuth token is an admin REST credential: `POST /rest/v1/sites/<id>/posts/new` created a post, `.../delete?force=true` permanently removed it, and a no-op `POST .../posts/1743` updated a real draft — all outside MCP. Toggles are policy, not a boundary.
 - **Cloudflare:** reads `200` for Workers scripts, KV namespaces, DNS records, account + zone detail. Write probes both refused (`No access to the specified resource`, `10000 auth`), so the token is read-only. Zone Analytics is `1015` (API sunset → GraphQL), not an auth failure.
 
 Known exceptions (re-check before trusting "read-only"):
