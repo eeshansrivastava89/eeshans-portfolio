@@ -49,6 +49,38 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 	})();
 </script>
 
+<script is:inline>
+	// Contents highlights the section currently in view.
+	// Deferred: the script sits above the article body it observes.
+	const initToc = () => {
+		const toc = document.querySelector("details.toc");
+		if (!toc) return;
+		const links = [...toc.querySelectorAll('a[href^="#"]')].filter((a) => !a.classList.contains("toc-root"));
+		const targets = links
+			.map((a) => ({ link: a, el: document.getElementById(decodeURIComponent(a.getAttribute("href")).slice(1)) }))
+			.filter((pair) => pair.el);
+		if (!targets.length) return;
+		const setActive = (el) => {
+			for (const { link, el: target } of targets) {
+				if (target === el) link.setAttribute("aria-current", "true");
+				else link.removeAttribute("aria-current");
+			}
+		};
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const visible = entries
+					.filter((entry) => entry.isIntersecting)
+					.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+				if (visible[0]) setActive(visible[0].target);
+			},
+			{ rootMargin: "-96px 0px -65% 0px", threshold: 0 },
+		);
+		targets.forEach(({ el }) => observer.observe(el));
+	};
+	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initToc, { once: true });
+	else initToc();
+</script>
+
 <style>
 	/* Collapsed-by-default disclosure on mobile; the header keeps panel chrome */
 	.toc-summary {

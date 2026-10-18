@@ -13,13 +13,13 @@
 
 export const fonts = {
 	display: {
-		name: "Libre Franklin",
-		fallback: "Georgia, serif",
+		name: "Inter",
+		fallback: "system-ui, -apple-system, sans-serif",
 		weights: [400, 500, 600, 700, 800],
 		styles: ["normal", "italic"],
 	},
 	sans: {
-		name: "Libre Franklin",
+		name: "Inter",
 		fallback: "system-ui, -apple-system, sans-serif",
 		weights: [400, 500, 600, 700, 800],
 		styles: ["normal"],

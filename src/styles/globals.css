@@ -6,8 +6,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--font-display: "Libre Franklin", Georgia, serif;
-	--font-sans: "Libre Franklin", system-ui, -apple-system, sans-serif;
+	--font-display: "Inter", system-ui, -apple-system, sans-serif;
+	--font-sans: "Inter", system-ui, -apple-system, sans-serif;
 	--font-mono: "IBM Plex Mono", "Fira Code", monospace;
 
 	/* Type scale — the only sizes the UI may use (T1).
@@ -151,12 +151,18 @@
 /* Header: name + nav on one row (desktop); stacked name-above-nav (mobile).
    Border + padding live here, not on inner wrappers, so the stacked variant
    keeps the same rhythm as the desktop row. */
+.site-header-wrap {
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	background: var(--color-bg);
+	border-bottom: 1px solid var(--color-line);
+}
 .site-header {
 	display: flex;
 	align-items: center;
 	gap: 16px;
-	border-bottom: 1px solid var(--color-line);
-	padding-block: 32px 28px; /* horizontal padding comes from the px-8 utility —
+	padding-block: 18px 16px; /* horizontal padding comes from the px-8 utility —
 	                          never write a padding shorthand here; unlayered CSS
 	                          would clobber the layered utility */
 }
@@ -193,8 +199,8 @@
    cap there truncated panels behind an inner scrollbar. */
 .layout > .sidebar-stick {
 	position: sticky;
-	top: 24px;
-	max-height: calc(100vh - 48px);
+	top: 92px;
+	max-height: calc(100vh - 116px);
 	overflow-y: auto;
 }
 /* TOC links jump smoothly; headings clear the viewport top */
@@ -202,7 +208,8 @@ html {
 	scroll-behavior: smooth;
 }
 .post-body :is(h2, h3, h4) {
-	scroll-margin-top: 24px;
+	/* clear the sticky header when a Contents link jumps */
+	scroll-margin-top: 88px;
 }
 @media (max-width: 960px) {
 	/* Four labels + a 48px control can't share one 334px row; the toggle
@@ -219,7 +226,7 @@ html {
 	display: grid;
 	grid-template-columns: 128px minmax(0, 1fr);
 	gap: 28px;
-	align-items: center;
+	align-items: start;
 	padding: 24px 0 32px;
 }
 .hero-photo {
@@ -241,20 +248,6 @@ html {
 	color: var(--color-text-soft);
 	max-width: 70ch;
 	line-height: 1.5;
-}
-.hero-links {
-	margin-top: 14px;
-	display: flex;
-	gap: 22px;
-	font-size: var(--text-ui);
-	font-weight: 600;
-}
-.hero-links a {
-	color: var(--color-accent);
-	transition: color 150ms ease;
-}
-.hero-links a:hover {
-	color: var(--color-accent-2);
 }
 @media (max-width: 720px) {
 	.hero-band {
@@ -775,4 +768,10 @@ html {
 .post-body {
 	padding: 0;
 	max-width: 72ch;
+}
+
+/* Contents: the entry for the section you are reading */
+.toc-list a[aria-current="true"] {
+	color: var(--color-text);
+	font-weight: 600;
 }
