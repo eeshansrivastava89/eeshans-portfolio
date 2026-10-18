@@ -52,7 +52,7 @@ Status at the last review:
 | WordPress | wpcom MCP | `public-api.wordpress.com/wpcom/v2/mcp/v1` | none — broad Bearer token, write tools exposed | **connected, unprotected** |
 | Substack | none official | — | — | **not connected** |
 | Supabase | official remote | `mcp.supabase.com/mcp` | `?project_ref=nazioidbiydxduonenmb&read_only=true&features=database,debugging,docs` | **connected & verified** 2026-10-17: `transaction_read_only=on`, 7 read tools, no write tools |
-| Cloudflare | official remote (Code Mode) | `mcp.cloudflare.com/mcp` | API token with read-only permissions | **not connected** |
+| Cloudflare | official remote (Code Mode) | `mcp.cloudflare.com/mcp` | API token — read-only permissions required | **connected but NON-COMPLIANT** 2026-10-17: the old token carries Workers + KV **edit**; read-only replacement pending |
 
 Rules:
 
@@ -65,6 +65,7 @@ Rules:
 Verified tool surfaces (re-check these when a server reconnects; drift means a new guard is needed):
 
 - **Supabase:** `execute_sql`, `list_tables`, `list_extensions`, `list_migrations`, `get_advisors`, `query_logs`, `search_docs`. No `apply_migration`, `deploy_edge_function`, `create_project`, `create_branch`, storage-config or account tools. Session reports `transaction_read_only = on`.
+- **Cloudflare (non-compliant, do not trust):** probe results — account detail, Workers scripts, Workers subdomain, KV list, zone settings all `200`; DNS records and zone analytics `10000 (auth)`; but `DELETE` on a non-existent Worker returned `10007` and on a non-existent KV namespace returned `10011 (invalid UUID)` — both are post-authorisation errors, so the token holds Workers **and** KV write. Treat as an "Edit Cloudflare Workers" token until replaced.
 
 Known exceptions (re-check before trusting "read-only"):
 
