@@ -43,4 +43,6 @@ Every feature should have exactly one implementation path. No silent fallbacks, 
 
 **Enabled means verified.** Enumerate tools, confirm the write surface, record it in `MCP.md`.
 
+A pinned reminder of these rules is injected every 3 steps by `tools/dsh-plugins/pinned-api-rule` (installed in the DSH profile).
+
 Status: PostHog ✅ · Supabase ✅ · Cloudflare ✅ · WordPress ⚠️ (MCP toggles; the token bypasses them) · Substack ✗. Evidence and open work: [`MCP.md`](MCP.md).

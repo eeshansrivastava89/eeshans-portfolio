@@ -20,6 +20,15 @@ Companion to the MCP rules in `AGENTS.md`. Detail lives here so the instructions
 
 WordPress.com issues one OAuth token with the account's full role authority and no audience binding. The MCP server accepts it as-is, so it is equally valid against the REST API. That is the "token passthrough" the MCP spec forbids — servers MUST reject tokens not issued for them. No local fix: DSH's bash sandbox confines file effects only, and the token is readable by the same user who runs the shell.
 
+## Pinned reminder plugin
+
+`tools/dsh-plugins/pinned-api-rule` re-injects the MCP/write rule every 3rd step, because AGENTS.md is loaded once per session and can compact away.
+
+- Installed at `~/.dsh/profiles/desktop/plugins/pinned-api-rule`, with `@deepseek-ai/dsh-llm@0.2.1-rc.2` (the version bundled in `app.asar`) local to it.
+- Loader entry must be an `insert:` block with an **absolute** path — top-level `- id:` entries only override existing bundle plugins.
+- The plugin must declare `inject = ["agents"]`, or it registers before the pre-step service exists.
+- Verified 2026-10-17: load marker written, reminder observed in context at step 3.
+
 ## Open work
 
 1. **PostHog tightening** — add `?features=core,product_analytics,insights,sql,flags,experiments,web_analytics,dashboards` to drop the unguarded data-quality tools. Installer: `.pi/tools/dsh-mcp.py posthog`.
