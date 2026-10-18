@@ -33,7 +33,7 @@ When fixing bugs or adding features, don't solve problems by adding `if/else` br
 
 Every feature should have exactly one implementation path. No silent fallbacks, no "try X, then Y, then Z" chains that mask which path actually ran. If something fails, it should fail with a clear error — not fall through to a default that hides the problem. Implicit behavior is a bug waiting to happen. Make the happy path explicit and the error path visible.
 
-## MCP servers (2026-10-17)
+## MCP servers
 
 **MCP-only access.** If a server exists for a service, every read and write goes through it. Never call the REST/GraphQL API directly, never lift the token from config. A refusal is the answer — stop, don't route around it. Only exception: explicit per-call approval for a named operation.
 
