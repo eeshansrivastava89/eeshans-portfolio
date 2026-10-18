@@ -451,6 +451,21 @@ html {
 	border-color: var(--color-accent);
 	color: var(--color-accent);
 }
+/* Primary action in a card: the live demo is the thing to try first */
+.btn-primary {
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+	color: #ffffff;
+}
+.btn-primary:hover {
+	background: var(--color-accent-2);
+	border-color: var(--color-accent-2);
+	color: #ffffff;
+}
+.dark .btn-primary,
+.dark .btn-primary:hover {
+	color: #14130f;
+}
 
 /* GitHub repo list: the panel's one list — commits per repo, ranked */
 .gh-section {

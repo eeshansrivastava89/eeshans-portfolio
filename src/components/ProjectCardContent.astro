@@ -64,6 +64,19 @@ const primaryHref = liveUrl ?? repoUrl;
 
 	<div class="project-actions">
 		{
+			liveUrl && (
+				<a
+					href={liveUrl}
+					class="btn btn-primary"
+					target="_blank"
+					rel="noopener noreferrer"
+					{...tracked("project_clicked", { project: title, link_type: "live", placement })}
+				>
+					Try it live ↗
+				</a>
+			)
+		}
+		{
 			hasVideo && (
 				<button
 					type="button"
