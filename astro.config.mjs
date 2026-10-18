@@ -39,10 +39,9 @@ export default defineConfig({
 			}),
 		},
 	},
-	redirects: {
-		"/posts": "/writing",
-		"/posts/**": "/writing",
-	},
+	// Legacy /posts URLs are handled at the host layer (Dockerfile nginx rule).
+	// A wildcard here would be baked into the static output as a literal
+	// `posts/**/index.html` and never match a real slug.
 	vite: {
 		plugins: [tailwindcss()],
 	},

@@ -1,21 +1,15 @@
 ---
 import SubscribeLink from "@/components/SubscribeLink.astro";
 import { formatDate } from "@/data/content";
-
-interface GroupLink {
-	label: string;
-	href: string;
-	count: number;
-	active: boolean;
-}
+import type { FeedGroup, GroupLink } from "@/data/feed-groups";
 
 interface Props {
 	/** Page title, e.g. "Technical Writing" */
 	title: string;
 	/** Subscribe config per feed */
 	feed: "substack" | "wordpress";
-	/** Primary feed rows: slug, date, title */
-	posts: { slug: string; date: Date; title: string; href: string }[];
+	/** Feed rows bucketed by year — one group when a year filter is active */
+	groups: FeedGroup[];
 	/** Year panel links */
 	yearLinks: GroupLink[];
 	/** Secondary grouping: tags or categories */
@@ -28,7 +22,7 @@ interface Props {
 const {
 	title,
 	feed,
-	posts,
+	groups,
 	yearLinks,
 	secondTitle,
 	secondLinks,
@@ -88,11 +82,16 @@ const {
 		</header>
 		<div class="panel feed" style="--order: 11">
 			<div class="pb">
-				{posts.map((post) => (
-					<a class="item" href={post.href} data-ph-event={feed === "substack" ? "writing_item_clicked" : "blog_item_clicked"} data-ph-placement={`${feed}_feed`} data-ph-target-type={feed === "substack" ? "writing_item" : "blog_item"}>
-						<span class="d">{formatDate(post.date)}</span>
-						<span class="t">{post.title}</span>
-					</a>
+				{groups.map((group) => (
+					<section class="feed-year">
+						<h2 class="feed-year-label">{group.year}</h2>
+						{group.posts.map((post) => (
+							<a class="item" href={post.href} data-ph-event={feed === "substack" ? "writing_item_clicked" : "blog_item_clicked"} data-ph-placement={`${feed}_feed`} data-ph-target-type={feed === "substack" ? "writing_item" : "blog_item"}>
+								<span class="d">{formatDate(post.date)}</span>
+								<span class="t">{post.title}</span>
+							</a>
+						))}
+					</section>
 				))}
 			</div>
 		</div>

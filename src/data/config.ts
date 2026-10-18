@@ -6,6 +6,9 @@ export const siteConfig = {
 	hero: {
 		headline: "Hi, I'm Eeshan.",
 		pitch: "I lead data science at Starbucks — and test new AI tools until the hype wears off. Writing about local AI and experimentation, and building open-source tools you can try.",
+		/** Search/social description — the pitch is too long for a snippet */
+		metaDescription:
+			"Eeshan Srivastava leads data science at Starbucks, tests local AI tools, and writes about experimentation, local models, and what survives the hype cycle.",
 	},
 	/** Homepage display counts — every homepage list and panel reads from here */
 	homepage: {

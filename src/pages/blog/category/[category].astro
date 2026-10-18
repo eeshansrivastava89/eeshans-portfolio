@@ -2,18 +2,12 @@
 import BaseLayout from "@/layouts/Base.astro";
 import FeedLayout from "@/components/FeedLayout.astro";
 import { getBlogPosts } from "@/data/content";
-
-const CURRENT_YEAR = new Date().getUTCFullYear();
+import { groupByYear, groupLinks, yearLinks } from "@/data/feed-groups";
 
 export async function getStaticPaths() {
 	const allPosts = await getBlogPosts();
-	const slugs = new Map<string, string>(); // slug → name
-	for (const post of allPosts) {
-		for (const cat of post.data.categories) {
-			slugs.set(cat.slug, cat.name);
-		}
-	}
-	return [...slugs.keys()].map((slug) => ({ params: { category: slug } }));
+	const slugs = new Set(allPosts.flatMap((p) => p.data.categories.map((c) => c.slug)));
+	return [...slugs].map((slug) => ({ params: { category: slug } }));
 }
 
 const requestedCatSlug = Astro.params.category!;
@@ -23,36 +17,11 @@ if (!catName) {
 	throw new Error(`Unknown category slug "${requestedCatSlug}" on /blog/category`);
 }
 
-const byYear = new Map<string, number>();
-for (const post of allPosts) {
-	const y = post.data.createdAt.getUTCFullYear().toString();
-	byYear.set(y, (byYear.get(y) ?? 0) + 1);
-}
-const yearLinks = [...byYear.entries()]
-	.sort((a, b) => Number(b[0]) - Number(a[0]))
-	.map(([y, count]) => ({
-		label: y,
-		href: `/blog/${y}`,
-		count,
-		active: false,
-	}));
-
-const catCounts = new Map<string, { name: string; count: number }>();
-for (const post of allPosts) {
-	for (const cat of post.data.categories) {
-		const entry = catCounts.get(cat.slug) ?? { name: cat.name, count: 0 };
-		entry.count += 1;
-		catCounts.set(cat.slug, entry);
-	}
-}
-const categoryLinks = [...catCounts.entries()]
-	.sort((a, b) => b[1].count - a[1].count)
-	.map(([slug, { name, count }]) => ({ label: name, href: `/blog/category/${slug}`, count, active: slug === requestedCatSlug }));
-
 // Category view spans all years (the category panel is the filter)
-const posts = allPosts
-	.filter((p) => p.data.categories.some((c) => c.slug === requestedCatSlug))
-	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/blog/${p.id}` }));
+const posts = allPosts.filter((p) => p.data.categories.some((c) => c.slug === requestedCatSlug));
+const groups = groupByYear(posts, (post) => `/blog/${post.id}`);
+const years = yearLinks(allPosts, "/blog");
+const categories = groupLinks(allPosts, (post) => post.data.categories, "/blog/category", requestedCatSlug);
 ---
 
 <BaseLayout
@@ -63,10 +32,10 @@ const posts = allPosts
 	<FeedLayout
 		title="Personal Blog"
 		feed="wordpress"
-		posts={posts}
-		yearLinks={yearLinks}
+		groups={groups}
+		yearLinks={years}
 		secondTitle="Categories"
-		secondLinks={categoryLinks}
+		secondLinks={categories}
 		filterLabel={`${catName} · ${posts.length} posts`}
 	/>
 </BaseLayout>

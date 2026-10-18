@@ -61,6 +61,10 @@ RUN echo 'server { \
     location / { \
         try_files $uri $uri/index.html /index.html; \
     } \
+    \
+    location ~ ^/posts(/.*)?$ { \
+        return 301 /writing/; \
+    } \
 }' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080

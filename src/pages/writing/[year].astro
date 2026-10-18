@@ -2,48 +2,22 @@
 import BaseLayout from "@/layouts/Base.astro";
 import FeedLayout from "@/components/FeedLayout.astro";
 import { getVisiblePosts } from "@/data/content";
-
-const CURRENT_YEAR = new Date().getUTCFullYear();
+import { groupByYear, groupLinks, yearLinks } from "@/data/feed-groups";
 
 export async function getStaticPaths() {
 	const allPosts = await getVisiblePosts();
-	const years = [...new Set(allPosts.map((p) => p.data.createdAt.getUTCFullYear()))].sort((a, b) => b - a);
-	return years.map((year) => ({ params: { year: year.toString() } }));
+	const years = new Set(allPosts.map((p) => p.data.createdAt.getUTCFullYear()));
+	return [...years].sort((a, b) => b - a).map((year) => ({ params: { year: year.toString() } }));
 }
 
 const allPosts = await getVisiblePosts();
 const requestedYear = Astro.params.year!;
 const year = Number(requestedYear);
 
-const byYear = new Map<string, number>();
-for (const post of allPosts) {
-	const y = post.data.createdAt.getUTCFullYear().toString();
-	byYear.set(y, (byYear.get(y) ?? 0) + 1);
-}
-const yearLinks = [...byYear.entries()]
-	.sort((a, b) => Number(b[0]) - Number(a[0]))
-	.map(([y, count]) => ({
-		label: y,
-		href: `/writing/${y}`,
-		count,
-		active: y === requestedYear,
-	}));
-
-const tagCounts = new Map<string, { name: string; count: number }>();
-for (const post of allPosts) {
-	for (const tag of post.data.tags) {
-		const entry = tagCounts.get(tag.slug) ?? { name: tag.name, count: 0 };
-		entry.count += 1;
-		tagCounts.set(tag.slug, entry);
-	}
-}
-const tagLinks = [...tagCounts.entries()]
-	.sort((a, b) => b[1].count - a[1].count)
-	.map(([slug, { name, count }]) => ({ label: name, href: `/writing/tag/${slug}`, count, active: false }));
-
-const posts = allPosts
-	.filter((p) => p.data.createdAt.getUTCFullYear() === year)
-	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/writing/${p.id}` }));
+const posts = allPosts.filter((p) => p.data.createdAt.getUTCFullYear() === year);
+const groups = groupByYear(posts, (post) => `/writing/${post.id}`);
+const years = yearLinks(allPosts, "/writing", requestedYear);
+const tags = groupLinks(allPosts, (post) => post.data.tags, "/writing/tag");
 ---
 
 <BaseLayout
@@ -54,10 +28,10 @@ const posts = allPosts
 	<FeedLayout
 		title="Technical Writing"
 		feed="substack"
-		posts={posts}
-		yearLinks={yearLinks}
+		groups={groups}
+		yearLinks={years}
 		secondTitle="Tags"
-		secondLinks={tagLinks}
+		secondLinks={tags}
 		filterLabel={`${requestedYear} · ${posts.length} essays`}
 	/>
 </BaseLayout>

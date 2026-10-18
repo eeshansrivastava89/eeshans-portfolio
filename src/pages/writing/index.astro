@@ -2,43 +2,14 @@
 import BaseLayout from "@/layouts/Base.astro";
 import FeedLayout from "@/components/FeedLayout.astro";
 import { getVisiblePosts } from "@/data/content";
+import { groupByYear, groupLinks, yearLinks } from "@/data/feed-groups";
 
-// Shared grouping data for the /writing section (index, years, tags).
-// Default view = current year only; the Years panel switches.
-// Tag URLs use tag slugs (a/b testing → ab-testing).
+// Same archive shape as /blog: every essay, grouped by year.
 
 const allPosts = await getVisiblePosts();
-const CURRENT_YEAR = new Date().getUTCFullYear();
-
-const byYear = new Map<string, number>();
-for (const post of allPosts) {
-	const year = post.data.createdAt.getUTCFullYear().toString();
-	byYear.set(year, (byYear.get(year) ?? 0) + 1);
-}
-const yearLinks = [...byYear.entries()]
-	.sort((a, b) => Number(b[0]) - Number(a[0]))
-	.map(([year, count]) => ({
-		label: year,
-		href: `/writing/${year}`,
-		count,
-		active: Number(year) === CURRENT_YEAR,
-	}));
-
-const tagCounts = new Map<string, { name: string; count: number }>();
-for (const post of allPosts) {
-	for (const tag of post.data.tags) {
-		const entry = tagCounts.get(tag.slug) ?? { name: tag.name, count: 0 };
-		entry.count += 1;
-		tagCounts.set(tag.slug, entry);
-	}
-}
-const tagLinks = [...tagCounts.entries()]
-	.sort((a, b) => b[1].count - a[1].count)
-	.map(([slug, { name, count }]) => ({ label: name, href: `/writing/tag/${slug}`, count, active: false }));
-
-const posts = allPosts
-	.filter((p) => p.data.createdAt.getUTCFullYear() === CURRENT_YEAR)
-	.map((p) => ({ slug: p.id, date: p.data.createdAt, title: p.data.title, href: `/writing/${p.id}` }));
+const groups = groupByYear(allPosts, (post) => `/writing/${post.id}`);
+const years = yearLinks(allPosts, "/writing");
+const tags = groupLinks(allPosts, (post) => post.data.tags, "/writing/tag");
 ---
 
 <BaseLayout
@@ -49,10 +20,10 @@ const posts = allPosts
 	<FeedLayout
 		title="Technical Writing"
 		feed="substack"
-		posts={posts}
-		yearLinks={yearLinks}
+		groups={groups}
+		yearLinks={years}
 		secondTitle="Tags"
-		secondLinks={tagLinks}
-		filterLabel={`${CURRENT_YEAR} · ${posts.length} essays`}
+		secondLinks={tags}
+		filterLabel={`${allPosts.length} essays · all years`}
 	/>
 </BaseLayout>
