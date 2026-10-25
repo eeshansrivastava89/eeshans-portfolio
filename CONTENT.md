@@ -161,9 +161,9 @@ Fetched by running `pnpm refresh:substack` (or automatically in CI on schedule).
 ### WordPress Posts
 
 Fetched by running `pnpm refresh:wordpress` (or automatically in CI on schedule).
-- Cache file: `.cache/wordpress-posts.json` (committed)
-- Refresh script: `scripts/refresh-wordpress.mjs` (public WordPress.com REST API, no proxy)
-- Data source: `src/lib/wordpress.ts`
+- Content: `src/content/blog/<slug>.json` — one committed file per post; the file name **is** the entry id and therefore the URL
+- Refresh script: `scripts/refresh-wordpress.mjs` (public WordPress.com REST API, no proxy) — rewrites every file and deletes files for posts that disappeared upstream, so a refresh is a per-post diff
+- Schema and HTML rendering: `src/content.config.ts` + `src/lib/wordpress.ts`
 - Posts are sourced entirely from WordPress — no local MDX files.
 
 ### Goodreads Shelf (homepage sidebar)
@@ -182,6 +182,7 @@ Fetched by running `pnpm refresh:goodreads`, in the same 4-hour CI run as the ot
 ```
 src/
 ├── content/
+│   ├── blog/              ← WordPress posts, one JSON file per post (generated)
 │   ├── projects/          ← Project data (MDX)
 │   ├── experience/         ← Work & education timeline (MDX)
 │   ├── impact/             ← Recognition categories (MDX)

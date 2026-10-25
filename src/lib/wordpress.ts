@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import * as cheerio from "cheerio";
 import { MEDIA_SELECTOR, repairMediaUrl, WORDPRESS_ORIGIN } from "./hotlinked-media.mjs";
 
@@ -7,40 +5,6 @@ export const WORDPRESS_SITE_URL = WORDPRESS_ORIGIN;
 // WordPress.com personal sites have no public /follow page — following is a
 // WordPress Reader action taken on the site itself, so CTAs point at the root
 export const WORDPRESS_FOLLOW_URL = WORDPRESS_SITE_URL;
-const WORDPRESS_SNAPSHOT_PATH = path.join(
-	process.cwd(),
-	".cache",
-	"wordpress-posts.json",
-);
-
-export interface WordPressPost {
-	title: string;
-	link: string;
-	slug: string;
-	date: Date;
-	excerpt: string;
-	content: string;
-	categories: { name: string; slug: string }[];
-	coverImage?: string;
-	/** WordPress.com likes on the original post */
-	likeCount: number;
-	/** Approved comments on the original post */
-	commentCount: number;
-	/** Media URLs (after repairMediaUrl) that returned 4xx at the last refresh */
-	deadMedia: string[];
-}
-
-function readWordPressSnapshot(): WordPressPost[] {
-	if (!fs.existsSync(WORDPRESS_SNAPSHOT_PATH)) {
-		throw new Error(
-			`${WORDPRESS_SNAPSHOT_PATH} does not exist. Run pnpm refresh:wordpress and commit the generated snapshot.`,
-		);
-	}
-
-	return JSON.parse(
-		fs.readFileSync(WORDPRESS_SNAPSHOT_PATH, "utf-8"),
-	) as WordPressPost[];
-}
 
 export function renderWordPressHtml(html: string, deadMedia: string[]): string {
 	// isDocument=false: keep fragment mode so $.html() returns the body fragment
@@ -131,8 +95,4 @@ export function renderWordPressHtml(html: string, deadMedia: string[]): string {
 	});
 
 	return $.html();
-}
-
-export async function getWordPressPosts(): Promise<WordPressPost[]> {
-	return readWordPressSnapshot();
 }

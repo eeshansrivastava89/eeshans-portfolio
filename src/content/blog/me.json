@@ -1,0 +1,16 @@
+{
+  "title": "++E++",
+  "link": "https://blog.eeshans.com/2010/11/14/me/",
+  "date": "2010-11-14T14:48:54.000Z",
+  "excerpt": "while(you == readingThisPoem) { String title = “++E++”; if( you.dontLike(title) ) { printf(“I don’t care!”); } if( I_Die == true ) { if( PeopleRememberMe == true ) { myLife = “Complete”; } else { myLife = “Incomplete”; } } switch( myLife ) { case “Complete”: printf(“I’ll rest in peace!”); break; case “Incomplete”: printf(“I’ll come back […]",
+  "content": "<pre>while(you == readingThisPoem)\r\n{\r\n    String title = \"++E++\";\r\n    if( you.dontLike(title) )\r\n    {\r\n        printf(\"I don't care!\");\r\n    }\r\n    if( I_Die == true )\r\n    {\r\n        if( PeopleRememberMe == true )\r\n        {\r\n            myLife = \"Complete\";\r\n        }\r\n        else\r\n        {\r\n            myLife = \"Incomplete\";\r\n        }\r\n    }\r\n    switch( myLife )\r\n    {\r\n        case \"Complete\":\r\n            printf(\"I'll rest in peace!\");\r\n            break;\r\n        case \"Incomplete\":\r\n            printf(\"I'll come back to fulfil my dream!\");\r\n            break;\r\n        default:\r\n            printf(\"My thoughts are not so simple as they seem!\");\r\n    }\r\n}</pre>\n",
+  "categories": [
+    {
+      "name": "Poems",
+      "slug": "poems"
+    }
+  ],
+  "likeCount": 0,
+  "commentCount": 0,
+  "deadMedia": []
+}

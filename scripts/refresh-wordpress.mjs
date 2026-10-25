@@ -17,7 +17,10 @@ const POSTS_API_URL =
 // Joined by slug, so the snapshot carries no WordPress IDs.
 const V1_POSTS_API_URL =
   "https://public-api.wordpress.com/rest/v1.1/sites/eeshan89.wordpress.com/posts";
-const SNAPSHOT_PATH = path.join(process.cwd(), ".cache", "wordpress-posts.json");
+// One committed JSON file per post. The `blog` collection globs this directory,
+// so the file set *is* the post set, and the file name is the entry id — which
+// is the URL segment.
+const BLOG_DIR = path.join(process.cwd(), "src", "content", "blog");
 const MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
 const PER_PAGE = 100;
 const PROBE_CONCURRENCY = 12;
@@ -373,8 +376,30 @@ if (dead > probed / 2) {
   throw new Error(`${dead} of ${probed} media URLs probed dead — refusing to write a snapshot that strips them`);
 }
 
-fs.mkdirSync(path.dirname(SNAPSHOT_PATH), { recursive: true });
-fs.writeFileSync(SNAPSHOT_PATH, `${JSON.stringify(posts, null, 2)}\n`);
+// The slug is the file name, so it is dropped from the payload rather than
+// duplicated inside the file. Every file is rewritten whole: an unchanged post
+// serialises to identical bytes, so git sees no diff for it.
+function syncPostFiles(posts) {
+  fs.mkdirSync(BLOG_DIR, { recursive: true });
+  for (const { slug, ...data } of posts) {
+    fs.writeFileSync(
+      path.join(BLOG_DIR, `${slug}.json`),
+      `${JSON.stringify(data, null, 2)}\n`
+    );
+  }
+
+  // A post deleted or unpublished upstream must stop rendering here, so remove
+  // any file the refresh no longer produced.
+  const expected = new Set(posts.map((post) => `${post.slug}.json`));
+  const stale = fs
+    .readdirSync(BLOG_DIR)
+    .filter((name) => name.endsWith(".json") && !expected.has(name));
+  for (const name of stale) fs.unlinkSync(path.join(BLOG_DIR, name));
+
+  return stale.length;
+}
+
+const removed = syncPostFiles(posts);
 console.log(
-  `Refreshed ${SNAPSHOT_PATH} with ${posts.length} WordPress posts from ${POSTS_API_URL}.`
+  `Wrote ${posts.length} post files to ${BLOG_DIR} from ${POSTS_API_URL} (removed ${removed} stale).`
 );
