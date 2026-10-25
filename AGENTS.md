@@ -46,3 +46,20 @@ Every feature should have exactly one implementation path. No silent fallbacks, 
 A pinned reminder of these rules is injected every 3 steps by `tools/dsh-plugins/pinned-api-rule` (installed in the DSH profile).
 
 Status: PostHog ✅ · Supabase ✅ · Cloudflare ✅ · WordPress ⚠️ (MCP toggles; the token bypasses them) · Substack ✗. Evidence and open work: [`MCP.md`](MCP.md).
+
+## Known hostile traffic
+
+A crawler fleet from **Chiron Software LLC** (AS212304) swept `/blog/*` on 2026-10-24: 139 sessions across 131 IPs in three minutes, one identical headless-Chrome user agent, `https://www.google.com/` spoofed as the referrer on every request. Sibling entity: **Buddy Software LLC** (AS398464), same AS name, same Virginia Beach area code. Neither has a PeeringDB presence; their space is announced by Cox (AS22773).
+
+**Block at the edge, whole site** — Cloudflare → Security → WAF → Custom rules:
+
+```
+(ip.src in {113.30.192.0/21 194.26.202.0/24 195.64.119.0/24 195.64.120.0/22 195.64.124.0/23})
+```
+
+Status: **pending manual application** (2026-10-24). The Cloudflare MCP token is read-only — both `dns.write` and the WAF ruleset write are refused — so this rule cannot be managed from a session. Record the date here once it is deployed.
+
+Two things to revisit yearly, or when the crawler returns:
+
+- IP blocks change hands. If Chiron releases this space, the rule will later block whoever receives it.
+- The sibling AS398464 ranges are **not** covered: `77.247.116.0/22`, `185.217.166.0/24`, `205.234.116.0/24`. If the sweep moves there, extend the rule rather than guessing at new ranges.
