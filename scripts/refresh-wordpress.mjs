@@ -376,16 +376,64 @@ if (dead > probed / 2) {
   throw new Error(`${dead} of ${probed} media URLs probed dead — refusing to write a snapshot that strips them`);
 }
 
+// WordPress recomputes a tiled gallery's layout every time it serves a post: a
+// post nobody touched comes back with different row heights, different item
+// sizes and the photos in a different order (one gallery here has returned
+// 156, 191 and 233px rows for the same photos). Reducing a gallery to the set
+// of its photos, with captions, is how two versions of a post are recognised as
+// the same; without it every refresh rewrites that file and the history fills
+// with changes that never happened.
+function withoutGalleryLayout(content) {
+  const $ = cheerio.load(content, null, false);
+  $(".tiled-gallery").each((_, gallery) => {
+    const photos = $(gallery)
+      .find(".tiled-gallery-item")
+      .toArray()
+      .map((item) => {
+        const $item = $(item);
+        const $photo = $item.find("img").first();
+        const src = ($photo.attr("src") ?? "").replace(
+          /[?&](?:w|h|fit|resize)=[^&"']*/g,
+          ""
+        );
+        // Alt text and captions are content, so they take part in the comparison
+        return [
+          src,
+          $photo.attr("alt") ?? "",
+          $photo.attr("title") ?? "",
+          $item.text().replace(/\s+/g, " ").trim(),
+        ].join(" ");
+      })
+      .sort();
+    $(gallery).replaceWith(
+      `<div class="tiled-gallery" data-photos="${photos.join("|")}"></div>`
+    );
+  });
+  return $.html();
+}
+
+function isSamePost(existing, next) {
+  const comparable = (post) =>
+    JSON.stringify({ ...post, content: withoutGalleryLayout(post.content) });
+  return comparable(existing) === comparable(next);
+}
+
 // The slug is the file name, so it is dropped from the payload rather than
-// duplicated inside the file. Every file is rewritten whole: an unchanged post
-// serialises to identical bytes, so git sees no diff for it.
+// duplicated inside the file.
 function syncPostFiles(posts) {
   fs.mkdirSync(BLOG_DIR, { recursive: true });
+  let kept = 0;
   for (const { slug, ...data } of posts) {
-    fs.writeFileSync(
-      path.join(BLOG_DIR, `${slug}.json`),
-      `${JSON.stringify(data, null, 2)}\n`
-    );
+    const filePath = path.join(BLOG_DIR, `${slug}.json`);
+    const existing = fs.existsSync(filePath)
+      ? JSON.parse(fs.readFileSync(filePath, "utf-8"))
+      : null;
+    // Only the gallery's pixel geometry moved: keep the file we already have
+    if (existing && isSamePost(existing, data)) {
+      kept++;
+      continue;
+    }
+    fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);
   }
 
   // A post deleted or unpublished upstream must stop rendering here, so remove
@@ -396,10 +444,11 @@ function syncPostFiles(posts) {
     .filter((name) => name.endsWith(".json") && !expected.has(name));
   for (const name of stale) fs.unlinkSync(path.join(BLOG_DIR, name));
 
-  return stale.length;
+  return { stale: stale.length, kept };
 }
 
-const removed = syncPostFiles(posts);
+const { stale, kept } = syncPostFiles(posts);
 console.log(
-  `Wrote ${posts.length} post files to ${BLOG_DIR} from ${POSTS_API_URL} (removed ${removed} stale).`
+  `Wrote ${posts.length - kept} of ${posts.length} post files to ${BLOG_DIR} from ${POSTS_API_URL} ` +
+    `(${kept} unchanged, ${stale} stale removed).`
 );
