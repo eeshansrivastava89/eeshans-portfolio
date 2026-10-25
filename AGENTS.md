@@ -59,6 +59,8 @@ A crawler fleet from **Chiron Software LLC** (AS212304) swept `/blog/*` on 2026-
 
 Status: **pending manual application** (2026-10-24). The Cloudflare MCP token is read-only — both `dns.write` and the WAF ruleset write are refused — so this rule cannot be managed from a session. Record the date here once it is deployed.
 
+**Why Block, not a challenge** (decided 2026-10-24). The fleet runs a real browser — it executed `posthog-js` and emitted `$pageview` events — so a non-interactive JS challenge is likely to be solved. That leaves Block or Interactive Challenge as the only actions that actually stop it, and Interactive Challenge is Block with a CAPTCHA escape hatch and more moving parts. The one cost of Block is a proxy user seeing a 403; at 4,096 addresses in a commercial proxy pool, a real reader from there is unlikely, and a CAPTCHA loop serves them no better. Swapping the action later is a one-field edit, so this is not lock-in.
+
 Two things to revisit yearly, or when the crawler returns:
 
 - IP blocks change hands. If Chiron releases this space, the rule will later block whoever receives it.
