@@ -13,6 +13,10 @@ import { MEDIA_SELECTOR, repairMediaUrl } from "../src/lib/hotlinked-media.mjs";
 // link field returns that public domain, which is what we use as canonical.
 const POSTS_API_URL =
   "https://public-api.wordpress.com/wp/v2/sites/eeshan89.wordpress.com/posts";
+// Likes and comment counts are not in the v2 payload; v1.1 exposes them.
+// Joined by slug, so the snapshot carries no WordPress IDs.
+const V1_POSTS_API_URL =
+  "https://public-api.wordpress.com/rest/v1.1/sites/eeshan89.wordpress.com/posts";
 const SNAPSHOT_PATH = path.join(process.cwd(), ".cache", "wordpress-posts.json");
 const MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
 const PER_PAGE = 100;
@@ -117,6 +121,8 @@ function normalizePost(post) {
     content,
     coverImage,
     categories,
+    likeCount: 0,
+    commentCount: 0,
     deadMedia: [],
   };
 }
@@ -191,66 +197,113 @@ async function findDeadMedia(posts) {
   return { probed: urls.length, dead: [...live.values()].filter((ok) => !ok).length };
 }
 
+// One curl invocation for every API read: retries are what keep the 4-hourly
+// refresh from failing on a blip, so every call gets the same policy.
+function curlArgs(apiUrl) {
+  return [
+    "--fail",
+    "--silent",
+    "--show-error",
+    "--location",
+    "--compressed",
+    "--retry",
+    "6",
+    "--retry-all-errors",
+    "--retry-delay",
+    "15",
+    "--retry-max-time",
+    "180",
+    "--connect-timeout",
+    "10",
+    "--max-time",
+    "60",
+    apiUrl,
+  ];
+}
+
+function curlJson(apiUrl) {
+  const body = execFileSync("curl", curlArgs(apiUrl), {
+    encoding: "utf-8",
+    maxBuffer: MAX_RESPONSE_BYTES,
+  });
+  return JSON.parse(body);
+}
+
+async function curlJsonAsync(apiUrl) {
+  const { stdout } = await execFileAsync("curl", curlArgs(apiUrl), {
+    encoding: "utf-8",
+    maxBuffer: MAX_RESPONSE_BYTES,
+  });
+  return JSON.parse(stdout);
+}
+
 function fetchPage(page) {
   const apiUrl = `${POSTS_API_URL}?per_page=${PER_PAGE}&page=${page}&_fields=id,slug,link,date,title,content,excerpt,jetpack_featured_media_url,categories`;
-  const body = execFileSync(
-    "curl",
-    [
-      "--fail",
-      "--silent",
-      "--show-error",
-      "--location",
-      "--compressed",
-      "--retry",
-      "6",
-      "--retry-all-errors",
-      "--retry-delay",
-      "15",
-      "--retry-max-time",
-      "180",
-      "--connect-timeout",
-      "10",
-      "--max-time",
-      "60",
-      apiUrl,
-    ],
-    { encoding: "utf-8", maxBuffer: MAX_RESPONSE_BYTES }
-  );
-
-  const posts = JSON.parse(body);
+  const posts = curlJson(apiUrl);
   if (!Array.isArray(posts)) {
     throw new Error(`WordPress API did not return an array from ${apiUrl}`);
   }
   return posts;
 }
 
+// v2 returns raw characters in slugs ("…"), v1.1 percent-encodes them
+// ("%e2%80%a6"). Decode both sides so the join can't miss a post on encoding.
+function slugKey(slug) {
+	try {
+		return decodeURIComponent(slug);
+	} catch {
+		return slug;
+	}
+}
+
+// Comment counts come from the post payload; likes do not. `like_count` is a
+// cached field that reset to 0 when the domain moved, while /likes computes the
+// real number from the likes table — so likes cost one request per post.
+async function fetchLikeCount(postId) {
+  const { found } = await curlJsonAsync(
+    `${V1_POSTS_API_URL}/${postId}/likes`
+  );
+  if (!Number.isFinite(found)) {
+    throw new Error(`WordPress likes endpoint returned no count for post ${postId}`);
+  }
+  return found;
+}
+
+async function fetchEngagementBySlug() {
+  const engagement = new Map();
+  for (let page = 1; ; page++) {
+    const apiUrl = `${V1_POSTS_API_URL}?number=${PER_PAGE}&page=${page}&fields=ID,slug,discussion`;
+    const { posts = [] } = curlJson(apiUrl);
+    for (const post of posts) {
+      if (!post?.slug || !Number.isFinite(post.ID)) continue;
+      engagement.set(slugKey(post.slug), {
+        id: post.ID,
+        likeCount: 0,
+        commentCount: Number.isFinite(post.discussion?.comment_count)
+          ? post.discussion.comment_count
+          : 0,
+      });
+    }
+    if (posts.length < PER_PAGE) break;
+  }
+
+  const entries = [...engagement.entries()];
+  for (let i = 0; i < entries.length; i += PROBE_CONCURRENCY) {
+    const batch = entries.slice(i, i + PROBE_CONCURRENCY);
+    const counts = await Promise.all(
+      batch.map(([, value]) => fetchLikeCount(value.id))
+    );
+    batch.forEach(([, value], index) => {
+      value.likeCount = counts[index];
+    });
+  }
+
+  return engagement;
+}
+
 function fetchCategories() {
   const apiUrl = `${POSTS_API_URL.replace(/\/posts$/, "")}/categories?per_page=100&_fields=id,name,slug`;
-  const body = execFileSync(
-    "curl",
-    [
-      "--fail",
-      "--silent",
-      "--show-error",
-      "--location",
-      "--compressed",
-      "--retry",
-      "6",
-      "--retry-all-errors",
-      "--retry-delay",
-      "15",
-      "--retry-max-time",
-      "180",
-      "--connect-timeout",
-      "10",
-      "--max-time",
-      "60",
-      apiUrl,
-    ],
-    { encoding: "utf-8", maxBuffer: MAX_RESPONSE_BYTES }
-  );
-
-  const categories = JSON.parse(body);
+  const categories = curlJson(apiUrl);
   if (!Array.isArray(categories)) {
     throw new Error(`WordPress API did not return an array of categories from ${apiUrl}`);
   }
@@ -291,6 +344,23 @@ for (const post of posts) {
 }
 
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+// Every published post should have engagement counts. A missing slug means the
+// v1.1 endpoint changed shape or the site moved — fail here rather than
+// silently shipping zeroes onto every post.
+const engagement = await fetchEngagementBySlug();
+const missingEngagement = posts.filter((post) => !engagement.has(slugKey(post.slug)));
+if (missingEngagement.length > 0) {
+  throw new Error(
+    `WordPress engagement counts missing for ${missingEngagement.length} post(s): ` +
+      missingEngagement.map((post) => post.slug).join(", ")
+  );
+}
+for (const post of posts) {
+  const { likeCount, commentCount } = engagement.get(slugKey(post.slug));
+  post.likeCount = likeCount;
+  post.commentCount = commentCount;
+}
 
 if (posts.length === 0) {
   throw new Error(`WordPress API returned zero posts: ${POSTS_API_URL}`);

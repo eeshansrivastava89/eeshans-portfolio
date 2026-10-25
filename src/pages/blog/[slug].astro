@@ -16,6 +16,13 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const wordPressUrl = post.data.externalUrl;
 const tocHeadings = getPostHeadings(post.data.body ?? "");
+/** "1 like" / "2 likes" — the only grammar the counts need */
+const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? "" : "s"}`;
+/** Zero counts are noise; the invitation alone still reads correctly */
+const engagementStats = [
+	post.data.likeCount > 0 ? `♥ ${plural(post.data.likeCount, "like")}` : null,
+	post.data.commentCount > 0 ? plural(post.data.commentCount, "comment") : null,
+].filter(Boolean);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} activePage="/blog" canonical={wordPressUrl} image={post.data.coverImage}>
@@ -58,6 +65,47 @@ const tocHeadings = getPostHeadings(post.data.body ?? "");
 			{post.data.body && (
 				<article class="post-body prose prose-neutral dark:prose-invert" style="--order: 5" set:html={post.data.body} />
 			)}
+
+			<footer class="post-engagement">
+				<p class:list={["post-engagement-line", engagementStats.length > 0 && "has-stats"]}>
+					{engagementStats.length > 0 && (
+						<span class="font-mono">{engagementStats.join(" · ")}</span>
+					)}
+					<a
+						href={`${wordPressUrl}#comments`}
+						{...tracked("content_clicked", { content_type: "blog", placement: "post_engagement", slug: post.id })}
+					>Join the discussion on the blog ↗</a>
+				</p>
+			</footer>
 		</article>
 	</div>
 </BaseLayout>
+
+<style>
+	.post-engagement {
+		margin-top: 48px;
+		padding-top: 18px;
+		border-top: 1px solid var(--color-line);
+	}
+	.post-engagement p {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 8px;
+		font-size: var(--text-meta);
+		color: var(--color-text-faint);
+	}
+	/* The hairline belongs to the link, so it never dangles at a line break */
+	.post-engagement-line.has-stats a::before {
+		content: "·";
+		margin-inline-end: 8px;
+		color: var(--color-line-strong);
+	}
+	.post-engagement a {
+		color: var(--color-accent);
+		transition: color 150ms ease;
+	}
+	.post-engagement a:hover {
+		color: var(--color-accent-2);
+	}
+</style>

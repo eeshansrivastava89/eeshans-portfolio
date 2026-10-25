@@ -22,6 +22,10 @@ export interface WordPressPost {
 	content: string;
 	categories: { name: string; slug: string }[];
 	coverImage?: string;
+	/** WordPress.com likes on the original post */
+	likeCount: number;
+	/** Approved comments on the original post */
+	commentCount: number;
 	/** Media URLs (after repairMediaUrl) that returned 4xx at the last refresh */
 	deadMedia: string[];
 }
