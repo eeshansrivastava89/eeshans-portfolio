@@ -23,6 +23,10 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/settings.json
 
+# agent instructions and ops notes — private, never published
+AGENTS.md
+MCP.md
+
 # agent context
 .pi/
 .claude/
