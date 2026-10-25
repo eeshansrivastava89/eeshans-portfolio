@@ -6,7 +6,7 @@
 export const MEDIA_SELECTOR = "img[src], video[src]";
 
 /** WordPress origin that root-relative media paths (e.g. /wp-content/...) belong to */
-export const WORDPRESS_ORIGIN = "https://eeshan89.wordpress.com";
+export const WORDPRESS_ORIGIN = "https://blog.eeshans.com";
 
 /**
  * Repair a hotlinked media URL:

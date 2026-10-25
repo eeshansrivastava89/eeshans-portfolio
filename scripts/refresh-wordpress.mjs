@@ -8,8 +8,9 @@ import * as cheerio from "cheerio";
 import { MEDIA_SELECTOR, repairMediaUrl } from "../src/lib/hotlinked-media.mjs";
 
 // Public WordPress.com REST API — no proxy needed (unlike Substack, this API
-// is reachable from CI). The link field points at wpcomstaging.com, which is
-// where eeshan89.wordpress.com 301-redirects; use it verbatim as canonical.
+// is reachable from CI). The site's .wordpress.com slug is the stable API
+// identifier even though the blog's public home is now blog.eeshans.com; the
+// link field returns that public domain, which is what we use as canonical.
 const POSTS_API_URL =
   "https://public-api.wordpress.com/wp/v2/sites/eeshan89.wordpress.com/posts";
 const SNAPSHOT_PATH = path.join(process.cwd(), ".cache", "wordpress-posts.json");
