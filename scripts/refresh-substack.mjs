@@ -113,10 +113,14 @@ function fetchWithCurl(apiUrl) {
     { encoding: "utf-8", maxBuffer: MAX_RESPONSE_BYTES }
   );
 
-  const posts = JSON.parse(body);
+  // Substack moved the posts endpoint from a bare array to an envelope
+  // ({ posts, nextCursor }). The proxy passes the body through verbatim, so
+  // unwrap it here. 13 posts against the 50-per-page limit means one page
+  // is the whole feed; pagination is deliberately not followed.
+  const posts = JSON.parse(body)?.posts;
   if (!Array.isArray(posts)) {
     throw new Error(
-      `Substack API did not return an array of posts from ${apiUrl}`
+      `Substack API did not return a posts array from ${apiUrl}`
     );
   }
   return posts;
