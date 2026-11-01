@@ -49,17 +49,20 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # (http://) instead of the scheme the Fly edge proxy received the request
 # with (https://). Serving `$uri/index.html` directly avoids that redirect.
 #
-# `absolute_redirect off` is defense-in-depth: if nginx ever does emit a
-# redirect, it will use a relative Location header (no scheme), which
-# the browser resolves against the current page origin (https).
+# The final fallback MUST be `=404`, not `/index.html`. Falling back to
+# index.html served the homepage with a 200 for every unmatched URL, so
+# any nonexistent path looked real to crawlers (soft 404) and clients got
+# the homepage instead of an error. `error_page 404` routes the miss to
+# the 404 page Astro builds, with a real 404 status.
 RUN echo 'server { \
     listen 8080; \
     server_name _; \
     root /usr/share/nginx/html; \
     index index.html; \
     \
+    error_page 404 /404.html; \
     location / { \
-        try_files $uri $uri/index.html /index.html; \
+        try_files $uri $uri/index.html =404; \
     } \
     \
     location ~ ^/posts(/.*)?$ { \
