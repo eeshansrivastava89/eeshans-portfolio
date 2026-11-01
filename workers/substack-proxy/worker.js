@@ -6,15 +6,19 @@
  * fetch the API directly. This worker fetches from Cloudflare's network,
  * which Substack allows.
  *
- * Behavior:
- * - GET /substack/posts -> JSON array of posts
- * - Responses are stored in the Cache API for STALE_ENTRY_TTL_SECONDS, and
- *   served without touching Substack while younger than CACHE_TTL_SECONDS.
- *   Net effect: Substack is hit at most once per CACHE_TTL window instead
- *   of on every CI run.
- * - If the cached entry is expired and Substack errors (e.g. 429 rate
- *   limit), the stale entry is served anyway. 502 only when there is no
- *   cached copy at all.
+ * Cache: ONE copy in KV (env.SUBSTACK_KV), readable from every Cloudflare
+ * data center. The old Cache API store was per-data-center, so a request
+ * landing somewhere that had never fetched the URL had nothing to fall back
+ * on when Substack rate limited it, and returned 502 — roughly 1 in 10
+ * scheduled CI runs. KV is global, so any data center can serve the last
+ * good copy.
+ *
+ * Behaviour, in order:
+ * - younger than FRESH_TTL_SECONDS -> serve the KV copy, no upstream call
+ * - older, upstream OK             -> store the new copy and serve it
+ * - older, upstream 429            -> wait Retry-After, retry once
+ * - older, upstream failed         -> serve the stale KV copy
+ * - no KV copy and upstream failed -> 502
  *
  * Deploy ONLY from this repo: pnpm deploy:worker
  * Edits made in the Cloudflare dashboard will be overwritten.
@@ -22,8 +26,15 @@
 
 const UPSTREAM_URL =
   "https://theasymptotic.substack.com/api/v1/posts?limit=50";
-const CACHE_TTL_SECONDS = 3600; // serve from cache for 1 hour
-const STALE_ENTRY_TTL_SECONDS = 7 * 24 * 3600; // keep stale copy for 7 days
+const CACHE_KEY = "posts";
+
+// Longer than the ~6h the "4-hourly" schedule actually lands on, so most runs
+// are answered from KV without touching Substack at all.
+const FRESH_TTL_SECONDS = 6 * 3600;
+// Ceiling on how stale a copy may get before KV drops it entirely.
+const ENTRY_TTL_SECONDS = 30 * 24 * 3600;
+// Honour Retry-After, but never stall a CI request longer than this.
+const MAX_RETRY_WAIT_SECONDS = 5;
 
 const UPSTREAM_HEADERS = {
   Accept: "application/json, text/plain;q=0.9, */*;q=0.8",
@@ -31,47 +42,76 @@ const UPSTREAM_HEADERS = {
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
 };
 
-function ageSeconds(response) {
-  const fetchedAt = Number(response.headers.get("x-fetched-at") || 0);
-  return (Date.now() - fetchedAt) / 1000;
+const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+
+function json(body, status, headers = {}) {
+  return new Response(body, {
+    status,
+    headers: { "Content-Type": "application/json", ...headers },
+  });
+}
+
+/**
+ * Returns { body } on success or { error } on failure. A 429 is retried once
+ * after waiting, because the whole point of the KV copy is to make rate
+ * limiting the caller's problem rather than CI's.
+ */
+async function fetchUpstream() {
+  const errors = [];
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let response;
+    try {
+      response = await fetch(UPSTREAM_URL, { headers: UPSTREAM_HEADERS });
+    } catch (err) {
+      errors.push(String(err));
+      break;
+    }
+
+    if (response.ok) {
+      return { body: await response.text() };
+    }
+
+    errors.push(`Upstream Substack error: ${response.status}`);
+    if (response.status !== 429) break;
+
+    const retryAfter = Number(response.headers.get("retry-after")) || 2;
+    await sleep(Math.min(retryAfter, MAX_RETRY_WAIT_SECONDS));
+  }
+  return { error: errors.join("; ") };
 }
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname !== "/substack/posts") {
       return new Response("Not found", { status: 404 });
     }
 
-    const cache = caches.default;
-    const cacheKey = new Request(url.toString(), request);
+    const stored = await env.SUBSTACK_KV.get(CACHE_KEY, "json");
+    const ageSeconds = stored ? (Date.now() - stored.fetchedAt) / 1000 : Infinity;
 
-    const cached = await cache.match(cacheKey);
-    if (cached && ageSeconds(cached) < CACHE_TTL_SECONDS) {
-      return cached;
+    if (stored && ageSeconds < FRESH_TTL_SECONDS) {
+      return json(stored.body, 200, { "x-cache": "fresh" });
     }
 
-    let upstream;
-    try {
-      upstream = await fetch(UPSTREAM_URL, { headers: UPSTREAM_HEADERS });
-      if (!upstream.ok) {
-        throw new Error(`Upstream Substack error: ${upstream.status}`);
-      }
-    } catch (err) {
-      if (cached) {
-        return cached; // stale is better than down
-      }
-      return new Response(String(err), { status: 502 });
+    const upstream = await fetchUpstream();
+
+    if (upstream.body) {
+      await env.SUBSTACK_KV.put(
+        CACHE_KEY,
+        JSON.stringify({ body: upstream.body, fetchedAt: Date.now() }),
+        { expirationTtl: ENTRY_TTL_SECONDS }
+      );
+      return json(upstream.body, 200, { "x-cache": "refreshed" });
     }
 
-    const response = new Response(await upstream.text(), {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": `public, max-age=${STALE_ENTRY_TTL_SECONDS}`,
-        "x-fetched-at": String(Date.now()),
-      },
-    });
-    ctx.waitUntil(cache.put(cacheKey, response.clone()));
-    return response;
+    if (stored) {
+      return json(stored.body, 200, { "x-cache": "stale" }); // stale beats down
+    }
+
+    return json(
+      `No Substack copy available and upstream failed (${upstream.error})`,
+      502
+    );
   },
 };

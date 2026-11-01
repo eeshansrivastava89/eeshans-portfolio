@@ -4,3 +4,10 @@ compatibility_date = "2026-07-25"
 
 # Custom domain binding (replaces the dashboard-managed one).
 routes = [{ pattern = "substack.eeshans.com", custom_domain = true }]
+
+# One shared copy of the Substack posts list, readable from every data center.
+# The Cache API this replaced was per-data-center, so a data center that had
+# never fetched the URL returned 502 whenever Substack rate limited it.
+[[kv_namespaces]]
+binding = "SUBSTACK_KV"
+id = "92887453cf9d49d98c5fff80b52247c6"
