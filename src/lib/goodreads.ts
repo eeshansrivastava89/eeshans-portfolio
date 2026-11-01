@@ -25,35 +25,44 @@ export interface GoodreadsData {
 
 const SHELVES: GoodreadsShelfKey[] = ["currentlyReading", "recentlyRead", "toRead"];
 
+/** Every failure says the same thing, because the remedy is the same. */
+const MAINTENANCE =
+	".cache/goodreads.json is maintained by hand and committed — Goodreads retired the shelf RSS feed, so there is no script that can rebuild it";
+
 /**
  * Reads the committed shelf snapshot. There is no network call at build time
  * and no fallback: a missing or malformed snapshot stops the build, because a
  * half-populated reading panel is worse than a loud failure.
+ *
+ * The panel renders `fetchedAt` as an "as of" date, so the snapshot is allowed
+ * to age. It is not allowed to be undated or malformed — an unlabelled frozen
+ * shelf would claim to be current forever.
  */
 export function getGoodreadsData(): GoodreadsData {
 	if (!fs.existsSync(CACHE_PATH)) {
-		throw new Error(
-			"Goodreads snapshot missing at .cache/goodreads.json — run `pnpm refresh:goodreads`",
-		);
+		throw new Error(`Goodreads snapshot missing: ${MAINTENANCE}`);
 	}
 
 	const data = JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8")) as Partial<GoodreadsData>;
 	if (!data.shelves) {
-		throw new Error("Goodreads snapshot has no shelves — run `pnpm refresh:goodreads`");
+		throw new Error(`Goodreads snapshot has no shelves: ${MAINTENANCE}`);
+	}
+
+	const fetchedAt = data.fetchedAt ? new Date(data.fetchedAt) : null;
+	if (!fetchedAt || Number.isNaN(fetchedAt.getTime())) {
+		throw new Error(`Goodreads snapshot has no valid fetchedAt date: ${MAINTENANCE}`);
 	}
 
 	for (const shelf of SHELVES) {
 		const books = data.shelves[shelf];
 		if (!Array.isArray(books) || books.length === 0) {
-			throw new Error(
-				`Goodreads snapshot is missing the "${shelf}" shelf — run \`pnpm refresh:goodreads\``,
-			);
+			throw new Error(`Goodreads snapshot is missing the "${shelf}" shelf: ${MAINTENANCE}`);
 		}
 		for (const book of books) {
 			const missing = (["title", "author", "cover", "url"] as const).filter((field) => !book[field]);
 			if (missing.length > 0) {
 				throw new Error(
-					`Goodreads snapshot item ${book.bookId || "?"} in "${shelf}" is missing ${missing.join(", ")}`,
+					`Goodreads snapshot item ${book.bookId || "?"} in "${shelf}" is missing ${missing.join(", ")}: ${MAINTENANCE}`,
 				);
 			}
 		}

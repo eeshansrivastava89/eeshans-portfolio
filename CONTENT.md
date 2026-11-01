@@ -168,9 +168,14 @@ Fetched by running `pnpm refresh:wordpress` (or automatically in CI on schedule)
 
 ### Goodreads Shelf (homepage sidebar)
 
-Fetched by running `pnpm refresh:goodreads`, in the same 4-hour CI run as the other snapshots.
-- Cache file: `.cache/goodreads.json` (committed)
-- Refresh script: `scripts/refresh-goodreads.mjs` — per-shelf RSS (`currently-reading`, `read`, `to-read`); the public API was retired in 2020, the RSS still works
+**Hand-maintained and frozen.** Goodreads retired the `/review/list_rss` shelves and now
+disallows it in `robots.txt`, so nothing can rebuild this snapshot automatically — it is
+no longer part of the 4-hour CI run.
+- Cache file: `.cache/goodreads.json` (committed) — edit the shelves here, then update `fetchedAt`
+- The panel renders `fetchedAt` as an "as of Oct 26, 2026" line, so an ageing snapshot stays
+  honest. An undated or malformed snapshot fails the build instead of claiming to be current.
+- `scripts/refresh-goodreads.mjs` and `pnpm refresh:goodreads` remain in the repo but **cannot
+  succeed**; they are kept only so the decision stays reversible if Goodreads restores the feed.
 - Data source: `src/lib/goodreads.ts`
 - Shelf sizes and the profile link: `src/data/config.ts` → `goodreads`
 - A missing or malformed snapshot stops the build — the panel never renders half-empty

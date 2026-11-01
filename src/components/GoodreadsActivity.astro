@@ -1,9 +1,10 @@
 ---
 import { tracked } from "@/lib/analytics";
 import { siteConfig } from "@/data/config";
+import { formatDate } from "@/data/content";
 import { getGoodreadsData, type GoodreadsShelfKey } from "@/lib/goodreads";
 
-const { shelves } = getGoodreadsData();
+const { shelves, fetchedAt } = getGoodreadsData();
 
 const SECTIONS: { key: GoodreadsShelfKey; label: string; count: number }[] = [
 	{ key: "currentlyReading", label: "Reading now", count: siteConfig.goodreads.currentlyReading },
@@ -40,4 +41,7 @@ const stars = (rating: number) => "★".repeat(rating) + "☆".repeat(5 - rating
 			</div>
 		))
 	}
+	<p class="gr-asof">
+		as of <time datetime={fetchedAt}>{formatDate(new Date(fetchedAt))}</time>
+	</p>
 </div>
