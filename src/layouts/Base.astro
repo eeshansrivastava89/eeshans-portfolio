@@ -37,7 +37,11 @@ const allowedHosts = import.meta.env.PUBLIC_ANALYTICS_ALLOWED_HOSTS ?? '';
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content={description} />
-		{canonical && <link rel="canonical" href={canonical} />}
+		{/* Every page is self-canonical on the apex domain by default; post
+		    pages override it to point at the WordPress original. Without a
+		    default, www and apex both served the same page with no
+		    canonical and nothing to say which was primary. */}
+		<link rel="canonical" href={canonical ?? pageUrl} />
 		<title>{fullTitle}</title>
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content={siteConfig.title} />
