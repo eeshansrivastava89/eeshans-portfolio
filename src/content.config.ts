@@ -90,7 +90,7 @@ const blog = defineCollection({
 				excerpt || `${post.title}, from Eeshan's Blog (${date.getUTCFullYear()}).`,
 			externalUrl: link,
 			source: "wordpress" as const,
-			body: renderWordPressHtml(content, deadMedia),
+			body: renderWordPressHtml(content, deadMedia, link),
 		})),
 });
 

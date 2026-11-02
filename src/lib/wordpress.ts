@@ -6,18 +6,21 @@ export const WORDPRESS_SITE_URL = WORDPRESS_ORIGIN;
 // WordPress Reader action taken on the site itself, so CTAs point at the root
 export const WORDPRESS_FOLLOW_URL = WORDPRESS_SITE_URL;
 
-export function renderWordPressHtml(html: string, deadMedia: string[]): string {
+export function renderWordPressHtml(html: string, deadMedia: string[], postUrl: string): string {
 	// isDocument=false: keep fragment mode so $.html() returns the body fragment
 	const $ = cheerio.load(html, null, false);
 
 	$("script").remove();
 	$("style").remove();
 
-	// Root-relative hrefs (e.g. WP.com's retired /2011/annual-report/ service
-	// pages) would otherwise resolve against this site and 404 here. Point
-	// them at the WordPress origin they came from.
-	$('a[href^="/"]').each((_, el) => {
-		$(el).attr("href", `${WORDPRESS_ORIGIN}${$(el).attr("href")}`);
+	// Relative hrefs were written for the post's page on WordPress
+	// (root-relative /2011/annual-report/, or ../2011/06/23/rise/ between
+	// poems). Here they would resolve against this site and invent URLs that
+	// never existed. Resolve each against the post's WordPress URL, exactly as
+	// a browser on the blog does. In-page #anchors stay as they are.
+	$('a[href]:not([href^="#"])').each((_, el) => {
+		const href = $(el).attr("href")!;
+		if (!URL.canParse(href)) $(el).attr("href", new URL(href, postUrl).href);
 	});
 	// Inline background images carry the same root-relative paths
 	// (e.g. the 2011 annual-report teaser) and 404 for the same reason.
